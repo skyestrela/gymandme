@@ -396,6 +396,9 @@ const bodyweightKey = e => `${e?.d}|${e?.t ?? ''}`
 const RESET_LISTS = {
   workouts: workoutKey, routines: x => x?.id, customEx: x => x?.id, bodyweight: bodyweightKey,
   gymCards: x => x?.id, equipProfiles: x => x?.id, favEx: x => x,
+  // Daily essentials: a day of water named like a weigh-in (day and time), a logged food and a
+  // completed fast by id, so a reset records removing them and another device's copy drops them too.
+  water: bodyweightKey, food: x => x?.id, fastLog: x => x?.id,
 }
 const RESET_MAPS = ['exNotes', 'barWeights', 'balanceOverrides', 'loadKind', 'plates']
 /** An entry's name in resetIds: a workout's id (or day and start), a weigh-in's day and time, … */
@@ -492,6 +495,9 @@ export function sinceReset(S, at, ids) {
 const DEL_LISTS = {
   workouts: workoutKey, routines: x => x?.id, customEx: x => x?.id, bodyweight: e => e?.d,
   gymCards: x => x?.id, equipProfiles: x => x?.id, favEx: x => x,
+  // A day of water is a day's entry (one per day, so keyed by the day), a logged food and a
+  // completed fast by id — whatever removes one of them here has to remove it on the other devices.
+  water: e => e?.d, food: x => x?.id, fastLog: x => x?.id,
 }
 // When an entry was last edited, to hold against a removal. Entries with no time of their own
 // (favourites, and cards and profiles saved before they were stamped) count as older than any
@@ -499,6 +505,7 @@ const DEL_LISTS = {
 const DEL_TIME = {
   workouts: workoutTime, routines: x => Number(x?._ts) || 0, customEx: x => Number(x?._ts) || 0,
   bodyweight: e => Number(e?.t) || 0, gymCards: x => Number(x?._ts) || 0, equipProfiles: x => Number(x?._ts) || 0,
+  water: e => Number(e?.t) || 0, food: x => Number(x?._ts) || 0, fastLog: x => Number(x?._ts) || 0,
 }
 // Per field, the most stamps kept; past it the oldest go first.
 export const DELETED_MAX = 5000
@@ -783,7 +790,7 @@ export function mergeStates(a0, b0, { prefer } = {}) {
     }
   }
   out.workouts.sort(byDayStart)
-  for (const f of ['routines', 'customEx', 'equipProfiles', 'gymCards']) {
+  for (const f of [...['routines', 'customEx', 'equipProfiles', 'gymCards'], 'food', 'fastLog']) {
     if (list(n[f]).length || list(o[f]).length) out[f] = (f === 'routines' ? unionByNeighbours : unionById)(n[f], o[f]).map(clone)
   }
   // The routines in the order chosen last (`edited.routineOrder`), the newer copy's without a
@@ -801,7 +808,7 @@ export function mergeStates(a0, b0, { prefer } = {}) {
   // are both kept. The same for a custom exercise (a photo added on one device survives a rename
   // on the other), an equipment profile and a gym card.
   if (!prefer) {
-    for (const f of ['routines', 'customEx', 'equipProfiles', 'gymCards']) {
+    for (const f of [...['routines', 'customEx', 'equipProfiles', 'gymCards'], 'food', 'fastLog']) {
       if (!out[f]) continue
       const other = new Map(list(o[f]).filter(x => x?.id != null).map(x => [x.id, x]))
       out[f] = out[f].map(x => {
@@ -811,6 +818,9 @@ export function mergeStates(a0, b0, { prefer } = {}) {
     }
   }
   out.bodyweight = mergeBodyweight(n.bodyweight, o.bodyweight).map(clone)
+  // A day of water is a day's entry like a weigh-in: where both copies have the day, the one
+  // logged last (`t`) stands — two phones each adding a glass merge into one day's total.
+  out.water = mergeBodyweight(n.water, o.water).map(clone)
   if (list(n.favEx).length || list(o.favEx).length) out.favEx = [...new Set([...list(n.favEx), ...list(o.favEx)])]
   // What either device removed stays removed (the `deleted` section above). A workout taken out
   // this way leaves its exercises' kept loads to be read again, as an edit of it would: from the

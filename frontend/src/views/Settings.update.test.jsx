@@ -23,7 +23,7 @@ const mocks = vi.hoisted(() => {
     replaceState: vi.fn(), setUser: vi.fn(), pullState: vi.fn(), pushState: vi.fn(),
     signOut: vi.fn(), signOutAll: vi.fn(), resetDemo: vi.fn(), disconnectServer: vi.fn(),
   })
-  state.checkForUpdate = vi.fn(() => Promise.resolve({ hasUpdate: true, latestVersion: '9.9.9', apkUrl: 'https://x/opengym.apk', hashUrl: null }))
+  state.checkForUpdate = vi.fn(() => Promise.resolve({ hasUpdate: true, latestVersion: '9.9.9', apkUrl: 'https://x/gymandme.apk', hashUrl: null }))
   state.confirmSheet = vi.fn()
   return state
 })
@@ -86,59 +86,34 @@ const mount = async () => {
   await act(async () => { root.render(<Settings page="about" />) })
   await act(async () => { await Promise.resolve(); await Promise.resolve() })
 }
-const updateRow = () => [...host.querySelectorAll('.lrow')].find(r => r.textContent.includes('Update to openGym v9.9.9'))
-const checkRow = () => [...host.querySelectorAll('.lrow')].find(r => r.textContent.includes('Check for updates'))
-const webRow = () => [...host.querySelectorAll('.lrow')].find(r => r.textContent.includes('Get the Android app'))
+const disabledRow = () => [...host.querySelectorAll('.lrow')].find(r => r.textContent.includes('Updates unavailable'))
+const legacyUpdateRow = () => [...host.querySelectorAll('.lrow')].find(r => /Update to Gym&Me|Check for updates|Get the Android app/.test(r.textContent))
 
-describe('Settings — in-app update check', () => {
-  it('web build: never asks for releases; the Updates section points at the APK instead', async () => {
+describe('Settings — Gym&Me update state', () => {
+  it('web build offers neither the upstream APK nor an update check', async () => {
     await mount()
     expect(mocks.checkForUpdate).not.toHaveBeenCalled()
-    expect(updateRow()).toBeUndefined()
-    expect(checkRow()).toBeUndefined()
-    expect(webRow()).toBeTruthy()
+    expect(disabledRow()).toBeUndefined()
+    expect(legacyUpdateRow()).toBeUndefined()
   })
 
-  it('mobile build on iOS: no check, no row, no section', async () => {
+  it('mobile build on iOS has no Android updater controls', async () => {
     mocks.MOBILE = true
     await mount()
     expect(mocks.checkForUpdate).not.toHaveBeenCalled()
-    expect(updateRow()).toBeUndefined()
-    expect(checkRow()).toBeUndefined()
-    expect(webRow()).toBeUndefined()
+    expect(disabledRow()).toBeUndefined()
+    expect(legacyUpdateRow()).toBeUndefined()
   })
 
-  it('mobile build on Android: checks once and shows the row, tapping it asks before downloading', async () => {
+  it('Android explains that updates are unavailable without checking or downloading from upstream', async () => {
     mocks.MOBILE = true
     mocks.android = true
     await mount()
-    expect(mocks.checkForUpdate).toHaveBeenCalledTimes(1)
-    expect(updateRow()).toBeTruthy()
-    act(() => { updateRow().click() })
-    expect(mocks.confirmSheet).toHaveBeenCalledTimes(1)
-    expect(mocks.confirmSheet.mock.calls[0][0].title).toBe('Update to 9.9.9?')
-  })
-
-  it('Android without a newer release: a "Check for updates" row stays, and tapping it checks again', async () => {
-    mocks.MOBILE = true
-    mocks.android = true
-    mocks.checkForUpdate.mockResolvedValueOnce({ hasUpdate: false, latestVersion: 'test', apkUrl: null, hashUrl: null })
-    await mount()
-    expect(mocks.checkForUpdate).toHaveBeenCalledTimes(1)
-    expect(updateRow()).toBeUndefined()
-    expect(checkRow()).toBeTruthy()
-    await act(async () => { checkRow().click(); await Promise.resolve() })
-    expect(mocks.checkForUpdate).toHaveBeenCalledTimes(2)
-    await act(async () => { await Promise.resolve() })
-    expect(updateRow()).toBeTruthy()   // the second (default) answer had 9.9.9 — the row now offers it
-  })
-
-  it('Android when gitlab.com is unreachable: stays quiet, keeps the row', async () => {
-    mocks.MOBILE = true
-    mocks.android = true
-    mocks.checkForUpdate.mockRejectedValueOnce(new Error('offline'))
-    await mount()
-    expect(updateRow()).toBeUndefined()
-    expect(checkRow()).toBeTruthy()
+    expect(mocks.checkForUpdate).not.toHaveBeenCalled()
+    expect(disabledRow()).toBeTruthy()
+    expect(disabledRow().textContent).toContain('Gym&Me updates are not configured yet.')
+    expect(legacyUpdateRow()).toBeUndefined()
+    act(() => { disabledRow().click() })
+    expect(mocks.confirmSheet).not.toHaveBeenCalled()
   })
 })

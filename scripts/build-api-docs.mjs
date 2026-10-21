@@ -466,36 +466,36 @@ document.querySelectorAll('[data-xall]').forEach(b => b.addEventListener('click'
 
 const html = `<!DOCTYPE html>
 <!-- GENERATED FILE - do not edit by hand.
-     Built by scripts/build-api-docs.mjs from api/openapi.yaml (openGym API v${spec.info.version}).
+     Built by scripts/build-api-docs.mjs from api/openapi.yaml (Gym&amp;Me API v${spec.info.version}).
      Regenerate with: node scripts/build-api-docs.mjs -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>API — openGym</title>
-<meta name="description" content="The complete openGym HTTP API, documented as an OpenAPI spec: passkey auth, state sync, push notifications, pairing and admin routes.">
+<title>API — Gym&amp;Me</title>
+<meta name="description" content="The complete Gym&amp;Me HTTP API, documented as an OpenAPI spec: passkey auth, state sync, push notifications, pairing and admin routes.">
 <meta name="theme-color" content="#000000">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="preconnect" href="https://stats.duarte-santos.ch">
-<meta property="og:title" content="openGym API reference">
-<meta property="og:description" content="The complete openGym HTTP API as an OpenAPI spec: passkey auth, state sync, push notifications, pairing and admin routes.">
-<meta property="og:image" content="https://opengym.duarte-santos.ch/img/social.jpg">
+<meta property="og:title" content="Gym&amp;Me API reference">
+<meta property="og:description" content="The complete Gym&amp;Me HTTP API as an OpenAPI spec: passkey auth, state sync, push notifications, pairing and admin routes.">
+<meta property="og:image" content="/img/social.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="openGym — your training, your data, your server. Two phones showing the home and workout screens.">
-<meta property="og:url" content="https://opengym.duarte-santos.ch/api.html">
+<meta property="og:image:alt" content="Gym&amp;Me — your training, your data, your server. Two phones showing the home and workout screens.">
+<meta property="og:url" content="/api.html">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="openGym">
+<meta property="og:site_name" content="Gym&amp;Me">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="openGym API reference">
-<meta name="twitter:image" content="https://opengym.duarte-santos.ch/img/social.jpg">
-<link rel="canonical" href="https://opengym.duarte-santos.ch/api.html">
+<meta name="twitter:title" content="Gym&amp;Me API reference">
+<meta name="twitter:image" content="/img/social.jpg">
+<link rel="canonical" href="/api.html">
 <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
 <link rel="icon" type="image/png" sizes="180x180" href="icon-180.png">
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="stylesheet" href="styles.css?v=22">
 <script>document.documentElement.className += ' js'</script>
-<!-- Umami web analytics for opengym.duarte-santos.ch (self-hosted, cookieless). -->
+<!-- Umami web analytics for the site (self-hosted, cookieless). -->
 <script defer src="https://stats.duarte-santos.ch/script.js" data-website-id="db36019e-50f4-453c-9c56-d0588aefe233"></script>
 <style>${css}</style>
 </head>
@@ -505,7 +505,7 @@ const html = `<!DOCTYPE html>
 <nav><div class="wrap nav-in">
   <a class="brand" href="/">
     <img src="icon-180.png" alt="" width="24" height="24">
-    openGym
+    Gym&amp;Me
   </a>
   <div class="nav-quick">
     <a class="ql site" href="/#features">Features</a>
@@ -567,10 +567,10 @@ ${railTags}
 
 <main id="main" class="api-main">
   <h1>API</h1>
-  <p class="lead">Every route the openGym backend serves — passkey auth, state sync,
+  <p class="lead">Every route the Gym&amp;Me backend serves — passkey auth, state sync,
      push, pairing, admin — as one hand-written
      OpenAPI&nbsp;spec. The same file lives
-     <a href="https://github.com/DuarteSantos8/openGym/blob/main/api/openapi.yaml" rel="noopener">in the repository</a>
+     <a href="../api/openapi.yaml" rel="noopener">in the repository</a>
      at <code>api/openapi.yaml</code>, next to the one server file it documents.</p>
   <div class="actions api-actions">
     <a class="btn" href="openapi.yaml" download>
@@ -579,7 +579,7 @@ ${railTags}
   </div>
   <p class="api-facts">
     <span>OpenAPI ${esc(spec.openapi)}</span>
-    <span>openGym v${esc(spec.info.version)}</span>
+    <span>Gym&amp;Me v${esc(spec.info.version)}</span>
     <span>${ops.length} endpoints</span>
     <span>${esc(spec.info.license.name)}</span>
   </p>
@@ -612,7 +612,7 @@ ${schemaCards}
 </main>
 
 <footer><div class="wrap foot">
-  <span class="c">openGym · AGPL-3.0 · © 2026 <a href="https://duarte-santos.ch" rel="noopener">Duarte Santos</a></span>
+  <span class="c">Gym&amp;Me · AGPL-3.0 · © 2026 <a href="https://duarte-santos.ch" rel="noopener">Duarte Santos</a></span>
   <div class="links">
     <a href="docs.html">Docs</a>
     <a href="about.html">About</a>

@@ -1,35 +1,35 @@
 <!DOCTYPE html>
 <!-- GENERATED FILE - do not edit by hand.
-     Built by scripts/build-api-docs.mjs from api/openapi.yaml (openGym API v1.3.10).
+     Built by scripts/build-api-docs.mjs from api/openapi.yaml (Gym&amp;Me API v1.3.10).
      Regenerate with: node scripts/build-api-docs.mjs -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>API — openGym</title>
-<meta name="description" content="The complete openGym HTTP API, documented as an OpenAPI spec: passkey auth, state sync, push notifications, pairing and admin routes.">
+<title>API — Gym&amp;Me</title>
+<meta name="description" content="The complete Gym&amp;Me HTTP API, documented as an OpenAPI spec: passkey auth, state sync, push notifications, pairing and admin routes.">
 <meta name="theme-color" content="#000000">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="preconnect" href="https://stats.duarte-santos.ch">
-<meta property="og:title" content="openGym API reference">
-<meta property="og:description" content="The complete openGym HTTP API as an OpenAPI spec: passkey auth, state sync, push notifications, pairing and admin routes.">
-<meta property="og:image" content="https://opengym.duarte-santos.ch/img/social.jpg">
+<meta property="og:title" content="Gym&amp;Me API reference">
+<meta property="og:description" content="The complete Gym&amp;Me HTTP API as an OpenAPI spec: passkey auth, state sync, push notifications, pairing and admin routes.">
+<meta property="og:image" content="/img/social.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="openGym — your training, your data, your server. Two phones showing the home and workout screens.">
-<meta property="og:url" content="https://opengym.duarte-santos.ch/api.html">
+<meta property="og:image:alt" content="Gym&amp;Me — your training, your data, your server. Two phones showing the home and workout screens.">
+<meta property="og:url" content="/api.html">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="openGym">
+<meta property="og:site_name" content="Gym&amp;Me">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="openGym API reference">
-<meta name="twitter:image" content="https://opengym.duarte-santos.ch/img/social.jpg">
-<link rel="canonical" href="https://opengym.duarte-santos.ch/api.html">
+<meta name="twitter:title" content="Gym&amp;Me API reference">
+<meta name="twitter:image" content="/img/social.jpg">
+<link rel="canonical" href="/api.html">
 <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
 <link rel="icon" type="image/png" sizes="180x180" href="icon-180.png">
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="stylesheet" href="styles.css?v=22">
 <script>document.documentElement.className += ' js'</script>
-<!-- Umami web analytics for opengym.duarte-santos.ch (self-hosted, cookieless). -->
+<!-- Umami web analytics for the site (self-hosted, cookieless). -->
 <script defer src="https://stats.duarte-santos.ch/script.js" data-website-id="db36019e-50f4-453c-9c56-d0588aefe233"></script>
 <style>
 /* ------------------------------------------------------------- API reference
@@ -158,7 +158,7 @@ main.api-main .lead { color: var(--fg-2); max-width: 58ch; margin: 14px 0 0; fon
 <nav><div class="wrap nav-in">
   <a class="brand" href="/">
     <img src="icon-180.png" alt="" width="24" height="24">
-    openGym
+    Gym&amp;Me
   </a>
   <div class="nav-quick">
     <a class="ql site" href="/#features">Features</a>
@@ -230,10 +230,10 @@ main.api-main .lead { color: var(--fg-2); max-width: 58ch; margin: 14px 0 0; fon
 
 <main id="main" class="api-main">
   <h1>API</h1>
-  <p class="lead">Every route the openGym backend serves — passkey auth, state sync,
+  <p class="lead">Every route the Gym&amp;Me backend serves — passkey auth, state sync,
      push, pairing, admin — as one hand-written
      OpenAPI&nbsp;spec. The same file lives
-     <a href="https://github.com/DuarteSantos8/openGym/blob/main/api/openapi.yaml" rel="noopener">in the repository</a>
+     <a href="../api/openapi.yaml" rel="noopener">in the repository</a>
      at <code>api/openapi.yaml</code>, next to the one server file it documents.</p>
   <div class="actions api-actions">
     <a class="btn" href="openapi.yaml" download>
@@ -242,18 +242,18 @@ main.api-main .lead { color: var(--fg-2); max-width: 58ch; margin: 14px 0 0; fon
   </div>
   <p class="api-facts">
     <span>OpenAPI 3.1.0</span>
-    <span>openGym v1.3.10</span>
+    <span>Gym&amp;Me v1.3.10</span>
     <span>69 endpoints</span>
     <span>AGPL-3.0-or-later</span>
   </p>
 
   <section class="api-sec" id="overview">
     <h2>Overview</h2>
-    <p class="sub">Passkey (WebAuthn) auth + per-user state storage for openGym. One Node file, no framework, JSON-file
+    <p class="sub">Passkey (WebAuthn) auth + per-user state storage for Gym&amp;Me. One Node file, no framework, JSON-file
        storage, HMAC-signed session cookies.</p>
     <div class="srv">
-  <div class="srv-row"><code>/</code><span>Same origin as the openGym web app (the normal deployment)</span></div>
-  <div class="srv-row"><code>https://opengym.example.com</code><span>Your self-hosted instance</span></div>
+  <div class="srv-row"><code>/</code><span>Same origin as the Gym&amp;Me web app (the normal deployment)</span></div>
+  <div class="srv-row"><code>https://gymandme.example.com</code><span>Your self-hosted instance</span></div>
     </div>
     <div class="ov-grid">
   <div class="ov">
@@ -5102,7 +5102,7 @@ main.api-main .lead { color: var(--fg-2); max-width: 58ch; margin: 14px 0 0; fon
 </main>
 
 <footer><div class="wrap foot">
-  <span class="c">openGym · AGPL-3.0 · © 2026 <a href="https://duarte-santos.ch" rel="noopener">Duarte Santos</a></span>
+  <span class="c">Gym&amp;Me · AGPL-3.0 · © 2026 <a href="https://duarte-santos.ch" rel="noopener">Duarte Santos</a></span>
   <div class="links">
     <a href="docs.html">Docs</a>
     <a href="about.html">About</a>

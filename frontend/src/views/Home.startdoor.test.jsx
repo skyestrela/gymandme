@@ -14,6 +14,7 @@ import Home from './Home.jsx'
 const nav = vi.fn()
 vi.mock('react-router-dom', () => ({ useNavigate: () => nav }))
 vi.mock('../sheets.jsx', () => ({
+  waterSheet: vi.fn(), fastingSheet: vi.fn(), foodSheet: vi.fn(), macroSheet: vi.fn(),
   starterPlanSheet: vi.fn(), bwSheet: vi.fn(), goalSheet: vi.fn(), dayOverrideSheet: vi.fn(),
   calendarSheet: vi.fn(), startFlow: vi.fn(), bwDeltaColor: () => '', weighInsSheet: vi.fn(),
 }))
@@ -43,6 +44,11 @@ const mount = () => act(() => root.render(<Home />))
 const door = () => [...host.querySelectorAll('button')].find(b => b.textContent.includes('Choose a different workout'))
 
 describe('Home — the way to the Start screen when a plan already owns today', () => {
+  it('shows Gym&Me as the anonymous runtime heading', () => {
+    setS(); mount()
+    expect(host.querySelector('h1')?.textContent).toBe('Gym&Me')
+  })
+
   it('offers the door on a planned day, where the Start button would start the plan', () => {
     setS(); mount()
     expect(door()).toBeTruthy()

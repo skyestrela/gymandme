@@ -1,6 +1,7 @@
 // @vitest-environment happy-dom
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { WEB_STATE_KEY } from '../lib/product.js'
 
 vi.mock('../lib/api.js', () => ({ api: vi.fn(), setRemoteAuth: vi.fn() }))
 
@@ -37,7 +38,7 @@ describe('gymCards state', () => {
     expect(cards[0]).toMatchObject({ id: 'c1', label: 'FitZone', value: 'ABC123', fmt: 'qrcode' })
 
     // persist() writes the whole state under the app's storage key — the card must be in it.
-    const saved = JSON.parse(localStorage.getItem('gym_state_v1'))
+    const saved = JSON.parse(localStorage.getItem(WEB_STATE_KEY))
     expect(saved.gymCards).toHaveLength(1)
     expect(saved.gymCards[0].value).toBe('ABC123')
   })
@@ -79,7 +80,7 @@ describe('lastGymCardId', () => {
 
   it('persists to localStorage like any other field', () => {
     useStore.getState().update(s => { s.lastGymCardId = 'c9' }, false)
-    const saved = JSON.parse(localStorage.getItem('gym_state_v1'))
+    const saved = JSON.parse(localStorage.getItem(WEB_STATE_KEY))
     expect(saved.lastGymCardId).toBe('c9')
   })
 

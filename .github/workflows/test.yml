@@ -11,6 +11,7 @@ on:
       - 'scripts/build-coach-assets.mjs'
       - 'scripts/build-coach-library.mjs'
       - 'scripts/build-api-docs.mjs'
+      - 'scripts/check-brand.sh'
       - 'website/api.html'
       - 'api/coach/prompts/**'
       - '.github/workflows/test.yml'
@@ -23,6 +24,7 @@ on:
       - 'scripts/build-coach-assets.mjs'
       - 'scripts/build-coach-library.mjs'
       - 'scripts/build-api-docs.mjs'
+      - 'scripts/check-brand.sh'
       - 'website/api.html'
       - 'api/coach/prompts/**'
       - '.github/workflows/test.yml'
@@ -60,6 +62,10 @@ jobs:
       # backlog of untranslated demo-view strings to clear before it can fail the build.
       - run: node scripts/check-source-strings.mjs
         working-directory: frontend
+      # The old product name must not come back outside the exceptions the script names:
+      # the licence and the history, the legacy migration identifiers, and the identifiers
+      # that already name something on a device or on the wire.
+      - run: ./scripts/check-brand.sh
       # The fatigue model must never read higher after a rest day than before it.
       # Property probe over ~108k comparisons; too slow for the unit suite, cheap here.
       - run: npm run test:fatigue-probe
@@ -122,24 +128,24 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - run: docker build --target default -t opengym-api:default ./api
-      - run: docker build --target coach   -t opengym-api:coach   ./api
+      - run: docker build --target default -t gymandme-api:default ./api
+      - run: docker build --target coach   -t gymandme-api:coach   ./api
       # No --target, exactly like docker-publish.yml. That workflow names no stage, so what it
       # ships is whatever Dockerfile stage happens to be last -- and that untargeted artifact,
-      # not opengym-api:default above, is the image every self-hoster pulls as :latest. Build it
+      # not gymandme-api:default above, is the image every self-hoster pulls as :latest. Build it
       # the same way here so the assertion below is about the thing we actually publish.
-      - run: docker build -t opengym-api:published ./api
+      - run: docker build -t gymandme-api:published ./api
 
       - name: the image published as :latest has no AI runtime either
         run: |
-          docker run --rm opengym-api:published node -e \
+          docker run --rm gymandme-api:published node -e \
             'import("@anthropic-ai/claude-agent-sdk").then(()=>{console.error("AI runtime present in the published image -- the last Dockerfile stage is no longer the runtime-free one");process.exit(1)},()=>process.exit(0))'
-          ! docker run --rm opengym-api:published codex --version
-          ! docker run --rm opengym-api:published bwrap --version
+          ! docker run --rm gymandme-api:published codex --version
+          ! docker run --rm gymandme-api:published bwrap --version
 
       - name: the default image boots and serves, with no AI runtime in it
         run: |
-          docker run -d --name api-default -e DATA_DIR=/data -p 3000:3000 opengym-api:default
+          docker run -d --name api-default -e DATA_DIR=/data -p 3000:3000 gymandme-api:default
           for i in $(seq 1 30); do
             curl -fsS http://localhost:3000/api/config >/dev/null 2>&1 && break
             sleep 1
@@ -147,13 +153,13 @@ jobs:
           curl -fsS http://localhost:3000/api/config | tee /dev/stderr | grep -q '"invite_only"'
           # Absent by construction, not by accident: --omit=optional is the only thing keeping
           # the AI dependency out of the image an owner gets when they never asked for it.
-          docker run --rm opengym-api:default node -e \
+          docker run --rm gymandme-api:default node -e \
             'import("@anthropic-ai/claude-agent-sdk").then(()=>{console.error("AI runtime present in the default image");process.exit(1)},()=>process.exit(0))'
           docker rm -f api-default
 
       - name: the coach image carries a runnable Agent SDK
         run: |
-          docker run --rm opengym-api:coach node --input-type=module -e '
+          docker run --rm gymandme-api:coach node --input-type=module -e '
             const { adapterFor } = await import("./coach/adapters/index.js");
             const r = await adapterFor("claude").check();
             if (!r.ok) { console.error(r.error); process.exit(1); }
@@ -162,21 +168,21 @@ jobs:
 
       - name: the coach image carries the Codex runtime and its sandbox
         run: |
-          docker run --rm opengym-api:coach codex --version
-          docker run --rm opengym-api:coach bwrap --version
+          docker run --rm gymandme-api:coach codex --version
+          docker run --rm gymandme-api:coach bwrap --version
           # Owned by the user jobs drop to, and 0700 — a credential cache readable by anything
           # else in the container would undo the point of dropping privileges at all.
-          test "$(docker run --rm opengym-api:coach stat -c '%U %a' /coach-auth)" = "coach 700"
+          test "$(docker run --rm gymandme-api:coach stat -c '%U %a' /coach-auth)" = "coach 700"
 
       - name: neither Codex nor its sandbox is in the default image
         run: |
           # bubblewrap is a Codex requirement, so an owner who never opted in should not be
           # carrying it. Both commands must fail.
-          ! docker run --rm opengym-api:default codex --version 2>/dev/null
-          ! docker run --rm opengym-api:default bwrap --version 2>/dev/null
+          ! docker run --rm gymandme-api:default codex --version 2>/dev/null
+          ! docker run --rm gymandme-api:default bwrap --version 2>/dev/null
 
       - name: the privilege drop can actually be performed in the image
         run: |
           # canDropPrivileges() fails closed, so a missing `coach` user disables every job —
           # including the fixture provider. Cheaper to assert here than to discover on an instance.
-          docker run --rm opengym-api:default id coach
+          docker run --rm gymandme-api:default id coach

@@ -12,6 +12,7 @@
    Real modules: store/useStore.js, lib/api.js, lib/remote.js, lib/mobile.js. Mocked: the Capacitor
    plugins (an in-memory Directory.Data), the question sheet, and fetch, which plays the server. */
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
+import { WEB_STATE_KEY } from '../lib/product.js'
 
 const h = vi.hoisted(() => {
   vi.stubEnv('VITE_MOBILE', '1')
@@ -95,7 +96,7 @@ function localPhone() {
   const S = { ...clone(DEF), _ts: 5000, workouts: [workout('phone-1', '2026-09-20')] }
   h.files.set('DATA/opengym-remote.json', JSON.stringify({ mode: 'local' }))
   h.files.set('DATA/opengym-state.json', JSON.stringify(S))
-  localStorage.setItem('gym_state_v1', JSON.stringify(S))
+  localStorage.setItem(WEB_STATE_KEY, JSON.stringify(S))
   localStorage.setItem('gym_guest', '1')
 }
 

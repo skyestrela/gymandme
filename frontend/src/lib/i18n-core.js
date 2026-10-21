@@ -1,3 +1,5 @@
+import { PRODUCT_ID, PRODUCT_NAME } from './product.js'
+
 // Runtime-agnostic core of the i18n module: state, constants and readers (t, dateLocale,
 // instrFor, exerciseNameFor, getLang). Plain Node-loadable — the browser-only pieces
 // (import.meta.glob lazy
@@ -67,6 +69,20 @@ export const getLang = () => lang
 export const dateLocale = () => DATE_LOCALES[lang] || 'en-GB'
 export const getVersion = () => version
 
+// Locale packs keep their established source keys, while every displayed value gets the current
+// product identity. That makes the full translated UI rebrand at runtime without invalidating
+// existing translations or touching legacy storage identifiers.
+const brandProductCopy = value => typeof value !== 'string' ? value : value
+  .replaceAll('openGym', PRODUCT_NAME)
+  .replaceAll('OpenGym', PRODUCT_NAME)
+  .replaceAll('opengym', PRODUCT_ID)
+  // The name starts with a consonant sound, so the English article has to change with it:
+  // "not an openGym answer" is "not a Gym&Me answer", not "not an Gym&Me answer".
+  // The word boundary matters: "other than openGym" must keep its "than", and a plain
+  // substring replace of "an Gym&Me" silently turned that into "other tha Gym&Me".
+  .replace(/\ban Gym&Me\b/g, 'a Gym&Me')
+  .replace(/\bAn Gym&Me\b/g, 'A Gym&Me')
+
 // Translate a source string; {0},{1}… are replaced with args (also on the English fallback).
 export function t(s, ...args) {
   let v = dict[s] || s
@@ -77,7 +93,7 @@ export function t(s, ...args) {
     v = (typeof args[0] === 'number' && forms[pluralCategory(args[0])]) || forms.other || forms.many || forms.one || s
   }
   for (let i = 0; i < args.length; i++) v = v.replaceAll('{' + i + '}', args[i])
-  return v
+  return brandProductCopy(v)
 }
 
 /* ------------------------------------------------------------------ plurals --
@@ -114,7 +130,7 @@ export function tn(one, other, n, ...rest) {
       let v = form
       const args = [n, ...rest]
       for (let i = 0; i < args.length; i++) v = v.replaceAll('{' + i + '}', args[i])
-      return v
+      return brandProductCopy(v)
     }
   }
   return t(n === 1 ? one : other, n, ...rest)

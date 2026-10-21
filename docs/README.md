@@ -1,4 +1,4 @@
-# openGym documentation
+# Gym&Me documentation
 
 Pick the part that matches what you're doing. If you just have a question, try the
 [FAQ](FAQ.md) first.
@@ -12,8 +12,8 @@ Pick the part that matches what you're doing. If you just have a question, try t
 | [Importing data](DATA_IMPORTS.md) | You're coming from FitNotes, Strong, Hevy or Apple Health, or sharing a plan with someone |
 | [AI coach](AI_COACH.md) | Your instance has the coach switched on and you want to know what it sees and can change |
 
-The [live demo](https://opengym.duarte-santos.ch/demo/) is the real app with example data, nothing
-to install.
+The in-browser demo is the real app with example data, nothing to install — run it from a
+checkout with `VITE_DEMO=1 npm run dev` in `frontend/`.
 
 ## Hosting it
 

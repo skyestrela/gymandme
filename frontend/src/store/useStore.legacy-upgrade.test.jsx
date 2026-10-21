@@ -4,6 +4,7 @@
    offline setting, plan and note changes were undone on the first sync when another device had
    synced meanwhile, and pushed without stamps when none had. lib/sync-legacy.js. */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { LEGACY_WEB_STATE_KEY, migrateLegacyWebState } from '../lib/product.js'
 
 const h = vi.hoisted(() => ({ api: null }))
 vi.mock('../lib/api.js', () => ({ api: (...a) => h.api(...a), setRemoteAuth: () => {} }))
@@ -51,7 +52,7 @@ function leaveOldCopy(base, mut) {
   mut(old)
   localStorage.setItem('gym_owner', OWNER)
   localStorage.setItem('gym_user', JSON.stringify({ id: OWNER, name: 'Ana' }))
-  localStorage.setItem('gym_state_v1', JSON.stringify(old))
+  localStorage.setItem(LEGACY_WEB_STATE_KEY, JSON.stringify(old))
   localStorage.setItem('gym_sync', JSON.stringify({ rev: base._rev, ts: base._ts }))
   localStorage.setItem('gym_synced_fp', JSON.stringify(fp))
   localStorage.setItem('gym_dirty', '1')
@@ -91,6 +92,37 @@ describe('the first sync after the update from v1.3.9', () => {
     expect(localStorage.getItem('gym_stash')).toBe(null)
   })
 
+  it('keeps a dirty legacy copy classified when neither new state nor marker can be written', async () => {
+    const base = baseDoc()
+    leaveOldCopy(base, s => { s.restSec = 140; s.week = { 1: 'r1', 3: 'r1' }; s.exNotes = { bench: 'offline note' }; s._ts = T + 1000 })
+    const srv = server(base)
+    const descriptor = Object.getOwnPropertyDescriptor(globalThis, 'localStorage')
+    const storage = globalThis.localStorage
+    const refusingStorage = new Proxy(storage, {
+      get(target, prop) {
+        const value = Reflect.get(target, prop)
+        if (prop === 'setItem') return (key, value) => {
+          if (key === 'gymandme_state_v1' || key === 'gym_legacy_owed') throw new DOMException('quota', 'QuotaExceededError')
+          return storage.setItem(key, value)
+        }
+        return typeof value === 'function' ? value.bind(target) : value
+      },
+    })
+    Object.defineProperty(globalThis, 'localStorage', { value: refusingStorage, configurable: true })
+    try {
+      const A = await openApp()
+      await A.getState().pullState()
+
+      expect(localStorage.getItem('gym_legacy_owed')).toBeNull()
+      expect(srv.log.find(x => x.method === 'PUT').body.stamped).toBe(false)
+      expect(srv.doc.restSec).toBe(140)
+      expect(srv.doc.week).toEqual({ 1: 'r1', 3: 'r1' })
+      expect(srv.doc.exNotes.bench).toBe('offline note')
+    } finally {
+      Object.defineProperty(globalThis, 'localStorage', descriptor)
+    }
+  })
+
   it('both sides changed the same setting: the merge decides as before, and the old copy is kept aside', async () => {
     const base = baseDoc()
     leaveOldCopy(base, s => { s.restSec = 140; s._ts = T + 1000 })
@@ -120,6 +152,40 @@ describe('the first sync after the update from v1.3.9', () => {
     expect(srv.log.filter(x => x.method === 'PUT').at(-1).body.stamped).toBe(true)
   })
 
+  it('retries a legacy-marker removal that failed after reconciliation before a restarted copy syncs', async () => {
+    const base = baseDoc()
+    leaveOldCopy(base, s => { s.restSec = 140; s._ts = T + 1000 })
+    const srv = server({ ...clone(base), _rev: 4, _ts: T + 5000, sound: false, edited: { sound: T + 5000 }, workouts: [...base.workouts, W('w3x', T + 5000)] })
+    const descriptor = Object.getOwnPropertyDescriptor(globalThis, 'localStorage')
+    const storage = globalThis.localStorage
+    const refusingRemoval = new Proxy(storage, {
+      get(target, prop) {
+        const value = Reflect.get(target, prop)
+        if (prop === 'removeItem') return key => {
+          if (key === 'gym_legacy_owed') throw new DOMException('quota', 'QuotaExceededError')
+          return storage.removeItem(key)
+        }
+        return typeof value === 'function' ? value.bind(target) : value
+      },
+    })
+    Object.defineProperty(globalThis, 'localStorage', { value: refusingRemoval, configurable: true })
+    try {
+      const A = await openApp()
+      await A.getState().pullState()
+      expect(srv.log.find(x => x.method === 'PUT').body.stamped).toBe(true)
+      expect(localStorage.getItem('gym_legacy_owed')).not.toBeNull()
+    } finally {
+      Object.defineProperty(globalThis, 'localStorage', descriptor)
+    }
+
+    const B = await openApp()
+    B.getState().update(s => { s.restSec = 150 })
+    await B.getState().pushState()
+
+    expect(srv.log.filter(x => x.method === 'PUT').at(-1).body.stamped).toBe(true)
+    expect(localStorage.getItem('gym_legacy_owed')).toBeNull()
+  })
+
   it('a copy this app wrote is never taken for an old app\'s', async () => {
     const base = baseDoc()
     leaveOldCopy(base, s => { s.restSec = 140 })
@@ -128,5 +194,59 @@ describe('the first sync after the update from v1.3.9', () => {
     const A = await openApp()
     await A.getState().pullState()
     expect(srv.log.find(x => x.method === 'PUT').body.stamped).toBe(true)
+  })
+
+  it('lifts a dirty legacy rollback changed after migration even when an old WID exists', async () => {
+    const base = baseDoc()
+    const retained = clone(base); delete retained._rev
+    localStorage.setItem('gym_owner', OWNER)
+    localStorage.setItem('gym_user', JSON.stringify({ id: OWNER, name: 'Ana' }))
+    localStorage.setItem(LEGACY_WEB_STATE_KEY, JSON.stringify(retained))
+    localStorage.setItem('gym_sync', JSON.stringify({ rev: base._rev, ts: base._ts }))
+    localStorage.setItem('gym_synced_fp', JSON.stringify(fp139(base)))
+    localStorage.setItem('gym_dirty', '1')
+    migrateLegacyWebState(localStorage)
+    localStorage.setItem(LEGACY_WEB_STATE_KEY, JSON.stringify({
+      ...retained,
+      restSec: 140,
+      week: { 1: 'r1', 3: 'r1' },
+      exNotes: { bench: 'rollback note' },
+      _ts: T + 1000,
+    }))
+    localStorage.setItem('gym_state_wid', 'old-wid')
+    const srv = server(base)
+
+    const A = await openApp()
+    await A.getState().pullState()
+
+    expect(srv.log.find(x => x.method === 'PUT').body.stamped).toBe(false)
+    for (const S of [srv.doc, A.getState().S]) {
+      expect(S.restSec).toBe(140)
+      expect(S.week).toEqual({ 1: 'r1', 3: 'r1' })
+      expect(S.exNotes.bench).toBe('rollback note')
+    }
+  })
+
+  it.each([null, '{not valid json'])('keeps the current dirty state when retained legacy provenance is unknown (%s)', async journal => {
+    const base = baseDoc()
+    const retained = clone(base); delete retained._rev
+    const current = { ...clone(base), restSec: 140, _ts: T + 1000 }
+    localStorage.setItem('gym_owner', OWNER)
+    localStorage.setItem('gym_user', JSON.stringify({ id: OWNER, name: 'Ana' }))
+    localStorage.setItem('gymandme_state_v1', JSON.stringify(current))
+    localStorage.setItem(LEGACY_WEB_STATE_KEY, JSON.stringify(retained))
+    if (journal !== null) localStorage.setItem('gym_legacy_migration_v1', journal)
+    localStorage.setItem('gym_sync', JSON.stringify({ rev: base._rev, ts: base._ts }))
+    localStorage.setItem('gym_synced_fp', JSON.stringify(fp139(base)))
+    localStorage.setItem('gym_dirty', '1')
+    localStorage.setItem('gym_state_wid', 'old-wid')
+    const srv = server(base)
+
+    const A = await openApp()
+    await A.getState().pullState()
+
+    expect(A.getState().S.restSec).toBe(140)
+    expect(srv.log.find(x => x.method === 'PUT').body.stamped).toBe(true)
+    expect(localStorage.getItem('gym_legacy_owed')).toBeNull()
   })
 })

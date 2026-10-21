@@ -11,9 +11,10 @@ import { PAGES, PAGE_IDS, ROOT_GROUPS, SEARCH, pageVisible, searchSettings, page
 globalThis.IS_REACT_ACT_ENVIRONMENT = true
 
 const mocks = vi.hoisted(() => {
-  const state = { S: null, user: null, sync: null, MOBILE: false, push: false, sheets: [], navs: [], toast: null }
+  const state = { S: null, user: null, sync: null, webRecovery: null, MOBILE: false, push: false, sheets: [], navs: [], toast: null }
   state.snapshot = () => ({
-    S: state.S, user: state.user, coachLocal: null, sync: state.sync, config: null,
+    S: state.S, user: state.user, coachLocal: null, sync: state.sync, config: null, webRecovery: state.webRecovery,
+    getWebRecoveryRaw: () => state.webRecovery?.raw ?? null,
     update: mut => { const next = structuredClone(state.S); mut(next); state.S = next },
     replaceState: vi.fn(), setUser: vi.fn(), pullState: vi.fn(), pushState: vi.fn(), setUnit: vi.fn(),
     resetEverything: vi.fn(), resetDemo: vi.fn(), importBackup: vi.fn(), importConflict: vi.fn(),
@@ -23,7 +24,7 @@ const mocks = vi.hoisted(() => {
 vi.mock('../store/useStore.js', () => {
   const useStore = selector => selector ? selector(mocks.snapshot()) : mocks.snapshot()
   useStore.getState = mocks.snapshot
-  return { useStore, DEF: { reminder: { time: '17:30' } }, hasData: () => false }
+  return { useStore, selectWebRecovery: state => state.webRecovery, DEF: { reminder: { time: '17:30' } }, hasData: () => false }
 })
 vi.mock('../store/useUI.js', () => {
   const snap = () => ({ toast: mocks.toast, openSheet: render => { mocks.sheets.push(render); return { close: vi.fn() } } })
@@ -55,6 +56,7 @@ beforeEach(() => {
   }
   mocks.user = null
   mocks.sync = null
+  mocks.webRecovery = null
   mocks.MOBILE = false
   mocks.push = false
   mocks.pushOn = false
@@ -260,6 +262,17 @@ describe('the search query', () => {
 })
 
 describe('the pages', () => {
+  it('shows the recovery notice in Data & backup only while a recovery copy is active', () => {
+    mount('data')
+    expect(host.textContent).not.toContain('Your saved Gym&Me profile needs recovery.')
+
+    mocks.webRecovery = { kind: 'corrupt-current-web-state', raw: '{not valid json' }
+    mount('data')
+    expect(host.textContent).toContain('Your saved Gym&Me profile needs recovery.')
+    expect(host.textContent).toContain('Gym&Me has not overwritten the original profile.')
+    expect(host.textContent).toContain('Download recovery copy')
+  })
+
   it('each search entry is a row on its page (guest in a browser)', () => {
     const byPage = {}
     for (const e of SEARCH) if (pageVisible(PAGES[e.page].parent || e.page, guestWeb) && (!e.when || e.when(guestWeb))) (byPage[e.page] ||= []).push(e.title)

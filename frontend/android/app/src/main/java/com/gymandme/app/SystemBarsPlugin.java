@@ -1,4 +1,4 @@
-package ch.duartesantos.opengym;
+package com.gymandme.app;
 
 import android.app.Activity;
 import android.os.Build;

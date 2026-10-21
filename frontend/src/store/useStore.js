@@ -21,12 +21,18 @@ import { linkTokenFromSearch, stripLinkFromUrl } from '../lib/device-link.js'
 import { loadRemote, chooseLocal, forgetRemote, connect, normalizeServerUrl, renewToken } from '../lib/remote.js'
 import { loadCoachDevice, saveCoachDevice, coachDeviceSettings } from '../lib/coach-device.js'
 import { RTL_LANGS } from '../lib/i18n-core.js'
+import { classifyLegacyMigration, MIGRATION_JOURNAL_KEY, migrateLegacyWebState, LEGACY_WEB_STATE_KEY, quarantineCorruptWebState, WEB_STATE_KEY } from '../lib/product.js'
 import { DEFAULT_TEMPLATE_ID } from '../lib/structuralBalanceTemplates.js'
 
 import { WC_DEFAULT } from '../lib/workout-controls.js'
 import { sanitizeAccent } from '../lib/accent.js'
+import { DEFAULT_FAST, DEFAULT_MACRO_GOAL, WATER_DEFAULT_GOAL } from '../lib/wellness.js'
 
-const KEY = 'gym_state_v1'
+const KEY = WEB_STATE_KEY
+// Selectors for a later recovery UI. `webRecovery` lives beside S so the corrupt raw payload can
+// be downloaded by an explicit user action without ever becoming profile or server data.
+export const selectWebRecovery = state => state.webRecovery
+export const selectWebRecoveryRaw = state => state.webRecovery?.raw ?? null
 // Where the saved copy stands with the server: the revision it descends from, and its own `_ts`
 // at that moment. `rev` goes back to the server as `baseRev` on every push, so a write over a
 // document this device never saw is refused (409) instead of dropping another device's work;
@@ -69,7 +75,7 @@ function logoutOwed(on) {
   } catch { /* private mode with storage blocked */ }
   return false
 }
-// Mobile build: whose copy the file mirror (lib/mobile.js, opengym-state.json) holds, and which
+// Mobile build: whose copy the file mirror (lib/mobile.js, gymandme-state.json) holds, and which
 // one — { owner, ts }, written after it (saveMirror). A device fact, so never inside S.
 const MIRROR_OWNER_FILE = 'opengym-state-owner.json'
 const CHECK_MIN_MS = 3000    // rev checks closer together than this are the same event (focus + visibility)
@@ -86,6 +92,17 @@ export const DEF = {
   unit: 'kg', restSec: 90, restPauseSec: 15, sound: true, soundOnSilent: false, vibrateOnSilent: false, timerFlash: false, timedSetOvertime: false, keepAwake: true, lang: 'en',
   theme: 'dark', accent: 'lime', body: 'male', targetW: null,
   bodyweight: [], routines: [], week: {}, dayPlan: {},
+  // Daily essentials (lib/wellness.js). One entry per local day for water, as for a weigh-in;
+  // food and completed fasts are lists keyed by id, like gym cards. `fasting` is the single
+  // fast running right now (null when none), and is the only one of these that reads the clock.
+  water: [], food: [], fastLog: [], fasting: null,
+  waterGoal: WATER_DEFAULT_GOAL, macroGoal: { ...DEFAULT_MACRO_GOAL }, fastWindow: DEFAULT_FAST,
+  // The calories goal (lib/macros.js, reached through profilePlan/goalOf in lib/wellness.js).
+  // `macroMode` is what you picked — lose weight, hold steady, gain muscle — and every other
+  // number about the targets falls out of it, so these three are the only ones the app cannot
+  // work out for itself: a weigh-in gives the weight, but the resting-burn formula needs a
+  // height and an age as well. `macroGoal` stays empty unless you type over the plan.
+  macroMode: null, heightCm: null, age: null,
   queue: null,   // a planner's floating week (lib/queue.js) — via the API, or by this rotation feature (below)
   // The in-app rotation's reusable definition — { id, sequence, label } (lib/rotation.js). Never
   // a live queue: it only ever feeds `queue`, and `queue.rotationId` says the pass is managed here.
@@ -246,9 +263,9 @@ export function restartedState(cur) {
   return s
 }
 
-function loadState() {
+function loadState(raw) {
   try {
-    const raw = localStorage.getItem(KEY)
+    if (raw === undefined) raw = migrateLegacyWebState(localStorage)
     if (raw) {
       const saved = JSON.parse(raw)
       const s = sanitizeAccent(Object.assign(clone(DEF), saved))
@@ -309,18 +326,82 @@ export const useStore = create((set, get) => {
   // saved copy as it is (takeSaved).
   let handedOver = false
   const staleUid = 'device-tab-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6)
+  // Read and migrate the saved copy before classifying an old dirty copy. Without this, the
+  // v1.3.9 detector looked only under the new key and missed a valid legacy profile whose first
+  // copy could not be written (for example, storage quota/private mode).
+  // Detect the current key before considering legacy state. An invalid current key is durable
+  // recovery data, not a reason to revive a potentially stale legacy mirror; quarantine a raw
+  // copy where storage permits and fail closed for this browser session.
+  const bootWebRecovery = quarantineCorruptWebState(localStorage)
+  // The corrupt current payload remains a recovery source until an explicit recovery action. Every
+  // automatic removal of the current state key must pass through this gate.
+  const removeCurrentWebState = () => {
+    if (get().webRecovery) return false
+    localStorage.removeItem(KEY)
+    return true
+  }
+  const bootRawState = (() => { try { return migrateLegacyWebState(localStorage) } catch { return null } })()
+  // Keep one validated read of the retained source. A rollback can replace it after this app made
+  // the current copy; then its own raw payload, not the stale current-key payload, is what needs
+  // lifting. Invalid retained data is never a source, and invalid current data keeps failing
+  // closed rather than being replaced by a legacy mirror.
+  const bootLegacy = (() => {
+    try {
+      const raw = localStorage.getItem(LEGACY_WEB_STATE_KEY)
+      if (raw === null) return { raw: null, validRaw: null }
+      JSON.parse(raw)
+      return { raw, validRaw: raw }
+    } catch { return { raw: null, validRaw: null } }
+  })()
+  const bootRawStateIsValid = (() => {
+    try { JSON.parse(bootRawState); return true } catch { return false }
+  })()
+  // The old key is retained as a recovery source. Its provenance, rather than a later WID, says
+  // whether it is the migration's unchanged source or a rollback/change made after migration.
+  const legacyMigration = (() => {
+    try {
+      return classifyLegacyMigration(
+        bootLegacy.raw,
+        localStorage.getItem(MIGRATION_JOURNAL_KEY),
+      )
+    } catch { return { requiresLegacyLift: false, requiresRecovery: true } }
+  })()
+  // A missing/damaged journal is deliberately not evidence of a rollback: preserve current state
+  // and leave recovery explicit rather than silently reviving a stale retained legacy mirror.
+  const legacyChangedAfterKnownMigration = legacyMigration.requiresLegacyLift
+  const bootStateSource = (() => {
+    try {
+      return legacyChangedAfterKnownMigration && localStorage.getItem(DIRTY_KEY) === '1' && bootLegacy.validRaw && bootRawStateIsValid
+        ? bootLegacy.validRaw
+        : bootRawState
+    } catch { return bootRawState }
+  })()
   // A copy that owes the server a change and was never written with a write id was last saved by
   // an app from before this one (v1.3.9), which stamped none of its settings, plan days or notes.
+  // Keep that fact in memory as well as storage: a quota/private-storage failure can refuse both
+  // the migrated copy and this marker, but this open app must still lift the legacy change.
+  let legacyOwed
+  const clearLegacy = () => {
+    legacyOwed = null
+    try { localStorage.removeItem(LEGACY_KEY) } catch { /* a later app load will retry */ }
+  }
+  const readLegacy = () => {
+    if (legacyOwed !== undefined) return legacyOwed
+    try { legacyOwed = JSON.parse(localStorage.getItem(LEGACY_KEY)) || null } catch { legacyOwed = null }
+    // The marker was already consumed when this app persisted a write id. If its removal failed
+    // then, retry it now but never send a normal current copy as the pre-v1.3.9 one.
+    if (legacyOwed && seenWid && !legacyChangedAfterKnownMigration) clearLegacy()
+    return legacyOwed
+  }
   // Noted now, before this app's first save writes a write id beside it.
   try {
-    if (!seenWid && seenOwner && localStorage.getItem(DIRTY_KEY) === '1' && localStorage.getItem(KEY) && !localStorage.getItem(LEGACY_KEY)) {
+    if ((!seenWid || legacyChangedAfterKnownMigration) && seenOwner && localStorage.getItem(DIRTY_KEY) === '1' && bootRawState && !readLegacy()) {
       let fp = null
       try { fp = JSON.parse(localStorage.getItem(SYNCED_FP_KEY)) } catch { /* no fingerprint: the copy is kept aside instead */ }
-      localStorage.setItem(LEGACY_KEY, JSON.stringify({ fp, owner: seenOwner }))
+      legacyOwed = { fp, owner: seenOwner }
+      localStorage.setItem(LEGACY_KEY, JSON.stringify(legacyOwed))
     }
-  } catch { /* storage refused: the first sync merges it as before */ }
-  const readLegacy = () => { try { return JSON.parse(localStorage.getItem(LEGACY_KEY)) || null } catch { return null } }
-  const clearLegacy = () => { try { localStorage.removeItem(LEGACY_KEY) } catch { /* the next sync tries again */ } }
+  } catch { /* the in-memory marker keeps this app's first sync safe */ }
 
   const readAdopt = () => { try { return JSON.parse(localStorage.getItem(ADOPT_KEY)) || null } catch { return null } }
   const writeAdopt = v => { try { if (v) localStorage.setItem(ADOPT_KEY, JSON.stringify(v)); else localStorage.removeItem(ADOPT_KEY) } catch { /* the hold in memory still stands */ } }
@@ -391,7 +472,7 @@ export const useStore = create((set, get) => {
        'local'   no server: a phone in local mode, a guest, nobody signed in
        'auth'    the server refuses this device (a 401), or the phone has lost its pairing
        'offline' the server could not be reached at all (no network, DNS, a timeout)
-       'error'   it answered with a failure: 5xx, 403, 413, a page that is not openGym's
+       'error'   it answered with a failure: 5xx, 403, 413, a page that is not Gym&Me's
        'held'    signed in, but the question about this device's own entries is still open
        'pending' reachable, and a change is still waiting to reach it
        'ok'      this device holds what the server holds
@@ -532,6 +613,16 @@ export const useStore = create((set, get) => {
     return true
   }
   const persist = (S, push = true, stamp = true) => {
+    // A malformed current browser profile must never be silently replaced by a fresh in-memory
+    // copy. Keep normal interaction in memory, but do not write any web state or arrange a
+    // server PUT until a later explicit recovery flow resolves the raw payload.
+    if (get().webRecovery) {
+      clearTimeout(pushTm)
+      pushTm = null
+      pushPending = false
+      set({ S })
+      return
+    }
     if (refuseStale(S)) return
     const { base, owed } = metaOf()   // the copy being replaced; the new one stands where it stood
     const joined = joinSaved(S, get()?.S)
@@ -589,7 +680,7 @@ export const useStore = create((set, get) => {
   // Boot's last step: from here on changes push, and one made during boot goes now.
   const finishBoot = (extra = {}) => {
     set({ ready: true, ...extra })
-    if (pushPending && get().user) {
+    if (pushPending && get().user && !get().webRecovery) {
       clearTimeout(pushTm)
       pushTm = setTimeout(() => get().pushState(), 1500)
     }
@@ -906,7 +997,7 @@ export const useStore = create((set, get) => {
     localStorage.removeItem('gym_guest')
     forgetSync()
     releaseAdopt()   // the copy it was about is gone
-    localStorage.removeItem(KEY)
+    removeCurrentWebState()
     localStorage.removeItem('gym_owner_name')
     localStorage.removeItem('gym_owner')
     seenOwner = null   // a guest's tab now: it joins what other signed-out tabs save (as setUser)
@@ -992,12 +1083,12 @@ export const useStore = create((set, get) => {
     if (!name) { try { name = localStorage.getItem('gym_owner_name') || '' } catch { /* the id then */ } }
     const entry = { server: server || null, uid, name, at: Date.now(), state }
     all[key] = entry
-    // A second full copy beside the first may not fit (a profile near the size limit): the copy
-    // in storage is wiped next anyway, so it makes the room.
+    // A second full copy beside the first may not fit. An ordinary profile is wiped next to make
+    // room; a corrupt recovery source is deliberately retained for an explicit recovery action.
     const v = JSON.stringify(all)
     try { localStorage.setItem(STASH_KEY, v) }
     catch {
-      try { localStorage.removeItem(KEY); localStorage.setItem(STASH_KEY, v) } catch { /* still full — the file may still take it */ }
+      try { removeCurrentWebState(); localStorage.setItem(STASH_KEY, v) } catch { /* still full — the file may still take it */ }
     }
     set({ keptRev: get().keptRev + 1 })
     if (MOBILE) keeping = readStashes().then(f => writeStashes({ ...f, [key]: entry })).catch(() => {})
@@ -1253,7 +1344,7 @@ export const useStore = create((set, get) => {
     markOwed(true)
   }
 
-  const S0 = loadState()
+  const S0 = loadState(bootStateSource)
   S0.customEx = healCustomEx(S0.customEx)
   registerCustom(S0.customEx)
   // Which photos and videos are still waiting for the server, known before the first sign-out
@@ -1267,6 +1358,9 @@ export const useStore = create((set, get) => {
 
   return {
     S: S0,
+    // Transient recovery metadata for an explicit UI/download flow; it is never part of S.
+    webRecovery: bootWebRecovery,
+    getWebRecoveryRaw() { return selectWebRecoveryRaw(get()) },
     user: user0,
     ready: false,
     // The connection as the screens show it — see statusOf above for every field.
@@ -1506,7 +1600,7 @@ export const useStore = create((set, get) => {
         if (other) {
           keepForPrevious(owner)
           forgetSync()
-          localStorage.removeItem(KEY)
+          removeCurrentWebState()
           // The new owner before the new copy, as on a sign-out: another tab still holding the
           // previous account's copy must not join it into this one (QA 2026-10-06).
           localStorage.setItem('gym_owner_name', u.name || '')
@@ -1549,6 +1643,12 @@ export const useStore = create((set, get) => {
     // many asked), and the promise returned covers that follow-up too, so a caller that awaits
     // before signing out knows the last change is on the server.
     async pushState() {
+      if (get().webRecovery) {
+        clearTimeout(pushTm)
+        pushTm = null
+        pushPending = false
+        return
+      }
       if (!get().user) return
       clearTimeout(pushTm)
       pushTm = null

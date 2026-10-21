@@ -22,6 +22,7 @@ import Stepper from './components/Stepper.jsx'
 import { durationSheet } from './components/DurationWheel.jsx'
 import { REST_MAX, fmtRest } from './lib/duration.js'
 import Icon from './components/Icon.jsx'
+import WaterBody from './components/WaterBody.jsx'
 import { Button, Slider, Switch, Segmented, SelectRow, Row, TextField, NumberField, MultiSelectRow } from './components/ui.jsx'
 import { glyphOf, GLYPH_GROUPS, DEFAULT_GLYPH } from './lib/glyphs.js'
 import BodyMap from './components/BodyMap.jsx'
@@ -53,9 +54,17 @@ import { moveWorkout, sameWorkout, startTimeOf, durationMinOf, setWorkoutDuratio
 import { editCompletedSession, editLeftEmpty, editedRecord, editChangesNothing } from './lib/session-edit.js'
 import { stampWorkout } from './lib/sync-merge.js'
 import { weeklyWeights } from './lib/bodyweight.js'
+import {
+  DEFAULT_FAST, FAST_PRESETS, WATER_QUICK, fastElapsedMs, fastHitGoal, fastPreset,
+  fastRemainingMs, fastStreak, foodEntry, foodOn, foodTotal, goalOf, isFasting, profilePlan,
+  addFood, recentFoods, removeFood, startFast, stopFast, updateFood, waterGoalFor, waterGoalOf,
+  waterSet, waterTotal,
+} from './lib/wellness.js'
+import { clampGoal, sessionsPerWeek } from './lib/macros.js'
 import { workoutText } from './lib/workout-text.js'
 import { copyText } from './lib/clipboard.js'
 import { queueRemaining, pinState } from './lib/queue.js'
+import { moveExerciseTo, copyExerciseTo } from './lib/routine-actions.js'
 
 const S = () => useStore.getState().S
 const update = (...a) => useStore.getState().update(...a)
@@ -266,6 +275,424 @@ function WeightInput({ value, setValue, unit }) {
     <Slider value={sv} min={W_LO} max={W_HI} step={0.5} onChange={onSlide} />
   </>
 }
+
+/* ============================ daily essentials ============================ */
+//
+// Water, fasting and food, edited in one place each. The Home card carries the quick taps; these
+// are for the exact number, the change of mind, and the setting you only touch once.
+
+function WaterSheet({ close }) {
+  const st = useStore(s => s.S)
+  const d = todayISO()
+  const [ml, setMl] = useState(waterTotal(st.water, d))
+  const [goal, setGoal] = useState(waterGoalOf(st))
+  const suggestion = waterGoalFor(st, d)
+  const save = () => {
+    update(s => { s.water = waterSet(s.water, d, ml); s.waterGoal = Math.max(250, Math.round(goal)) })
+    close()
+    toast(t('Water saved'))
+  }
+  return <>
+    <h3>{t('Water')}</h3>
+    <div className="dim small" style={{ marginBottom: 10 }}>{t('Today')}</div>
+    <div className="row" style={{ justifyContent: 'center', gap: 8 }}>
+      <button className="iconbtn" onClick={() => setMl(v => Math.max(0, v - WATER_QUICK[0]))} aria-label={t('Remove {0} ml', fmtNum(WATER_QUICK[0]))}><Icon name="minus" /></button>
+      <label className="wl-read">
+        <NumberField fit value={ml} onChange={setMl} aria-label={t('Water (ml)')} enterKeyHint="done"
+          onKeyDown={e => { if (e.key === 'Enter') e.currentTarget.blur() }} />
+        <span className="u"> ml</span>
+      </label>
+      <button className="iconbtn" onClick={() => setMl(v => v + WATER_QUICK[0])} aria-label={t('Add {0} ml', fmtNum(WATER_QUICK[0]))}><Icon name="plus" /></button>
+    </div>
+    <div className="chips" style={{ justifyContent: 'center' }}>
+      <button className="chip" onClick={() => setMl(v => Math.max(0, v - WATER_QUICK[1]))}>−{fmtNum(WATER_QUICK[1])}</button>
+      {WATER_QUICK.map(q => <button key={q} className="chip" onClick={() => setMl(v => v + q)}>+{fmtNum(q)}</button>)}
+    </div>
+    <Slider value={Math.min(ml, 6000)} min={0} max={6000} step={50} onChange={setMl} />
+
+    <div style={{ marginTop: 18 }}>
+      <WaterBody ml={ml} goal={goal} size="lg" showBenefits />
+    </div>
+
+    {suggestion && Math.abs(suggestion.ml - goal) >= 100 && <div className="row between" style={{ gap: 10, marginTop: 14 }}>
+      <div className="dim small" style={{ minWidth: 0 }}>
+        {t('About {0} ml a day for your weight', fmtNum(suggestion.ml))}
+        {suggestion.training ? ' · ' + t('training day') : ''}
+      </div>
+      <Button size="sm" onClick={() => update(s => { s.waterGoal = suggestion.ml })}>{t('Use this')}</Button>
+    </div>}
+    <div className="dim small" style={{ marginTop: 12 }}>{t('About a fifth of what you drink comes from food.')}</div>
+
+    <div className="row between" style={{ marginTop: 16 }}>
+      <span className="lbl2">{t('Goal')}</span>
+      <span className="row" style={{ gap: 6, alignItems: 'baseline' }}>
+        <NumberField value={goal} onChange={setGoal} aria-label={t('Water goal (ml)')} style={{ width: 96, textAlign: 'end' }} />
+        <span className="dim small">ml</span>
+      </span>
+    </div>
+    <div className="row" style={{ gap: 8, marginTop: 18 }}>
+      <Button variant="primary" onClick={save}>{t('Save')}</Button>
+      {waterTotal(st.water, d) > 0 && <Button variant="ghost" onClick={() => { setMl(0); update(s => { s.water = waterSet(s.water, d, 0) }); close(); toast(t('Cleared')) }}>{t('Clear')}</Button>}
+    </div>
+  </>
+}
+
+function FastingSheet({ close }) {
+  const st = useStore(s => s.S)
+  const running = isFasting(st.fasting)
+  const [tick, setTick] = useState(() => Date.now())
+  useEffect(() => {
+    if (!running) return undefined
+    const id = setInterval(() => setTick(Date.now()), 1000)
+    return () => clearInterval(id)
+  }, [running])
+  const [win, setWin] = useState(st.fasting?.preset || st.fastWindow || DEFAULT_FAST)
+  const history = [...(st.fastLog || [])].reverse().slice(0, 7)
+  const streak = fastStreak(st.fastLog)
+
+  const start = () => {
+    update(s => { s.fasting = startFast(win); s.fastWindow = win })
+    close()
+    toast(t('Fast started'))
+  }
+  const end = () => {
+    update(s => {
+      const done = stopFast(s.fasting)
+      if (done) s.fastLog = [...(s.fastLog || []), done]
+      if (s.fasting?.preset) s.fastWindow = s.fasting.preset
+      s.fasting = null
+    })
+    close()
+    toast(t('Fast saved'))
+  }
+  const drop = id => update(s => { s.fastLog = (s.fastLog || []).filter(e => e && e.id !== id) })
+
+  return <>
+    <h3>{t('Fasting')}</h3>
+    {running ? <>
+      <div className="big" style={{ marginTop: 6 }}>{fmtDur(fastElapsedMs(st.fasting, tick))}</div>
+      <div className="dim small">
+        {fastHitGoal(st.fasting, tick) ? t('Goal reached') : t('{0} to go', fmtDur(fastRemainingMs(st.fasting, tick)))}
+        {' · '}{fastPreset(st.fasting.preset).id}
+      </div>
+      <div style={{ marginTop: 12 }}><Button variant="primary" icon="check" onClick={end}>{t('End fast')}</Button></div>
+    </> : <>
+      <div className="dim small" style={{ margin: '4px 0 10px' }}>{t('Not fasting')}</div>
+      <div className="chips" style={{ marginBottom: 14 }}>
+        {FAST_PRESETS.map(p => (
+          <button key={p.id} className={'chip' + (p.id === win ? ' on' : '')} aria-pressed={p.id === win}
+            onClick={() => { setWin(p.id); update(s => { s.fastWindow = p.id }) }}>
+            {p.id}
+          </button>
+        ))}
+      </div>
+      <div className="dim small" style={{ marginBottom: 14 }}>
+        {t('{0} fast, {1} eating window', fmtNum(fastPreset(win).fastH), fmtNum(fastPreset(win).eatH))}
+      </div>
+      <Button variant="primary" icon="play" onClick={start}>{t('Start fast')}</Button>
+    </>}
+
+    {streak > 0 && <div className="row small" style={{ marginTop: 16, gap: 6, color: 'var(--orange)' }}>
+      <Icon name="flame" style={{ fontSize: 14 }} />{t('{0} day streak', streak)}
+    </div>}
+
+    {history.length > 0 && <>
+      <h4 className="sec" style={{ marginTop: 18 }}>{t('Recent fasts')}</h4>
+      {history.map(e => (
+        <div key={e.id} className="row between" style={{ padding: '8px 0', borderBottom: '1px solid var(--surface-2)' }}>
+          <div style={{ minWidth: 0 }}>
+            <div className="ttl">{t('{0} h fasted', fmtNum(e.h))}</div>
+            <div className="dim small">{fmtDate(e.d, true)} · {e.preset}{e.hit ? ' · ' + t('Goal reached') : ''}</div>
+          </div>
+          <button className="iconbtn" aria-label={t('Delete')} onClick={() => drop(e.id)}><Icon name="trash" /></button>
+        </div>
+      ))}
+    </>}
+  </>
+}
+
+function FoodSheet({ close }) {
+  const st = useStore(s => s.S)
+  const d = todayISO()
+  const goal = goalOf(st)
+  const items = foodOn(st.food, d)
+  const recents = recentFoods(st.food, 12, d)
+  const total = foodTotal(st.food, d)
+
+  const [editing, setEditing] = useState(null)     // the entry being corrected, or null
+  const [name, setName] = useState('')
+  const [kcal, setKcal] = useState(0)
+  const [p, setP] = useState(0)
+  const [c, setC] = useState(0)
+  const [f, setF] = useState(0)
+
+  const reset = () => { setEditing(null); setName(''); setKcal(0); setP(0); setC(0); setF(0) }
+  const load = e => {
+    setEditing(e); setName(e.name); setKcal(e.kcal); setP(e.p); setC(e.c); setF(e.f)
+  }
+  const save = () => {
+    const label = name.trim()
+    if (!label) { toast(t('Give it a name')); return }
+    update(s => {
+      const entry = foodEntry({ name: label, kcal, p, c, f, d, at: editing?.at })
+      s.food = editing ? updateFood(s.food, { ...entry, id: editing.id, at: editing.at }) : addFood(s.food, entry)
+    })
+    reset()
+    toast(t('Food logged'))
+  }
+  const quick = r => {
+    update(s => { s.food = addFood(s.food, foodEntry({ name: r.name, kcal: r.kcal, p: r.p, c: r.c, f: r.f, d })) })
+    toast(t('Food logged'))
+  }
+  const drop = id => { update(s => { s.food = removeFood(s.food, id) }); if (editing?.id === id) reset() }
+
+  return <>
+    <h3>{t('Food')}</h3>
+    <div className="dim small" style={{ marginBottom: 12 }}>
+      {fmtNum(total.kcal)} kcal · P {fmtNum(total.p)} · C {fmtNum(total.c)} · F {fmtNum(total.f)}
+    </div>
+
+    {items.length > 0 && items.map(e => (
+      <div key={e.id} className={'row between' + (editing?.id === e.id ? ' ed' : '')}
+        style={{ padding: '9px 0', borderBottom: '1px solid var(--surface-2)', cursor: 'pointer' }}
+        onClick={() => load(e)}>
+        <div style={{ minWidth: 0 }}>
+          <div className="ttl">{e.name}</div>
+          <div className="dim small">{fmtNum(e.kcal)} kcal · P {fmtNum(e.p)} · C {fmtNum(e.c)} · F {fmtNum(e.f)}</div>
+        </div>
+        <button className="iconbtn" aria-label={t('Delete')} onClick={ev => { ev.stopPropagation(); drop(e.id) }}><Icon name="trash" /></button>
+      </div>
+    ))}
+
+    <h4 className="sec" style={{ marginTop: 16 }}>{editing ? t('Edit') : t('Add food')}</h4>
+    <TextField value={name} onChange={e => setName(e.target.value)} placeholder={t('What did you eat?')} aria-label={t('Food name')} />
+    <div className="row" style={{ gap: 8, marginTop: 8 }}>
+      {[
+        [kcal, setKcal, t('Calories')],
+        [p, setP, t('Protein')],
+        [c, setC, t('Carbs')],
+        [f, setF, t('Fat')],
+      ].map(([value, set, label]) => (
+        <label key={label} className="wl-macro">
+          <NumberField value={value} onChange={set} aria-label={label} style={{ textAlign: 'center' }} />
+          <span className="dim small">{label}</span>
+        </label>
+      ))}
+    </div>
+    <div className="row" style={{ gap: 8, marginTop: 14 }}>
+      <Button variant="primary" onClick={save}>{t('Save')}</Button>
+      {editing && <Button variant="ghost" onClick={reset}>{t('Cancel')}</Button>}
+    </div>
+
+    {recents.length > 0 && <>
+      <h4 className="sec" style={{ marginTop: 18 }}>{t('Logged before')}</h4>
+      <div className="chips">
+        {recents.map(r => (
+          <button key={r.name} className="chip" onClick={() => quick(r)}>
+            {r.name} · {fmtNum(r.kcal)}
+          </button>
+        ))}
+      </div>
+    </>}
+
+    <h4 className="sec" style={{ marginTop: 18 }}>{t('Daily goals')}</h4>
+    {goal.plan.ok ? <>
+      <div className="row between" style={{ gap: 8, marginBottom: 10 }}>
+        <span className="dim small">{fmtNum(goal.kcal)} kcal · {macroModeLabel(goal.plan.mode)}</span>
+        <Button size="sm" variant="ghost" onClick={() => { close(); macroSheet() }}>{t('Change')}</Button>
+      </div>
+      <div className="row" style={{ gap: 8 }}>
+        {[['p', t('Protein'), goal.p], ['c', t('Carbs'), goal.c], ['f', t('Fat'), goal.f]].map(([k, label, v]) => (
+          <div key={k} className="wl-macro">
+            <span className="wl-num">{fmtNum(v || 0)}</span>
+            <span className="dim small">{label}</span>
+          </div>
+        ))}
+      </div>
+    </> : <div className="dim small">{t('We can work these out for you once you weigh in, add your height and age, and pick a goal.')}</div>}
+    <div style={{ height: 8 }} />
+    <Button onClick={close}>{t('Done')}</Button>
+  </>
+}
+
+/* ---- the calories goal ---- */
+//
+// Where the numbers on the calories row come from. You say what you are actually trying to do and
+// the app does the arithmetic: the last weigh-in, your sex in Settings, and how often the training
+// log says you train. Nothing here is a number you can starve yourself into — the floors at the
+// bottom are what the targets rest on, and a number typed under one is raised to it rather than
+// kept. That is the whole difference between a target and a diet.
+
+const macroModeLabel = id => (id === 'cut' ? t('Lose weight') : id === 'bulk' ? t('Gain muscle') : t('Maintain'))
+const macroModeHint = id => (id === 'cut' ? t('A fifth below what you burn')
+  : id === 'bulk' ? t('A tenth above what you burn')
+  : t('Exactly what you burn'))
+
+function MacroSheet({ close }) {
+  const st = useStore(s => s.S)
+  const plan = profilePlan(st)
+  const unit = st.unit || 'kg'
+  const mode = st.macroMode || 'maintain'
+  const spw = sessionsPerWeek(st.workouts, 8)
+
+  const [height, setHeight] = useState(st.heightCm || '')
+  const [age, setAge] = useState(st.age || '')
+  // Null until something is actually typed, so the tiles show the live plan right up to that
+  // moment — and so changing the goal throws a stale draft away instead of saving yesterday's
+  // answer over today's numbers.
+  const [draft, setDraft] = useState(null)
+  const [custom, setCustom] = useState(() => ['kcal', 'p', 'c', 'f'].some(k => Number(st.macroGoal?.[k]) > 0))
+
+  const shown = draft || goalOf(st)
+
+  const pick = id => {
+    update(s => { s.macroMode = id; s.macroGoal = {} })
+    setDraft(null)
+  }
+  const saveBody = () => {
+    update(s => {
+      s.heightCm = Number(height) > 0 ? Math.round(Number(height)) : null
+      s.age = Number(age) > 0 ? Math.round(Number(age)) : null
+    })
+    toast(t('Saved'))
+  }
+  // The one place a target can be typed rather than derived — and it is still read through the
+  // same floors, so "I want to eat 1200" comes back as the minimum, with an explanation.
+  const saveOver = () => {
+    const next = {}
+    let raised = false
+    for (const k of ['kcal', 'p', 'c', 'f']) {
+      const r = clampGoal(shown[k], plan, k)
+      if (r) { next[k] = r.value; raised = raised || r.raised }
+    }
+    update(s => { s.macroGoal = next })
+    setDraft(null)
+    toast(raised ? t('Raised to the minimum your body needs') : t('Saved'))
+  }
+  const clearOver = () => { update(s => { s.macroGoal = {} }); setDraft(null) }
+
+  const Floor = ({ v, label, note, unit: u }) => (
+    <div className="wl-floor">
+      <div className="row between" style={{ gap: 10 }}>
+        <span className="small">{label}</span>
+        <span className="small">{fmtNum(v)}{u ? ' ' + u : ''}</span>
+      </div>
+      <div className="dim small" style={{ marginTop: 2 }}>{note}</div>
+    </div>
+  )
+
+  return <>
+    <h3>{t('Your goal')}</h3>
+    <div className="dim small" style={{ margin: '4px 0 12px' }}>
+      {t('Say what you are actually trying to do. We work out the numbers from your weigh-ins, your body and your training log.')}
+    </div>
+
+    <div className="chips" style={{ marginBottom: 6 }}>
+      {['cut', 'maintain', 'bulk'].map(id => (
+        <button key={id} className={'chip nocap' + (id === mode ? ' on' : '')} aria-pressed={id === mode}
+          onClick={() => pick(id)}>
+          {macroModeLabel(id)}
+        </button>
+      ))}
+    </div>
+    <div className="dim small" style={{ marginBottom: 16 }}>{macroModeHint(mode)}</div>
+
+    {plan.ok ? <>
+      <div className="wl-line">
+        <span className="dim small">{t('Resting burn')}</span>
+        <span className="small">{fmtNum(plan.bmr)} kcal</span>
+      </div>
+      <div className="wl-line">
+        <span className="dim small">{t('Training')}</span>
+        <span className="small">{t('{0}x a week', fmtNum(Math.round(spw * 10) / 10))}</span>
+      </div>
+      <div className="wl-line">
+        <span className="dim small">{t('What you burn')}</span>
+        <span className="small">{fmtNum(plan.maintenance)} kcal</span>
+      </div>
+
+      <div className="row" style={{ gap: 8, marginTop: 16 }}>
+        {[['kcal', t('Calories'), ''], ['p', t('Protein'), 'g'], ['c', t('Carbs'), 'g'], ['f', t('Fat'), 'g']].map(([k, label, u]) => (
+          <div key={k} className="wl-macro">
+            <span className="wl-num">{fmtNum(shown[k] || 0)}</span>
+            <span className="dim small">{label}{u ? ' ' + u : ''}</span>
+          </div>
+        ))}
+      </div>
+
+      <div className="dim small" style={{ marginTop: 10 }}>
+        {plan.perWeekPct > 0
+          ? t('About {0} a week ({1}%) — the pace that keeps the change mostly muscle', fmtNum(Math.abs(plan.perWeek)) + ' ' + unit, fmtNum(plan.perWeekPct))
+          : t('Holding steady — your weight should not move')}
+        {plan.etaWeeks ? ' · ' + t('{0} weeks to {1}', plan.etaWeeks, fmtNum(st.targetW) + ' ' + unit) : ''}
+      </div>
+
+      <h4 className="sec" style={{ marginTop: 20 }}>{t('The minimum you require')}</h4>
+      <div className="dim small">{t('Your targets never go below these, and a number you type under one is raised to it.')}</div>
+      <div style={{ marginTop: 4 }}>
+        <Floor v={plan.floor.kcal} label={t('Calories')}
+          note={t('Never a quarter under what you burn, and never under what your body uses at rest.')} />
+        <Floor v={plan.floor.p} label={t('Protein')} unit="g"
+          note={t('Below this on a cut you lose muscle with the fat.')} />
+        <Floor v={plan.floor.f} label={t('Fat')} unit="g"
+          note={t('Below this your hormones and your fat-soluble vitamins suffer.')} />
+      </div>
+
+      <div className="row between" style={{ marginTop: 18, gap: 12 }}>
+        <div style={{ minWidth: 0 }}>
+          <div className="small">{t('Set my own numbers')}</div>
+          <div className="dim small">{t('Still raised to the minimum if you go under it.')}</div>
+        </div>
+        <Switch checked={custom} onChange={setCustom} aria-label={t('Set my own numbers')} />
+      </div>
+      {custom && <>
+        <div className="row" style={{ gap: 8, marginTop: 12 }}>
+          {[['kcal', t('Calories')], ['p', t('Protein')], ['c', t('Carbs')], ['f', t('Fat')]].map(([k, label]) => (
+            <label key={k} className="wl-macro">
+              <NumberField value={shown[k] || ''} onChange={n => setDraft(d => ({ ...(d || shown), [k]: n }))}
+                aria-label={t('{0} goal', label)} style={{ textAlign: 'center' }} />
+              <span className="dim small">{label}</span>
+            </label>
+          ))}
+        </div>
+        <div className="row" style={{ gap: 8, marginTop: 12 }}>
+          <Button size="sm" variant="primary" onClick={saveOver}>{t('Save')}</Button>
+          <Button size="sm" variant="ghost" onClick={clearOver}>{t('Back to the plan')}</Button>
+        </div>
+      </>}
+    </> : <div className="dim small">
+      {plan.needs.includes('weight')
+        ? t('We need a weigh-in before we can work this out.')
+        : t('Add your height and age below and the numbers appear here.')}
+    </div>}
+
+    <h4 className="sec" style={{ marginTop: 20 }}>{t('About you')}</h4>
+    <div className="dim small">{t('Your resting burn is worked out from your weight, height and age. Ask once and we never ask again.')}</div>
+    <div className="row" style={{ gap: 8, marginTop: 10 }}>
+      <label className="wl-macro">
+        <NumberField value={height} onChange={setHeight} aria-label={t('Height (cm)')} style={{ textAlign: 'center' }} />
+        <span className="dim small">{t('Height')} cm</span>
+      </label>
+      <label className="wl-macro">
+        <NumberField value={age} onChange={setAge} decimal={false} aria-label={t('Age')} style={{ textAlign: 'center' }} />
+        <span className="dim small">{t('Age')}</span>
+      </label>
+    </div>
+    <div className="row" style={{ gap: 8, marginTop: 12 }}>
+      <Button size="sm" onClick={saveBody}>{t('Save')}</Button>
+    </div>
+
+    <div style={{ height: 18 }} />
+    <Button variant="primary" onClick={close}>{t('Done')}</Button>
+  </>
+}
+
+export const waterSheet = () => ui().openSheet(close => <WaterSheet close={close} />)
+export const fastingSheet = () => ui().openSheet(close => <FastingSheet close={close} />)
+export const foodSheet = () => ui().openSheet(close => <FoodSheet close={close} />)
+export const macroSheet = () => ui().openSheet(close => <MacroSheet close={close} />)
+
+/* ============================ body weight ============================ */
 
 /* ============================ body weight ============================ */
 function BwSheet({ required, onDone, close }) {
@@ -927,6 +1354,18 @@ function ExerciseDetail({ ex, close }) {
 }
 export const exerciseDetailSheet = ex => ui().openSheet(close => <ExerciseDetail ex={ex} close={close} />)
 
+/* The exercise's animation on its own: the demo, the name and the steps to do the movement.
+   Opened from the routine editor, next to the chain button -- the exercise's own sheet is about
+   the numbers, this one is about the movement. */
+function ExerciseAnimation({ ex }) {
+  return <>
+    <h3 className={'exdetail-name ' + exerciseNameClass(ex)}>{exerciseNameFor(ex)}</h3>
+    <Media ex={ex} />
+    {instrFor(ex).length > 0 && <><h4 className="sec">{t('How to')}{!INSTR_LANGS.includes(getLang()) && <span className="dim" style={{ textTransform: 'none', letterSpacing: 0 }}> · {t('instructions in English')}</span>}</h4><ol className="steps-list">{instrFor(ex).map((s, i) => <li key={i}>{s}</li>)}</ol></>}
+  </>
+}
+export const exerciseAnimationSheet = ex => ui().openSheet(() => <ExerciseAnimation ex={ex} />)
+
 /* ============================ exercise history ============================ */
 // What you did on this exercise before, reachable mid-workout (issue #43): the curve first,
 // then the last sessions set by set, so the question "what did I do last month" is answered
@@ -1009,6 +1448,45 @@ function AddToRoutine({ ex, close }) {
   </>
 }
 export const addToRoutineSheet = ex => ui().openSheet(close => <AddToRoutine ex={ex} close={close} />)
+
+/* ============================ move an exercise to another routine ============================ */
+// Which routine an exercise goes to when it leaves the one it is in. The target is picked
+// here and the change happens at once, with an Undo: the toast puts the exercise back exactly
+// where it was, its place in the old routine and the new one included (lib/routine-actions.js).
+//
+// Copying is the same sheet with the other answer chosen: the exercise stays where it is and a
+// copy of it goes to the routine that is picked. Both keep the sets, reps, weight, rest, note
+// and rule the slot had; both leave the exercise's history behind, because progress belongs to
+// a routine and an exercise together (#216).
+function MoveExerciseToRoutine({ ex, fromId, index, close }) {
+  const st = useStore(s => s.S)
+  const [mode, setMode] = useState('move')
+  const from = st.routines.find(r => r.id === fromId)
+  const targets = st.routines.filter(r => r.id !== fromId)
+  const pick = rid => {
+    close()
+    if (mode === 'move') moveExerciseTo(fromId, index, rid)
+    else copyExerciseTo(fromId, index, rid)
+  }
+  return <>
+    <h3>{mode === 'move' ? t('Move exercise') : t('Copy exercise')}</h3>
+    <div className="muted small" style={{ marginBottom: 12 }}>
+      {mode === 'move'
+        ? t('“{0}” leaves {1} and goes to the end of the routine you pick.', exerciseNameText(ex), from ? from.name : t('this routine'))
+        : t('“{0}” stays in {1}, and a copy of it goes to the end of the routine you pick.', exerciseNameText(ex), from ? from.name : t('this routine'))}
+    </div>
+    <Segmented className="seg-inline" value={mode} onChange={setMode}
+      options={[{ value: 'move', label: t('Move') }, { value: 'copy', label: t('Duplicate') }]} />
+    {targets.length ? <div className="list" style={{ marginTop: 12 }}>
+      {targets.map(r => <div key={r.id} className="item" {...tappable(() => pick(r.id))}>
+        <span className="lrow-i"><Icon name={glyphOf(r.emoji)} /></span>
+        <div className="grow"><div className="tt">{r.name}</div><div className="ss">{exCount(r.ex.length)}</div></div>
+        <Icon name="chevronRight" className="chev" />
+      </div>)}
+    </div> : <div className="empty" style={{ marginTop: 12 }}>{t('No other routine yet.')}</div>}
+  </>
+}
+export const moveExerciseSheet = (ex, fromId, index) => ui().openSheet(close => <MoveExerciseToRoutine ex={ex} fromId={fromId} index={index} close={close} />)
 
 /* ============================ custom exercises (issue #11) ============================ */
 // Name + body part is all it takes — the exercise then behaves like any built-in one
@@ -1456,7 +1934,7 @@ const intensifierToSave = x => (x.type === 'dropset'
     ? { ...x, totalReps: Math.max(1, Math.round(x.totalReps) || 0), restSec: Math.max(5, Number(x.restSec) || 0) }
     : x)
 
-function ExConfig({ ex, existing, onSave, onDelete, onReplace, close, routine, initial, saveLabel }) {
+function ExConfig({ ex, existing, onSave, onDelete, onReplace, close, routine, initial, saveLabel, onMove }) {
   const st = useStore(s => s.S)
   const cardio = isCardio(ex.id)
   const speedUnit = speedUnitOf(st)
@@ -1783,10 +2261,13 @@ function ExConfig({ ex, existing, onSave, onDelete, onReplace, close, routine, i
         slot, with the slot's sets, reps, weight, rule and note kept (lib/routines.js). What was
         changed on this sheet and not saved is left behind, as closing it would. */}
     {onReplace && <><div style={{ height: 8 }} /><Button icon="swap" onClick={() => { close(); onReplace() }}>{t('Replace exercise')}</Button></>}
+    {/* The way out of this routine and into another one: the slot keeps what was set up for it
+        and the sheet that follows picks where it goes (lib/routine-actions.js). */}
+    {onMove && <><div style={{ height: 8 }} /><Button icon="merge" onClick={() => { close(); onMove() }}>{t('Move to another routine')}</Button></>}
     {onDelete && <><div style={{ height: 8 }} /><Button variant="danger" onClick={() => { close(); onDelete() }}>{t('Remove from routine')}</Button></>}
   </>
 }
-export const exConfigSheet = (ex, existing, onSave, onDelete, routine, initial, onReplace, saveLabel) => ui().openSheet(close => <ExConfig ex={ex} existing={existing} initial={initial} onSave={onSave} onDelete={onDelete} onReplace={onReplace} routine={routine} saveLabel={saveLabel} close={close} />)
+export const exConfigSheet = (ex, existing, onSave, onDelete, routine, initial, onReplace, saveLabel, onMove) => ui().openSheet(close => <ExConfig ex={ex} existing={existing} initial={initial} onSave={onSave} onDelete={onDelete} onReplace={onReplace} routine={routine} saveLabel={saveLabel} onMove={onMove} close={close} />)
 
 /* ============================ glyph picker ============================ */
 // Grouped by what the glyph means for a training day, so picking one is a scan
@@ -1896,7 +2377,7 @@ export async function exportPlanFile() {
   const st = S(), user = useStore.getState().user
   const bundle = buildPlanBundle(st, user?.name ? t('{0}’s plan', user.name) : '')
   const json = JSON.stringify(bundle, null, 2)
-  const name = 'opengym-plan-' + todayISO() + '.json'
+  const name = 'gymandme-plan-' + todayISO() + '.json'
   if (MOBILE) { try { await shareExport(json, name) } catch (e) { /* dismissed */ } return }
   const blob = new Blob([json], { type: 'application/json' })
   const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; a.click(); URL.revokeObjectURL(a.href)
@@ -1936,7 +2417,7 @@ function PlanTools({ close }) {
     <h3>{t('Share your plan')}</h3>
     <div className="muted small" style={{ marginBottom: 16 }}>{t('Send your routines to a friend, or put your week on paper.')}</div>
     <Button variant="primary" icon="share" onClick={exportFile} disabled={!hasRoutines}>{t('Export plan file')}</Button>
-    <div className="dim small" style={{ margin: '7px 2px 0', lineHeight: 1.4 }}>{t('A small file a friend can import into their own openGym. Routines only, none of your workouts or weigh-ins.')}</div>
+    <div className="dim small" style={{ margin: '7px 2px 0', lineHeight: 1.4 }}>{t('A small file a friend can import into their own Gym&Me. Routines only, none of your workouts or weigh-ins.')}</div>
     <div style={{ height: 12 }} />
     <Button variant="tinted" icon="note" onClick={() => { close(); printWholePlan() }} disabled={!hasRoutines}>{t('Print / Save as PDF')}</Button>
     <div className="dim small" style={{ margin: '7px 2px 0', lineHeight: 1.4 }}>{t('A clean printout, one page per plan. No exercise ever gets split across pages.')}</div>

@@ -6,6 +6,7 @@
    "synced", and its next push (a matching conditional one) deleted those workouts from the
    server and from the other device. (QA 2026-10-06, also in v1.3.9.) */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { WEB_STATE_KEY } from '../lib/product.js'
 
 const h = vi.hoisted(() => ({ api: null }))
 vi.mock('../lib/api.js', () => ({ api: (...a) => h.api(...a), setRemoteAuth: () => {} }))
@@ -43,7 +44,7 @@ let full = false
 const realSet = Storage.prototype.setItem
 // (spied before the first write: happy-dom keeps the method a storage first used)
 vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function (k, v) {
-  if (full && k === 'gym_state_v1') throw new DOMException('quota', 'QuotaExceededError')
+  if (full && k === WEB_STATE_KEY) throw new DOMException('quota', 'QuotaExceededError')
   return realSet.call(this, k, v)
 })
 beforeEach(() => {

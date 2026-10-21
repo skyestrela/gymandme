@@ -1,6 +1,6 @@
-# Contributing to openGym
+# Contributing to Gym&Me
 
-Thanks for taking a look. openGym is deliberately small and light on dependencies, and the aim is
+Thanks for taking a look. Gym&Me is deliberately small and light on dependencies, and the aim is
 to keep it that way: easy to read, easy to self-host.
 
 ## Project layout
@@ -13,7 +13,7 @@ api/       Backend: server.js on plain node:http, two dependencies (@simplewebau
 web/       Multi-stage Dockerfile (builds the frontend, serves it with nginx) and the nginx template.
 mcp/       Optional read-only MCP server for LLM clients (Claude Desktop, Cursor, ...). Not in the
            Docker build; it only runs when a client spawns it. See mcp/README.md.
-website/   The static project site at opengym.duarte-santos.ch.
+website/   The static project site.
 kubernetes/ Example manifests (docs/SELF_HOSTING_KUBERNETES.md).
 docs/      User and operator guides (index: docs/README.md); docs/dev/ has feature design notes.
 media/     Exercise images and GIFs, gitignored and fetched at runtime.
@@ -52,8 +52,8 @@ cd mcp && npm test
 
 ## Using AI tools
 
-openGym itself is developed with Claude Code (see
-[How openGym is built](README.md#how-opengym-is-built)), and [`CLAUDE.md`](CLAUDE.md) holds the
+Gym&Me itself is developed with Claude Code (see
+[How Gym&Me is built](README.md#how-gymandme-is-built)), and [`CLAUDE.md`](CLAUDE.md) holds the
 project context for it. You're welcome to use whatever tools you like for a pull request. The bar
 is the same either way: you understand the change, it's tested, and you can answer questions about
 it in review.

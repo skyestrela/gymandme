@@ -26,6 +26,7 @@ import { api, apiBlob, apiUpload } from './api.js'
 import { prefetchAllowed } from './media-prefetch.js'
 import { MB, BG_UPLOAD_METERED_MAX_MB, LOCAL_CACHE_MAX_MB, LOCAL_GC_GRACE_MS, limitsFrom, fmtMB } from './media-limits.js'
 import { MOBILE, nativeLoad } from './mobile.js'
+import { WEB_STATE_KEY } from './product.js'
 import { registerMediaRunner, publishMediaStatus, pendingRefCount, loadPending } from './media-owed.js'
 import { t } from './i18n-core.js'
 
@@ -41,7 +42,7 @@ const RECENT_WORKOUT_POSTERS = 20
 // Refusals that will not change by trying again: the file stays here, pending, and is not
 // offered again until someone asks (the Settings row).
 const REJECTED = new Set(['media-too-large', 'media-type', 'media-invalid', 'media-too-long', 'proxy-too-large', 'hash-mismatch'])
-const PERSISTED_KEY = 'gym_state_v1'
+const PERSISTED_KEY = WEB_STATE_KEY
 
 const sleep = ms => new Promise(r => setTimeout(r, ms))
 const isNetwork = e => !e || e.status == null || e.code === 'timeout' || e.code === 'network'

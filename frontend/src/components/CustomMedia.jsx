@@ -131,7 +131,7 @@ export function LinkCard({ url, compact, mini }) {
 
 /* ------------------------------------------------------------------ the big picture ------- */
 
-export default function CustomMedia({ ex, id, compact, minimizable }) {
+export default function CustomMedia({ ex, id, compact, minimizable, tiny }) {
   const gifSize = useStore(s => s.S.gifSize)
   const update = useStore(s => s.update)
   // The workout's list layout, from the store: only the workout card is minimizable.
@@ -145,7 +145,7 @@ export default function CustomMedia({ ex, id, compact, minimizable }) {
   const toggle = minimizable
     ? <button className="giftoggle" onClick={toggleSize}><Icon name={mini ? 'expand' : 'minimize'} />{mini ? t('Expand') : t('Minimize')}</button>
     : null
-  const cls = 'exmedia' + (compact ? ' compact' : '') + (mini ? ' mini' : '')
+  const cls = 'exmedia' + (compact ? ' compact' : '') + (tiny ? ' tiny' : '') + (mini ? ' mini' : '')
   const name = exerciseNameFor(ex)
   if (!m) return <LinkCard url={link} compact={compact} mini={mini} />
   const body = m.kind === 'video'

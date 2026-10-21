@@ -13,6 +13,7 @@
    at BASE and Capacitor's local server for any other URL. */
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 import { syncFingerprint } from '../lib/sync-changes.js'
+import { MOBILE_STATE_FILE, WEB_STATE_KEY } from '../lib/product.js'
 
 const h = vi.hoisted(() => {
   vi.stubEnv('VITE_MOBILE', '1')   // lib/mobile.js: MOBILE = import.meta.env.VITE_MOBILE === '1'
@@ -48,7 +49,7 @@ const USER = { id: 'u1', name: 'andi', admin: true }
 const clone = v => JSON.parse(JSON.stringify(v))
 const workout = (id, d) => ({ id, d, start: 1, entries: [] })
 const routine = (id, reps) => ({ id, name: id, ex: [{ id: 'bench', sets: 2, reps }] })
-const INDEX_HTML = '<!doctype html><html><head><title>openGym</title></head><body><div id="root"></div></body></html>'
+const INDEX_HTML = '<!doctype html><html><head><title>Gym&Me</title></head><body><div id="root"></div></body></html>'
 const res = (status, body, type = 'application/json') => ({
   ok: status >= 200 && status < 300, status,
   headers: { get: k => (k.toLowerCase() === 'content-type' ? type : null) },
@@ -110,10 +111,10 @@ function pairedPhone({ localStorage: withLocal = true, mirror, synced = true } =
   const S = { ...clone(DEF), ...clone(SERVER_STATE) }
   delete S._rev
   h.files.set('DATA/opengym-remote.json', JSON.stringify({ mode: 'remote', base: BASE, token: 'TOKEN-OLD', user: USER }))
-  h.files.set('DATA/opengym-state.json', JSON.stringify(mirror || S))
+  h.files.set('DATA/' + MOBILE_STATE_FILE, JSON.stringify(mirror || S))
   h.files.set('DATA/opengym-state-owner.json', JSON.stringify({ owner: USER.id, ts: (mirror || S)._ts }))
   if (withLocal) {
-    localStorage.setItem('gym_state_v1', JSON.stringify(S))
+    localStorage.setItem(WEB_STATE_KEY, JSON.stringify(S))
     localStorage.setItem('gym_user', JSON.stringify(USER))
     localStorage.setItem('gym_owner', USER.id)
     localStorage.setItem('gym_sync', JSON.stringify({ rev: 5, ts: 1000 }))
@@ -128,9 +129,9 @@ function zombiePhone(local) {
   localStorage.setItem('gym_user', JSON.stringify(USER))
   localStorage.setItem('gym_owner', USER.id)
   localStorage.setItem('gym_guest', '1')
-  localStorage.setItem('gym_state_v1', JSON.stringify(local))
+  localStorage.setItem(WEB_STATE_KEY, JSON.stringify(local))
   h.files.set('DATA/opengym-remote.json', JSON.stringify({ mode: 'local' }))
-  h.files.set('DATA/opengym-state.json', JSON.stringify(local))
+  h.files.set('DATA/' + MOBILE_STATE_FILE, JSON.stringify(local))
 }
 
 // Every test boots its own store; the ones before it must not write into its files. Their
@@ -290,9 +291,9 @@ describe('a phone an earlier version already unpaired', () => {
 
     expect(r).toMatchObject({ owed: true })
     expect(ids(useStore.getState().S.workouts)).toEqual(['w1', 'w-week'])
-    expect(localStorage.getItem('gym_state_v1')).toContain('w-week')
+    expect(localStorage.getItem(WEB_STATE_KEY)).toContain('w-week')
     await sleep(900)
-    expect(ids(readFile('opengym-state.json').workouts)).toEqual(['w1', 'w-week'])
+    expect(ids(readFile(MOBILE_STATE_FILE).workouts)).toEqual(['w1', 'w-week'])
     expect(useStore.getState().user).toEqual(USER)
     expect(h.calls).toHaveLength(0)
   })
@@ -413,7 +414,7 @@ describe('remote-mode boot and the durable file mirror', () => {
     expect(ids(useStore.getState().S.workouts)).toEqual(['w1', 'w-web', 'w2'])
     expect(ids(srv.doc.workouts)).toEqual(['w1', 'w-web', 'w2'])
     expect(srv.puts.at(-1).baseRev).toBe(6)
-    expect(ids(readFile('opengym-state.json').workouts)).toEqual(['w1', 'w-web', 'w2'])
+    expect(ids(readFile(MOBILE_STATE_FILE).workouts)).toEqual(['w1', 'w-web', 'w2'])
   })
 
   it('an ordinary start, mirror and storage in step, pulls as before and pushes nothing', async () => {
@@ -461,7 +462,7 @@ describe('the file mirror never brings back a copy that is not this account\'s l
     useStore.getState().update(s => { s.workouts.push(workout('a-secret', '2026-09-21')) })
     await useStore.getState().pushState()
     await sleep(900)
-    expect(ids(readFile('opengym-state.json').workouts)).toEqual(['w1', 'a-secret'])
+    expect(ids(readFile(MOBILE_STATE_FILE).workouts)).toEqual(['w1', 'a-secret'])
     return useStore
   }
 
@@ -481,10 +482,10 @@ describe('the file mirror never brings back a copy that is not this account\'s l
   it('another account paired while the file cannot be written: his copy left in it is never taken for hers', async () => {
     let useStore = await andiLogged()
     const bea = beaServer()
-    h.refuse.add('opengym-state.json')
+    h.refuse.add(MOBILE_STATE_FILE)
     await useStore.getState().connectToServer('gym.example.com', 'ABCD2345', vi.fn(async () => false))
     await sleep(900)
-    expect(ids(readFile('opengym-state.json').workouts)).toEqual(['w1', 'a-secret'])
+    expect(ids(readFile(MOBILE_STATE_FILE).workouts)).toEqual(['w1', 'a-secret'])
 
     useStore = await freshStore()
     await useStore.getState().boot()
@@ -497,9 +498,9 @@ describe('the file mirror never brings back a copy that is not this account\'s l
     h.files.clear()
     localStorage.clear()
     const local = { ...clone(DEF), _ts: Date.now(), workouts: [workout('mine', '2026-09-20')] }
-    localStorage.setItem('gym_state_v1', JSON.stringify(local))
+    localStorage.setItem(WEB_STATE_KEY, JSON.stringify(local))
     h.files.set('DATA/opengym-remote.json', JSON.stringify({ mode: 'local' }))
-    h.files.set('DATA/opengym-state.json', JSON.stringify(local))
+    h.files.set('DATA/' + MOBILE_STATE_FILE, JSON.stringify(local))
     let useStore = await freshStore()
     await useStore.getState().boot()
     const srv = serverWith(SERVER_STATE)
@@ -521,7 +522,7 @@ describe('the file mirror never brings back a copy that is not this account\'s l
     const mine = { ...clone(DEF), ...clone(SERVER_STATE), _ts: 3000 }
     delete mine._rev
     pairedPhone({ mirror: mine })
-    localStorage.setItem('gym_state_v1', JSON.stringify(mine))
+    localStorage.setItem(WEB_STATE_KEY, JSON.stringify(mine))
     localStorage.setItem('gym_sync', JSON.stringify({ rev: 5, ts: 3000 }))
     return serverWith({ ...SERVER_STATE, _ts: 2000, _rev: 6, workouts: [...SERVER_STATE.workouts, workout('w-other', '2026-09-19')] })
   }
@@ -541,7 +542,7 @@ describe('the file mirror never brings back a copy that is not this account\'s l
 
   it('with the file not writable at all, the copy before the adopt is merged at most — never pushed over the other device\'s work', async () => {
     const srv = clockAhead()
-    h.refuse.add('opengym-state.json')
+    h.refuse.add(MOBILE_STATE_FILE)
     h.refuse.add('opengym-state-owner.json')
     let useStore = await freshStore()
     await useStore.getState().boot()

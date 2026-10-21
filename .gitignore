@@ -7,6 +7,8 @@ data/
 
 # Local config
 .env
+# Machine-local dev overrides (tailscale hostnames, local media endpoints)
+frontend/.env.development
 
 # Build output / deps
 frontend/dist/

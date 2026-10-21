@@ -6,6 +6,19 @@ import {
 import { EXDB } from './exercises-data.js'
 import de from '../locales/de.js'
 
+describe('Gym&Me product copy', () => {
+  it('brands product references in English and loaded locale copy without changing translation keys', () => {
+    _setLangState('en', {}, null, null)
+    expect(t('Made with openGym')).toBe('Made with Gym&Me')
+
+    _setLangState('fr', { 'Made with openGym': 'Créé avec openGym', 'opengym backup': 'sauvegarde opengym' }, null, null)
+    expect(t('Made with openGym')).toBe('Créé avec Gym&Me')
+    expect(t('opengym backup')).toBe('sauvegarde gymandme')
+
+    _setLangState('en', {}, null, null)
+  })
+})
+
 describe('baseLang', () => {
   it('maps a derived locale to the language whose packs it loads', () => {
     expect(baseLang('de-CH')).toBe('de')

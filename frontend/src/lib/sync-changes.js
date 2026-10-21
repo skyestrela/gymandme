@@ -26,6 +26,11 @@ const LISTS = {
   b: ['bodyweight', e => e?.d],
   r: ['routines', r => r?.id],
   c: ['customEx', e => e?.id],
+  // Daily essentials: a day's water like a weigh-in (one per day), a logged food and a
+  // completed fast by id — so drinking a glass on one device counts as one pending change.
+  wa: ['water', e => e?.d],
+  f: ['food', e => e?.id],
+  fl: ['fastLog', e => e?.id],
 }
 // Not content: the stamps and the revision say when, not what (`deleted` and `edited` go with a
 // change the lists or the rest already count); the running workout never syncs.

@@ -22,7 +22,7 @@ const umamiSrc = process.env.VITE_UMAMI_SRC
 const umamiId = process.env.VITE_UMAMI_ID
 
 const umami = {
-  name: 'opengym-umami',
+  name: 'gymandme-umami',
   transformIndexHtml() {
     if (!umamiSrc || !umamiId) return
     return [{
@@ -44,7 +44,7 @@ const umami = {
 let outDir = fileURLToPath(new URL('./dist/', import.meta.url))
 let lazy = []
 const swStamp = {
-  name: 'opengym-sw-stamp',
+  name: 'gymandme-sw-stamp',
   apply: 'build',
   configResolved(config) { outDir = resolve(config.root, config.build.outDir) },
   generateBundle(_, bundle) { lazy = lazyAssets(bundle) },
@@ -61,10 +61,10 @@ const swStamp = {
 // APK: no Android-only settings, a service worker, the passkey login. scripts/check-mobile-bundle.mjs
 // reads this tag in the synced copy after `cap sync` and fails the build without it.
 const flavor = {
-  name: 'opengym-flavor',
+  name: 'gymandme-flavor',
   transformIndexHtml() {
     if (process.env.VITE_MOBILE !== '1') return
-    return [{ tag: 'meta', attrs: { name: 'opengym-flavor', content: 'mobile' }, injectTo: 'head' }]
+    return [{ tag: 'meta', attrs: { name: 'gymandme-flavor', content: 'mobile' }, injectTo: 'head' }]
   }
 }
 
@@ -85,6 +85,8 @@ export default defineConfig({
   plugins: [react(), umami, flavor, swStamp],
   base: './',
   server: {
+    // Allow the WSL node's exact Tailscale HTTPS hostname, not a broad tailnet suffix.
+    allowedHosts: ['ax16pro-wsl-new.tail07c964.ts.net'],
     // The Coach's core (payload, validator, prompts, HTTP adapters) lives in ../api/coach/core
     // and is imported by the phone build. vite build and vitest already reach it; the dev
     // server needs to be told the workspace is wider than frontend/.

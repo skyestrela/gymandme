@@ -154,6 +154,10 @@ export function buildDemoState() {
     dayPlan,
     workouts, bodyweight, exWeights,
     targetW: TARGET_W,
+    // What the calories plan is worked out from. Mifflin-St Jeor needs a height and an age, and
+    // the goal is the one thing the app cannot infer — the weight trend above says this profile
+    // is losing, so that is the goal it is given.
+    body: 'male', heightCm: 180, age: 30, macroMode: 'cut',
     // The history is rated, so the demo turns the column on and the stats get a scale to
     // label their aggregates with instead of guessing one (see displayScale).
     effort: 'rir'

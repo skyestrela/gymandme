@@ -41,7 +41,16 @@ describe('Brazilian Portuguese locale', () => {
     // has to be taught is a number nobody reads. What the numbers stood for is asserted above.
     // If the hash fails, review the changed keys and wording before accepting a new one. From
     // frontend/: node scripts/pt-br-inheritance-fingerprint.mjs --list
-    expect(fingerprint, 'pt-PT inheritance changed; review the inherited pt-BR wording').toBe('5304c30895afe32bf14334f32497355b645f481f695c582e3b28161a23cba864')
+    expect(fingerprint, 'pt-PT inheritance changed; review the inherited pt-BR wording').toBe('f474b6595b4633bc8e4eb72a9a17494f386b7bed06093ad3b9eccc0526ac87fd')
+  })
+
+  test('reviews the recovery notice wording for Brazilian Portuguese rather than inheriting pt-PT', () => {
+    expect(PT_BR_OVERRIDES).toMatchObject({
+      'Your saved Gym&Me profile needs recovery.': 'Seu perfil salvo do Gym&Me precisa ser recuperado.',
+      'Gym&Me has not overwritten the original profile.': 'O Gym&Me não substituiu o perfil original.',
+      'Download recovery copy': 'Baixar cópia de recuperação',
+      'Download a recovery copy before you reset or import anything.': 'Baixe uma cópia de recuperação antes de redefinir ou importar qualquer coisa.',
+    })
   })
 
   test('does not leak European Portuguese UI terms', () => {

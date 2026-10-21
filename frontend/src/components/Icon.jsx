@@ -1,4 +1,4 @@
-// openGym icon set — hand-drawn on a 24×24 grid, stroke-based, single weight.
+// Gym&Me icon set — hand-drawn on a 24×24 grid, stroke-based, single weight.
 //
 // Everything is one <svg> primitive with `currentColor`, so an icon inherits the
 // text colour and optical size of whatever it sits in. No emoji anywhere in the
@@ -31,6 +31,12 @@ const P = {
   flame: <path d="M12 20.4c3.2 0 5.4-2.1 5.4-5.1 0-3.9-3.4-5.6-2.6-9.8-2.5.8-4 2.9-4 5.1 0 1-.5 1.6-1.2 1.6-.8 0-1.2-.7-1.2-1.8-1.1 1.2-1.8 2.9-1.8 4.9 0 3 2.2 5.1 5.4 5.1Z" />,
   timer: <><circle cx="12" cy="13.4" r="7.2" /><path d="M12 9.6v3.8h2.8M9.6 3.4h4.8" /></>,
   clock: <><circle cx="12" cy="12" r="8.2" /><path d="M12 7.4V12l3.1 1.9" /></>,
+
+  /* ---- daily essentials ---- */
+  // A droplet for water and a plate for what was eaten. The flame is the workout streak, so
+  // the fasting streak borrows its tint rather than its glyph.
+  drop: <path d="M12 3.7c3.5 4.2 5.7 6.9 5.7 9.9a5.7 5.7 0 0 1-11.4 0c0-3 2.2-5.7 5.7-9.9Z" />,
+  meal: <><circle cx="12" cy="12" r="7.7" /><circle cx="12" cy="12" r="3.3" /></>,
 
   /* ---- status / achievement ---- */
   trophy: <><path d="M7.6 4h8.8v4.6a4.4 4.4 0 0 1-8.8 0Z" /><path d="M7.6 5.6H4.9v1.5a3 3 0 0 0 2.9 3M16.4 5.6h2.7v1.5a3 3 0 0 1-2.9 3M12 13v3.4M8.6 20.4h6.8l-.7-4H9.3Z" /></>,

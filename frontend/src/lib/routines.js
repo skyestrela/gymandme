@@ -1,5 +1,5 @@
 import { uid } from './format.js'
-import { defaultConfig, isBw, modeOf, MAX_PLANNED_WARMUPS, NOTE_MAX } from './history.js'
+import { defaultConfig, isBw, modeOf, MAX_PLANNED_WARMUPS, NOTE_MAX, cleanupSg } from './history.js'
 import { isAssisted, isBodyweightEq, isCardio } from './exercises.js'
 import { sessionsFor } from './progression.js'
 import { isWarmupRow } from './workout-model.js'
@@ -230,4 +230,109 @@ export function updateRoutineFromEntry(routine, entries, idx) {
     else delete slot[key]
   }
   return found.changes
+}
+
+
+/**
+ * Take an exercise out of one routine and put it in another: the slot keeps its sets, reps,
+ * weight, rest, note, warm-ups and progression rule, and only the routine it belongs to
+ * changes. The exercise's history does not come along — progress belongs to a routine and an
+ * exercise together (#216) — so the new routine starts its own line for it and the old one
+ * keeps the sessions it had.
+ *
+ * A superset never spans two routines, so a linked slot leaves the group on the way: the
+ * partner left behind dissolves it (cleanupSg) and the moved slot arrives unlinked. A copy
+ * would have the same trouble, landing beside a partner that carries the same group id and
+ * joining it by accident.
+ *
+ * The slot goes to the end of the target routine. Returns what moved and how to undo it, or
+ * null when there is nothing to move: no such routine, no such exercise, or the routine the
+ * exercise is in already.
+ */
+export function moveExerciseToRoutine(s, fromId, index, toId) {
+  const from = (s.routines || []).find(r => r.id === fromId)
+  const to = (s.routines || []).find(r => r.id === toId)
+  if (!from || !to || fromId === toId) return null
+  if (!Array.isArray(from.ex) || !Array.isArray(to.ex)) return null
+  if (!Number.isInteger(index) || index < 0 || index >= from.ex.length) return null
+  const slot = from.ex[index]
+  if (!slot) return null
+  const snap = {
+    kind: 'move', fromId, toId, index,
+    slot: structuredClone(slot),
+    fromEx: structuredClone(from.ex),
+    toEx: structuredClone(to.ex),
+  }
+  const moved = { ...slot }
+  delete moved.sg
+  from.ex.splice(index, 1)
+  cleanupSg(from.ex)
+  to.ex.push(moved)
+  cleanupSg(to.ex)
+  snap.moved = structuredClone(moved)
+  snap.afterFrom = JSON.stringify(from.ex)
+  snap.afterTo = JSON.stringify(to.ex)
+  return { moved, snap }
+}
+
+/**
+ * The same exercise in another routine as well: it stays where it was and a copy of the slot
+ * goes to the end of the target. The copy is unlinked for the same reason a moved one is — a
+ * superset never spans two routines.
+ */
+export function copyExerciseToRoutine(s, fromId, index, toId) {
+  const from = (s.routines || []).find(r => r.id === fromId)
+  const to = (s.routines || []).find(r => r.id === toId)
+  if (!from || !to || fromId === toId) return null
+  if (!Array.isArray(from.ex) || !Array.isArray(to.ex)) return null
+  if (!Number.isInteger(index) || index < 0 || index >= from.ex.length) return null
+  const slot = from.ex[index]
+  if (!slot) return null
+  const snap = {
+    kind: 'copy', fromId, toId, index,
+    slot: structuredClone(slot),
+    fromEx: structuredClone(from.ex),
+    toEx: structuredClone(to.ex),
+  }
+  const copy = { ...slot }
+  delete copy.sg
+  to.ex.push(copy)
+  cleanupSg(to.ex)
+  snap.moved = structuredClone(copy)
+  snap.afterFrom = JSON.stringify(from.ex)
+  snap.afterTo = JSON.stringify(to.ex)
+  return { moved: copy, snap }
+}
+
+/**
+ * Put a moved exercise back where it was, in place on a store draft. While the two routines'
+ * exercise lists are still exactly what the change left them, both go back whole. Once
+ * something else changed one of them — another device, another edit — only the exercise goes
+ * back: into the source at its old place, and out of the target, so that other change is not
+ * thrown away with it.
+ */
+export function restoreMovedExercise(s, snap) {
+  if (!snap || !snap.slot) return false
+  const from = (s.routines || []).find(r => r.id === snap.fromId)
+  const to = (s.routines || []).find(r => r.id === snap.toId)
+  if (!from) return false
+  const same = (list, json) => JSON.stringify(list || []) === json
+  // The source: a move gave the exercise away, a copy never took it.
+  if (snap.kind === 'move') {
+    if (same(from.ex, snap.afterFrom)) from.ex = structuredClone(snap.fromEx)
+    else if (!from.ex.some(e => JSON.stringify(e) === JSON.stringify(snap.slot))) {
+      from.ex.splice(Math.min(snap.index, from.ex.length), 0, structuredClone(snap.slot))
+    }
+    cleanupSg(from.ex)
+  }
+  // The target: the slot that was put there goes away again.
+  if (to) {
+    if (same(to.ex, snap.afterTo)) to.ex = structuredClone(snap.toEx)
+    else {
+      const at = to.ex.findIndex(e => JSON.stringify(e) === JSON.stringify(snap.moved))
+      if (at >= 0) to.ex.splice(at, 1)
+    }
+    cleanupSg(to.ex)
+  }
+  return true
 }

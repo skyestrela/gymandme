@@ -7,6 +7,7 @@ import { _resetMediaOwed, getMediaStatus } from './media-owed.js'
 import { jpeg, png } from './media-samples.test-util.js'
 import { installedApp, prefetchAllowed } from './media-prefetch.js'
 import { _setLangState } from './i18n-core.js'
+import { WEB_STATE_KEY } from './product.js'
 
 const MB = 1024 * 1024
 const hex = c => c.repeat(64)
@@ -291,7 +292,7 @@ describe('localMediaGc', () => {
     clock += 2 * 3600000
     await put(hex('9'))                                              // picked a moment ago
     const S = { customEx: [{ id: 'x', media: refOf(hex('a'), hex('b')) }] }
-    storage.setItem('gym_state_v1', JSON.stringify({ customEx: [{ id: 'y', media: refOf(hex('c')) }] }))   // another tab's copy
+    storage.setItem(WEB_STATE_KEY, JSON.stringify({ customEx: [{ id: 'y', media: refOf(hex('c')) }] }))   // another tab's copy
     const store = appStore({ S, user: null, stashedMediaHashes: async () => new Set([hex('d')]) })
     await make(store).localMediaGc()
     expect((await media.list()).map(r => r.hash).sort()).toEqual([hex('a'), hex('b'), hex('c'), hex('d'), hex('9')].sort())

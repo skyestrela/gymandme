@@ -42,7 +42,7 @@ const mocks = vi.hoisted(() => {
 vi.mock('../store/useStore.js', () => {
   const useStore = selector => selector ? selector(mocks.snapshot()) : mocks.snapshot()
   useStore.getState = mocks.snapshot
-  return { useStore, DEF: { reminder: { time: '17:30' }, workouts: [] }, hasData: () => false }
+  return { useStore, selectWebRecovery: state => state.webRecovery, DEF: { reminder: { time: '17:30' }, workouts: [] }, hasData: () => false }
 })
 vi.mock('../store/useUI.js', () => {
   const snap = () => ({ toast: (...a) => mocks.toast(...a), openSheet: vi.fn() })
@@ -144,16 +144,29 @@ describe('Settings — photos and videos', () => {
   it('the zip export carries the state and the photo under its hash', async () => {
     await media.put(HASH, new Blob([PHOTO]), { mime: 'image/jpeg', pending: false })
     let blob = null
+    const downloads = []
     const created = vi.spyOn(URL, 'createObjectURL').mockImplementation(b => { blob = b; return 'blob:zip' })
-    vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => {})
+    vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(function () { downloads.push(this.download) })
     await mount()
     act(() => { row('Export with photos & videos (.zip)').click() })
     await until(() => created.mock.calls.length > 0)
     expect(created).toHaveBeenCalled()
+    expect(downloads).toEqual([expect.stringMatching(/^gymandme-backup-\d{4}-\d{2}-\d{2}\.zip$/)])
     const names = (await readZip(blob)).map(e => e.name)
-    expect(names).toEqual(['opengym-backup.json', `media/${HASH}.jpg`, 'README.txt'])
+    expect(names).toEqual(['gymandme-backup.json', `media/${HASH}.jpg`, 'README.txt'])
     expect(mocks.toast).toHaveBeenCalledWith('Backup exported')
     vi.restoreAllMocks()
+  })
+
+  it('exports the JSON backup with a Gym&Me filename', async () => {
+    const downloads = []
+    vi.spyOn(URL, 'createObjectURL').mockImplementation(() => 'blob:json')
+    vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(function () { downloads.push(this.download) })
+    try {
+      await mount()
+      act(() => { row('Export backup (JSON)').click() })
+      expect(downloads).toEqual([expect.stringMatching(/^gymandme-backup-\d{4}-\d{2}-\d{2}\.json$/)])
+    } finally { vi.restoreAllMocks() }
   })
 
   it('the zip export names one file it could not include in the singular', async () => {

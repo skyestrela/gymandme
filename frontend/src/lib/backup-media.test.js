@@ -27,8 +27,11 @@ describe('export with photos & videos', () => {
     expect(out.included).toBe(3)
     expect(fetched).toEqual(['f'.repeat(64)])
     const entries = await readZip(out.blob)
+    expect(BACKUP_JSON).toBe('gymandme-backup.json')
     expect(entries.map(e => e.name)).toEqual([BACKUP_JSON, `media/${main.poster.hash}.png`, `media/${main.hash}.jpg`, `media/${vid.hash}.mov`, 'README.txt'])
     expect(JSON.parse(await entries[0].blob.text())).toEqual(JSON.parse(JSON.stringify(S, null, 2)))
+    expect(await entries.at(-1).blob.text()).toContain('Gym&Me backup with photos and videos')
+    expect(await entries.at(-1).blob.text()).toContain('gymandme-backup.json')
   })
 })
 
@@ -45,6 +48,12 @@ describe('import', () => {
     const media = createMediaStore(memoryBackend())
     expect(await storeBackupMedia(read.files, { media })).toEqual({ stored: 1, skipped: 0 })
     expect(await media.get(main.hash)).toMatchObject({ mime: 'image/jpeg', pending: true })
+  })
+
+  it('continues to import a legacy Gym&Me ZIP member', async () => {
+    const S = stateWith([])
+    const zip = await zipStore([{ name: 'opengym-backup.json', blob: new Blob([JSON.stringify(S)]) }])
+    await expect(readBackupFile(new File([zip], 'legacy.zip'))).resolves.toMatchObject({ state: S, zip: true })
   })
 
   it('a tampered file is skipped, and so is one over its cap or of a type that is not stored', async () => {
@@ -77,16 +86,16 @@ describe('import', () => {
     expect(read.state.customEx[1].media.mime).toBe('image/jpeg')
   })
 
-  it('refuses what is not an openGym backup, zipped or not', async () => {
+  it('refuses what is not a Gym&Me backup, zipped or not', async () => {
     await expect(readBackupFile(new File(['{"hello":1}'], 'x.json'))).rejects.toThrow()
     const zip = await zipStore([{ name: 'something.txt', blob: new Blob(['x']) }])
     await expect(readBackupFile(new File([zip], 'x.zip'))).rejects.toThrow()
   })
 
-  // German QA: 'Import fehlgeschlagen: not-zip', '... not an openGym backup', 'Unexpected token ...'.
+  // German QA: 'Import fehlgeschlagen: not-zip', '... not a Gym&Me backup', 'Unexpected token ...'.
   it('says why an import failed in words, never the thrown developer text', async () => {
     const why = async (content, name) => { try { await readBackupFile(new File([content], name)) } catch (e) { return backupImportError(e) } }
-    const notOurs = 'That file isn’t an openGym backup.'
+    const notOurs = 'That file isn’t a Gym&Me backup.'
     expect(await why('[1,2]', 'x.json')).toBe(notOurs)
     expect(await why('hello there', 'x.txt')).toBe(notOurs)
     expect(await why(new Uint8Array([0x50, 0x4b, 0x03, 0x04, 1, 2, 3, 4]), 'fake.zip')).toBe(notOurs)

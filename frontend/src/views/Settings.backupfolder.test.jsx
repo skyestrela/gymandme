@@ -26,7 +26,7 @@ const mocks = vi.hoisted(() => {
 vi.mock('../store/useStore.js', () => {
   const useStore = selector => selector ? selector(mocks.snapshot()) : mocks.snapshot()
   useStore.getState = mocks.snapshot
-  return { useStore, DEF: { reminder: { time: '17:30' } }, hasData: () => false }
+  return { useStore, selectWebRecovery: state => state.webRecovery, DEF: { reminder: { time: '17:30' } }, hasData: () => false }
 })
 vi.mock('../store/useUI.js', () => {
   const snap = () => ({ toast: vi.fn(), openSheet: vi.fn() })
@@ -105,7 +105,7 @@ describe('the backup folder rows', () => {
   })
 })
 
-// Android QA: the Auto-backup row still said Documents/openGym after another folder was chosen.
+// Android QA: the Auto-backup row still said Documents/gymandme after another folder was chosen.
 describe('the Auto-backup row', () => {
   const subtitle = () => [...host.querySelectorAll('.lrow')].find(r => r.textContent.includes('Auto-backup on changes'))?.querySelector('.lrow-s')?.textContent
   it('names the chosen folder', async () => {
@@ -113,11 +113,11 @@ describe('the Auto-backup row', () => {
     mocks.folder = { uri: 'content://tree/Sync', label: 'SyncFolder' }
     await mount()
     expect(subtitle()).toContain('“SyncFolder”')
-    expect(subtitle()).not.toContain('Documents/openGym')
+    expect(subtitle()).not.toContain('Documents/gymandme')
   })
-  it('names Documents/openGym with no folder chosen', async () => {
+  it('names Documents/gymandme with no folder chosen', async () => {
     mocks.S.autoBackup = true
     await mount()
-    expect(subtitle()).toContain('Documents/openGym')
+    expect(subtitle()).toContain('Documents/gymandme')
   })
 })

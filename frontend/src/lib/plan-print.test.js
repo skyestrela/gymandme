@@ -21,6 +21,8 @@ describe('planPrintHTML', () => {
   it('prints the week and every routine by default', () => {
     const html = planPrintHTML(S, 'Ana')
     expect(html).toContain('<title>Weekly Training Plan</title>')
+    expect(html).toContain('<div class="kicker">Gym&amp;Me</div>')
+    expect(html).toContain('<footer>Made with Gym&amp;Me</footer>')
     expect(text(html)).toContain('Week schedule')
     expect(text(html)).toContain('Push day')
     expect(text(html)).toContain('Pull day')

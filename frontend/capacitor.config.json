@@ -1,6 +1,6 @@
 {
-  "appId": "ch.duartesantos.opengym",
-  "appName": "openGym",
+  "appId": "com.gymandme.app",
+  "appName": "Gym&Me",
   "webDir": "dist",
   "backgroundColor": "#0c0e12",
   "android": {

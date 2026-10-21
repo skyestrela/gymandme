@@ -5,6 +5,7 @@ import { MemoryRouter } from 'react-router-dom'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import Workout, { removeActiveExercise } from './Workout.jsx'
 import { DEF, useStore } from '../store/useStore.js'
+import { WEB_STATE_KEY } from '../lib/product.js'
 import { useUI } from '../store/useUI.js'
 import { LANGS, DERIVED_LOCALES } from '../lib/i18n-core.js'
 
@@ -258,7 +259,7 @@ describe('remove-exercise edge cases', () => {
 
     act(() => { removeActiveExercise(1) })
 
-    const persisted = JSON.parse(localStorage.getItem('gym_state_v1'))
+    const persisted = JSON.parse(localStorage.getItem(WEB_STATE_KEY))
     expect(persisted.workouts).toEqual(workouts)
     expect(persisted.active.entries.map(e => e.id)).toEqual(['same', 'other'])
     expect(persisted.active.entries[0].target.marker).toBe('keep-first')

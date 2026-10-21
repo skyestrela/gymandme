@@ -13,6 +13,7 @@ import { t, tn } from './i18n-core.js'
 import { isoOf, todayISO } from './format.js'
 import { effectiveRoutineIds } from './history.js'
 import { NUDGE_COPY, lineIndex, nudgeFor, nudgeMinute, toneOf } from './nudge.js'
+import { LEGACY_MOBILE_STATE_FILE, MOBILE_STATE_FILE, PRODUCT_ID } from './product.js'
 
 export const MOBILE = import.meta.env.VITE_MOBILE === '1'
 
@@ -32,25 +33,39 @@ export async function isAndroid() {
   }
 }
 
-const FILE = 'opengym-state.json'
+const isMissingNativeFile = e => {
+  if (e?.code === 'OS-PLUG-FILE-0008') return true
+  const message = typeof e?.message === 'string' ? e.message.trim() : ''
+  return /^file does not exist\.?$/i.test(message) || /failed because file(?: at '[^']+')? does not exist\.?$/i.test(message)
+}
 
 export async function nativeLoad() {
   try {
     const { Filesystem, Directory, Encoding } = await import('@capacitor/filesystem')
-    const r = await Filesystem.readFile({ path: FILE, directory: Directory.Data, encoding: Encoding.UTF8 })
-    return JSON.parse(r.data)
-  } catch (e) { return null }   // first launch, or unreadable — localStorage copy takes over
+    try {
+      const r = await Filesystem.readFile({ path: MOBILE_STATE_FILE, directory: Directory.Data, encoding: Encoding.UTF8 })
+      return JSON.parse(r.data)
+    } catch (e) {
+      // Only an absent current file may use the older mirror. Corruption and I/O failures must
+      // fail closed so a stale legacy file cannot replace the user's current state.
+      if (!isMissingNativeFile(e)) return null
+    }
+    try {
+      const r = await Filesystem.readFile({ path: LEGACY_MOBILE_STATE_FILE, directory: Directory.Data, encoding: Encoding.UTF8 })
+      return JSON.parse(r.data)
+    } catch (e) { return null }
+  } catch (e) { return null }   // first launch, or unavailable filesystem — localStorage copy takes over
 }
 
 export async function nativeSave(state) {
   try {
     const { Filesystem, Directory, Encoding } = await import('@capacitor/filesystem')
-    await Filesystem.writeFile({ path: FILE, directory: Directory.Data, data: JSON.stringify(state), encoding: Encoding.UTF8 })
+    await Filesystem.writeFile({ path: MOBILE_STATE_FILE, directory: Directory.Data, data: JSON.stringify(state), encoding: Encoding.UTF8 })
   } catch (e) { /* keep the localStorage copy */ }
 }
 
 // "Connect to my server" mode (lib/remote.js): which of local-only / a paired remote account this
-// device chose, kept in its own file — never inside opengym-state.json, since that file's content
+// device chose, kept in its own file — never inside gymandme-state.json, since that file's content
 // is exactly what pushState() PUTs to a server, and a device's own connection secret must never
 // travel as if it were training data.
 const REMOTE_FILE = 'opengym-remote.json'
@@ -255,7 +270,7 @@ export async function printHtml(html, name) {
   await Print.printHtml({ html, name })
 }
 
-// "Auto-backup on changes" (Settings): a dated snapshot dropped into Documents/openGym/ —
+// "Auto-backup on changes" (Settings): a dated snapshot dropped into Documents/gymandme/ —
 // visible in Files (iOS) / a file manager (Android), unlike the private mirror nativeSave keeps
 // — so whatever the user points at that folder (a sync app, a manual copy) always has something
 // recent. One file per day; later triggers the same day just overwrite it.
@@ -266,11 +281,11 @@ export async function printHtml(html, name) {
 // The root is never pruned: a manual export saved there carries the same name, and nothing
 // tells it apart from an old automatic copy, so those stay for the person to clear (Import
 // backup still reads either kind).
-export const AUTO_BACKUP_DIR = 'openGym'
+export const AUTO_BACKUP_DIR = PRODUCT_ID
 export const AUTO_BACKUP_KEEP = 14
 // Only the exact names writeAutoBackup gives its files are ever pruned; anything else someone
 // keeps in the folder is theirs.
-const AUTO_BACKUP_NAME = /^opengym-backup-\d{4}-\d{2}-\d{2}(-[2-9])?\.json$/
+const AUTO_BACKUP_NAME = new RegExp(`^${PRODUCT_ID}-backup-\\d{4}-\\d{2}-\\d{2}(-[2-9])?\\.json$`)
 
 // Android's scoped storage lets an install write over, list and delete only the files it wrote
 // itself. After a reinstall, or with the test build beside the real one, today's name can belong
@@ -297,7 +312,7 @@ export async function writeAutoBackup(state) {
   // day then went without a copy, silently, while the newest file there was another install's.
   let name = null
   for (const suffix of ['', '-2', '-3', '-4', '-5', '-6', '-7', '-8', '-9']) {
-    const n = `opengym-backup-${day}${suffix}.json`
+    const n = `${PRODUCT_ID}-backup-${day}${suffix}.json`
     try { await write(n); name = n; break } catch (e) { /* owned by another install, or the disk said no: the next name */ }
   }
   if (!name) return   // best effort — the private mirror in Directory.Data still has the data
@@ -329,8 +344,8 @@ async function pruneAutoBackups({ Filesystem, Directory }, written) {
    and never in S: S syncs and exports, and a content:// address means nothing anywhere else.
 
    { uri, label }       the chosen folder, and its name as the picker showed it
-   { lost, lostLabel }  the folder stopped accepting copies; they go to Documents/openGym again
-   {}                   the default, Documents/openGym */
+   { lost, lostLabel }  the folder stopped accepting copies; they go to Documents/gymandme again
+   {}                   the default, Documents/gymandme */
 export const BACKUP_FOLDER_FILE = 'opengym-backup-folder.json'
 
 // The plugin proxy lives here and is never handed through a promise: a Capacitor plugin proxy
@@ -377,7 +392,7 @@ export async function chooseBackupFolder() {
   return next
 }
 
-/** Back to Documents/openGym; also how the warning about a lost folder is put away. */
+/** Back to Documents/gymandme; also how the warning about a lost folder is put away. */
 export async function resetBackupFolder() {
   const before = await backupFolder()
   if (before.uri) await releaseFolder(before.uri)
@@ -394,7 +409,7 @@ async function releaseFolder(uri) {
 async function writeToChosenFolder(state, day) {
   const folder = await backupFolder()
   if (!folder.uri) return false
-  const name = `opengym-backup-${day}.json`
+  const name = `${PRODUCT_ID}-backup-${day}.json`
   try {
     await loadFolderPlugin()
     const { ok } = await folderPlugin.check({ uri: folder.uri })

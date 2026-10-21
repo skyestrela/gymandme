@@ -35,7 +35,7 @@ const mocks = vi.hoisted(() => {
 vi.mock('../store/useStore.js', () => {
   const useStore = selector => selector ? selector(mocks.snapshot()) : mocks.snapshot()
   useStore.getState = mocks.snapshot
-  return { useStore, DEF: { reminder: { time: '17:30' }, workouts: [] }, hasData: () => false }
+  return { useStore, selectWebRecovery: state => state.webRecovery, DEF: { reminder: { time: '17:30' }, workouts: [] }, hasData: () => false }
 })
 vi.mock('../store/useUI.js', () => {
   const snap = () => ({ toast: (...a) => mocks.toast(...a), openSheet: vi.fn() })

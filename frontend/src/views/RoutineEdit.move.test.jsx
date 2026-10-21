@@ -11,6 +11,7 @@ import { DEF, useStore } from '../store/useStore.js'
 import { _setLangState } from '../lib/i18n-core.js'
 import de from '../locales/de.js'
 import { buildPlanBundle, parsePlan } from '../lib/plan-share.js'
+import { WEB_STATE_KEY } from '../lib/product.js'
 
 const cssSource = readFileSync(resolve(process.cwd(), 'src/index.css'), 'utf8')
 
@@ -109,7 +110,7 @@ describe('routine move controls', () => {
       entry('c3', 30, 'g'),
       entry('c4', 40)
     ])
-    expect(JSON.parse(localStorage.getItem('gym_state_v1')).routines[0].ex).toEqual(moved)
+    expect(JSON.parse(localStorage.getItem(WEB_STATE_KEY)).routines[0].ex).toEqual(moved)
   })
 
   it('takes the last member out of its superset, where it stands, and the next press moves it on', () => {
@@ -224,7 +225,7 @@ describe('routine move controls', () => {
 
     expect(useStore.getState().S).toBe(before)
     expect(useStore.getState().S.routines[0].ex[0].sg).toBe('orphan')
-    expect(localStorage.getItem('gym_state_v1')).toBeNull()
+    expect(localStorage.getItem(WEB_STATE_KEY)).toBeNull()
   })
 
   it('keeps pointer activation in both disabled boundary areas isolated from the routine row', () => {
@@ -245,7 +246,7 @@ describe('routine move controls', () => {
     expect(mocks.exConfigSheet).not.toHaveBeenCalled()
     expect(useStore.getState().S).toBe(before)
     expect(useStore.getState().S.routines[0].ex[0].sg).toBe('orphan')
-    expect(localStorage.getItem('gym_state_v1')).toBeNull()
+    expect(localStorage.getItem(WEB_STATE_KEY)).toBeNull()
   })
 
   it('uses localized accessible names and titles, retains button focus, and does not open config', () => {

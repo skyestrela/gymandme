@@ -9,6 +9,7 @@ const { toast } = vi.hoisted(() => ({ toast: vi.fn() }))
 vi.mock('./useUI.js', () => ({ useUI: { getState: () => ({ toast }) } }))
 
 import { api } from '../lib/api.js'
+import { LEGACY_WEB_STATE_KEY, WEB_STATE_KEY } from '../lib/product.js'
 import { DEF, hasData, restoredStateFor, useStore } from './useStore.js'
 
 const clone = value => JSON.parse(JSON.stringify(value))
@@ -28,6 +29,58 @@ afterEach(() => {
 })
 
 describe('saved workout state sync and restore', () => {
+  it('migrates legacy web state before loading the saved profile', async () => {
+    const legacy = { ...clone(DEF), restSec: 75, routines: [routine('legacy')] }
+    localStorage.setItem(LEGACY_WEB_STATE_KEY, JSON.stringify(legacy))
+    vi.resetModules()
+
+    const { useStore: reloadedStore } = await import('./useStore.js')
+
+    expect(reloadedStore.getState().S.routines.map(r => r.id)).toEqual(['legacy'])
+    expect(JSON.parse(localStorage.getItem(WEB_STATE_KEY))).toEqual(legacy)
+    expect(localStorage.getItem(LEGACY_WEB_STATE_KEY)).toBe(JSON.stringify(legacy))
+  })
+
+  it('loads a valid legacy profile when copying it to the current key is refused', async () => {
+    const legacy = { ...clone(DEF), routines: [routine('r1')] }
+    localStorage.setItem(LEGACY_WEB_STATE_KEY, JSON.stringify(legacy))
+    const descriptor = Object.getOwnPropertyDescriptor(globalThis, 'localStorage')
+    const storage = globalThis.localStorage
+    const refusingStorage = new Proxy(storage, {
+      get(target, prop) {
+        const value = Reflect.get(target, prop)
+        if (prop === 'setItem') return (key, value) => {
+          if (key === WEB_STATE_KEY) throw new DOMException('quota', 'QuotaExceededError')
+          return storage.setItem(key, value)
+        }
+        return typeof value === 'function' ? value.bind(target) : value
+      },
+    })
+    Object.defineProperty(globalThis, 'localStorage', { value: refusingStorage, configurable: true })
+    try {
+      vi.resetModules()
+      const { useStore: reloadedStore } = await import('./useStore.js')
+
+      expect(reloadedStore.getState().S.routines.map(r => r.id)).toEqual(['r1'])
+      expect(localStorage.getItem(WEB_STATE_KEY)).toBeNull()
+      expect(localStorage.getItem(LEGACY_WEB_STATE_KEY)).toBe(JSON.stringify(legacy))
+    } finally {
+      Object.defineProperty(globalThis, 'localStorage', descriptor)
+    }
+  })
+
+  it('uses the current profile when both current and legacy web state exist', async () => {
+    const current = { ...clone(DEF), routines: [routine('current')] }
+    const legacy = { ...clone(DEF), routines: [routine('legacy')] }
+    localStorage.setItem(WEB_STATE_KEY, JSON.stringify(current))
+    localStorage.setItem(LEGACY_WEB_STATE_KEY, JSON.stringify(legacy))
+    vi.resetModules()
+
+    const { useStore: reloadedStore } = await import('./useStore.js')
+
+    expect(reloadedStore.getState().S.routines.map(r => r.id)).toEqual(['current'])
+  })
+
   it('returns null for an older or dirty local state', () => {
     const local = { ...clone(DEF), _ts: 20, routines: [routine('local')] }
     const remote = { ...clone(DEF), _ts: 10, routines: [routine('remote')] }
@@ -57,7 +110,7 @@ describe('saved workout state sync and restore', () => {
 
     expect(useStore.getState().S.routines.map(r => r.id)).toEqual(['remote'])
     expect(useStore.getState().S.active).toEqual(active)
-    expect(JSON.parse(localStorage.getItem('gym_state_v1')).active).toEqual(active)
+    expect(JSON.parse(localStorage.getItem(WEB_STATE_KEY)).active).toEqual(active)
     expect(api).toHaveBeenCalledTimes(1)
   })
 
@@ -141,7 +194,7 @@ describe('saved workout state sync and restore', () => {
     await useStore.getState().pullState()
 
     expect(useStore.getState().S._ts).toBe(20)
-    expect(JSON.parse(localStorage.getItem('gym_state_v1'))._ts).toBe(20)
+    expect(JSON.parse(localStorage.getItem(WEB_STATE_KEY))._ts).toBe(20)
   })
 
   // Device B logs a workout at T1 and pushes it 1.5 s later; device A reloads inside that window
@@ -185,7 +238,7 @@ describe('signing in as a different profile', () => {
     expect(useStore.getState().S.routines).toEqual([])
     expect(useStore.getState().S.bodyweight).toEqual([])
     expect(useStore.getState().S.active).toBeNull()
-    expect(JSON.parse(localStorage.getItem('gym_state_v1')).routines).toEqual([])
+    expect(JSON.parse(localStorage.getItem(WEB_STATE_KEY)).routines).toEqual([])
     expect(localStorage.getItem('gym_owner')).toBe('B')
   })
 
@@ -227,9 +280,9 @@ describe('signing in as a different profile', () => {
 
       // B's setUser in the other tab: it wiped the copy, recorded the owner, then wrote defaults
       // under B. B's own data only lands there after its pull.
-      localStorage.removeItem('gym_state_v1')
+      localStorage.removeItem(WEB_STATE_KEY)
       localStorage.setItem('gym_owner', 'B')
-      localStorage.setItem('gym_state_v1', JSON.stringify({ ...clone(DEF), _ts: 30 }))
+      localStorage.setItem(WEB_STATE_KEY, JSON.stringify({ ...clone(DEF), _ts: 30 }))
       localStorage.setItem('gym_state_owner', 'B')
       window.dispatchEvent(new StorageEvent('storage', { key: 'gym_owner', oldValue: 'A', newValue: 'B' }))
 
@@ -243,18 +296,18 @@ describe('signing in as a different profile', () => {
       await useStore.getState().pushState()
 
       expect(api).not.toHaveBeenCalled()
-      expect(JSON.parse(localStorage.getItem('gym_state_v1')).routines.map(r => r.id)).toEqual(['typed-after'])
+      expect(JSON.parse(localStorage.getItem(WEB_STATE_KEY)).routines.map(r => r.id)).toEqual(['typed-after'])
     } finally { vi.useRealTimers() }
   })
 
   // A sign-out elsewhere removes the owner. Storage events arrive per key, so this tab may see
-  // the owner go while gym_state_v1 still holds A's copy — it must not keep that copy either way.
+  // the owner go while the current saved copy still holds A's profile — it must not keep that copy either way.
   it('a tab still holding the previous profile drops its data when that profile signs out elsewhere', async () => {
     useStore.getState().setUser({ id: 'A', name: 'A' })
     useStore.getState().replaceState({ ...clone(DEF), _ts: 20, routines: [routine('A-routine')], bodyweight: [{ d: '2026-09-01', kg: 80 }], active })
     api.mockResolvedValue({ state: null })
 
-    localStorage.removeItem('gym_owner')   // gym_state_v1 still holds A's copy at this instant
+    localStorage.removeItem('gym_owner')   // the current saved copy still holds A's profile at this instant
     window.dispatchEvent(new StorageEvent('storage', { key: 'gym_owner', oldValue: 'A', newValue: null }))
 
     expect(useStore.getState().user).toBeNull()
@@ -293,18 +346,18 @@ describe('signing in as a different profile', () => {
 
     expect(globalThis.localStorage).toBe(real)
     expect(writes).toContain('removeItem gym_owner')
-    expect(writes.lastIndexOf('removeItem gym_owner')).toBeLessThan(writes.lastIndexOf('setItem gym_state_v1'))
-    expect(writes.lastIndexOf('removeItem gym_owner')).toBeGreaterThan(writes.lastIndexOf('removeItem gym_state_v1'))
+    expect(writes.lastIndexOf('removeItem gym_owner')).toBeLessThan(writes.lastIndexOf('setItem ' + WEB_STATE_KEY))
+    expect(writes.lastIndexOf('removeItem gym_owner')).toBeGreaterThan(writes.lastIndexOf('removeItem ' + WEB_STATE_KEY))
     expect(localStorage.getItem('gym_owner')).toBeNull()
     expect(localStorage.getItem('gym_state_owner')).toBe('')
-    expect(JSON.parse(localStorage.getItem('gym_state_v1')).routines).toEqual([])
+    expect(JSON.parse(localStorage.getItem(WEB_STATE_KEY)).routines).toEqual([])
   })
 
   it('a storage event for another key or the same profile changes nothing', () => {
     useStore.getState().setUser({ id: 'A', name: 'A' })
     useStore.getState().replaceState({ ...clone(DEF), _ts: 20, routines: [routine('A-routine')] })
 
-    window.dispatchEvent(new StorageEvent('storage', { key: 'gym_state_v1', newValue: '{}' }))
+    window.dispatchEvent(new StorageEvent('storage', { key: WEB_STATE_KEY, newValue: '{}' }))
     window.dispatchEvent(new StorageEvent('storage', { key: 'gym_owner', oldValue: 'A', newValue: 'A' }))
 
     expect(useStore.getState().user).toEqual({ id: 'A', name: 'A' })
@@ -370,7 +423,7 @@ describe('a save this device refuses', () => {
     const guard = new Proxy(store, {
       get(target, prop) {
         const value = Reflect.get(target, prop)
-        if (prop === 'setItem') return (key, v) => { if (key === 'gym_state_v1') throw new DOMException('quota', 'QuotaExceededError'); return store.setItem(key, v) }
+        if (prop === 'setItem') return (key, v) => { if (key === WEB_STATE_KEY) throw new DOMException('quota', 'QuotaExceededError'); return store.setItem(key, v) }
         return typeof value === 'function' ? value.bind(target) : value
       }
     })
@@ -398,7 +451,7 @@ describe('a save this device refuses', () => {
 
     // Room again: the next refusal is news once more.
     useStore.getState().update(s => { s.restSec = 90 }, false)
-    expect(JSON.parse(localStorage.getItem('gym_state_v1')).restSec).toBe(90)
+    expect(JSON.parse(localStorage.getItem(WEB_STATE_KEY)).restSec).toBe(90)
     const undo2 = refusingStorage()
     try {
       useStore.getState().update(s => { s.restSec = 150 }, false)

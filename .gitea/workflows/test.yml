@@ -8,12 +8,14 @@ on:
     paths:
       - 'frontend/**'
       - 'mcp/**'
+      - 'scripts/check-brand.sh'
       - '.gitea/workflows/test.yml'
   push:
     branches: [main]
     paths:
       - 'frontend/**'
       - 'mcp/**'
+      - 'scripts/check-brand.sh'
       - '.gitea/workflows/test.yml'
   workflow_dispatch:
 
@@ -36,3 +38,7 @@ jobs:
         working-directory: frontend
       - run: npm test
         working-directory: frontend
+      # The old product name must not come back outside the exceptions the script names:
+      # the licence and the history, the legacy migration identifiers, and the identifiers
+      # that already name something on a device or on the wire.
+      - run: ./scripts/check-brand.sh

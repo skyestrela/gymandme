@@ -7,7 +7,7 @@ import { createRoot } from 'react-dom/client'
 import { useStore } from '../store/useStore.js'
 import { useUI } from '../store/useUI.js'
 import { _setLangState } from '../lib/i18n-core.js'
-import { ConnectSheet } from './MobileOnboarding.jsx'
+import MobileOnboarding, { ConnectSheet } from './MobileOnboarding.jsx'
 
 let root, host
 const type = (el, value) => act(() => {
@@ -45,5 +45,12 @@ describe('ConnectSheet', () => {
     expect(host.querySelector('[role="alert"]')).toBeNull()
     expect(close).toHaveBeenCalled()
     expect(connectToServer).toHaveBeenLastCalledWith('gym.example.com', 'ABCD2345', expect.any(Function))
+  })
+})
+
+describe('MobileOnboarding', () => {
+  it('renders Gym&Me as the first-launch heading', () => {
+    act(() => root.render(<MobileOnboarding />))
+    expect(host.querySelector('h1')?.textContent).toBe('Gym&Me')
   })
 })

@@ -8,6 +8,7 @@
    profile as is". Each "tab" is a fresh import of the store sharing one localStorage; the browser's
    storage events are replayed in the order the writes happened, as the browser delivers them. */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { WEB_STATE_KEY } from '../lib/product.js'
 
 const h = vi.hoisted(() => ({ api: null, toasts: [] }))
 vi.mock('../lib/api.js', () => ({ api: (...a) => h.api(...a), setRemoteAuth: () => {} }))
@@ -18,7 +19,7 @@ const w = (id, d = '2026-09-01') => ({ id, d, start: 1, end: 2, entries: [] })
 const routine = id => ({ id, name: id, exercises: [] })
 const ids = st => (st?.workouts || []).map(x => x.id).sort()
 const httpError = (status, data) => Object.assign(new Error(data?.error || 'HTTP ' + status), { status, data })
-const saved = () => JSON.parse(localStorage.getItem('gym_state_v1') || 'null')
+const saved = () => JSON.parse(localStorage.getItem(WEB_STATE_KEY) || 'null')
 
 let DEF
 let OWNER = 'o0'
@@ -105,7 +106,7 @@ const account = () => ({
 })
 const savedCopy = (doc, rev) => {
   const S = clone(doc); delete S._rev
-  localStorage.setItem('gym_state_v1', JSON.stringify(S))
+  localStorage.setItem(WEB_STATE_KEY, JSON.stringify(S))
   localStorage.setItem('gym_sync', JSON.stringify({ rev, ts: S._ts }))
 }
 
@@ -178,7 +179,7 @@ describe('a second tab while the first one changes owner', () => {
   it('a guest tab left open after "Keep profile as is" puts none of the guest copy into the account', async () => {
     DEF = (await import('./useStore.js')).DEF
     const srv = server({ ...account(), _rev: 3 })
-    localStorage.setItem('gym_state_v1', JSON.stringify({
+    localStorage.setItem(WEB_STATE_KEY, JSON.stringify({
       ...clone(DEF), _ts: Date.now(), restSec: 90, accent: 'lime',
       workouts: [w('gW1', '2026-09-04')], routines: [routine('Guest Routine')],
     }))
@@ -224,7 +225,7 @@ describe('a guest tab while the other tab signs in or creates a profile', () => 
   it('a profile created in the other tab shows in the guest tab at once, and the workout with it', async () => {
     DEF = (await import('./useStore.js')).DEF
     const srv = server(null)
-    localStorage.setItem('gym_state_v1', JSON.stringify(guestCopy(running())))
+    localStorage.setItem(WEB_STATE_KEY, JSON.stringify(guestCopy(running())))
     localStorage.setItem('gym_guest', '1')
     const A = await openTab(null)
     const B = await openTab(null)
@@ -246,7 +247,7 @@ describe('a guest tab while the other tab signs in or creates a profile', () => 
   it('a sign-in to an existing account: the guest tab gets the account, the running workout included, once it is answered', async () => {
     DEF = (await import('./useStore.js')).DEF
     const srv = server({ ...account(), _rev: 3 })
-    localStorage.setItem('gym_state_v1', JSON.stringify(guestCopy(running())))
+    localStorage.setItem(WEB_STATE_KEY, JSON.stringify(guestCopy(running())))
     localStorage.setItem('gym_guest', '1')
     const A = await openTab(null)
     const B = await openTab(null)
@@ -266,7 +267,7 @@ describe('a guest tab while the other tab signs in or creates a profile', () => 
   it('a guest tab on another screen is not told about a workout it does not show', async () => {
     DEF = (await import('./useStore.js')).DEF
     server(null)
-    localStorage.setItem('gym_state_v1', JSON.stringify(guestCopy(running())))
+    localStorage.setItem(WEB_STATE_KEY, JSON.stringify(guestCopy(running())))
     localStorage.setItem('gym_guest', '1')
     location.hash = '#/stats'
     const A = await openTab(null)
@@ -281,7 +282,7 @@ describe('a guest tab while the other tab signs in or creates a profile', () => 
   it('a new profile with nothing in it: the other tab takes it without waiting for a save', async () => {
     DEF = (await import('./useStore.js')).DEF
     server(null)
-    localStorage.setItem('gym_state_v1', JSON.stringify({ ...clone(DEF), _ts: Date.now(), restSec: 75 }))
+    localStorage.setItem(WEB_STATE_KEY, JSON.stringify({ ...clone(DEF), _ts: Date.now(), restSec: 75 }))
     const A = await openTab(null)
     const B = await openTab(null)
     await act(A, () => A.getState().setUser({ id: OWNER, name: 'Empty' }, { adopt: true }))

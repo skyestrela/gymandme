@@ -8,6 +8,7 @@ import { speedUnitOf, speedLabel, toSpeed } from '../lib/speed.js'
 import { t, exerciseNameFor, exerciseNameClass, getLang } from '../lib/i18n.js'
 import { bwSheet, goalSheet, calendarSheet, workoutDetailSheet, exerciseHistorySheet, WorkoutRow, bwDeltaColor, weighInsSheet } from '../sheets.jsx'
 import LineChart from '../components/LineChart.jsx'
+import { WellnessStats } from '../components/WellnessCard.jsx'
 import Heatmap from '../components/Heatmap.jsx'
 import Icon from '../components/Icon.jsx'
 import BodyMap, { BodyMapLegend } from '../components/BodyMap.jsx'
@@ -589,6 +590,9 @@ export default function Stats() {
     {hasEffort(S) && <EffortCard S={S} />}
 
     <div className="cols">
+      {/* Water, fasting and calories over the last month, when any of them is being logged. */}
+      <WellnessStats />
+
       <div className="card">
         <div className="row between bw-head" style={{ marginBottom: 8 }}>
           <h2 style={{ margin: 0 }}>{t('Body weight')}</h2>

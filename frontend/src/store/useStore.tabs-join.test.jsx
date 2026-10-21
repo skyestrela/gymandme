@@ -7,6 +7,7 @@
    wiped what the other tab owed. (QA 2026-10-06, also in v1.3.9.) Each "tab" is a fresh import of
    the store sharing one localStorage, as in the other tab tests. */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { WEB_STATE_KEY } from '../lib/product.js'
 
 const h = vi.hoisted(() => ({ api: null }))
 vi.mock('../lib/api.js', () => ({ api: (...a) => h.api(...a), setRemoteAuth: () => {} }))
@@ -17,7 +18,7 @@ const w = (id, d = '2026-09-01') => ({ id, d, start: 1, end: 2, entries: [] })
 const ids = st => (st?.workouts || []).map(x => x.id).sort()
 const httpError = (status, data) => Object.assign(new Error(data?.error || 'HTTP ' + status), { status, data })
 const tick = (ms = 30) => new Promise(r => setTimeout(r, ms))
-const saved = () => JSON.parse(localStorage.getItem('gym_state_v1'))
+const saved = () => JSON.parse(localStorage.getItem(WEB_STATE_KEY))
 
 let tabs = []
 let DEF
@@ -59,7 +60,7 @@ function server(doc) {
 }
 const savedCopy = (doc, rev) => {
   const S = clone(doc); delete S._rev
-  localStorage.setItem('gym_state_v1', JSON.stringify(S))
+  localStorage.setItem(WEB_STATE_KEY, JSON.stringify(S))
   localStorage.setItem('gym_sync', JSON.stringify({ rev, ts: S._ts }))
 }
 
@@ -94,7 +95,7 @@ describe('two tabs of one browser keep each other\'s changes', () => {
 
   it('guests: what one tab logged survives the other tab\'s setting change', async () => {
     localStorage.removeItem('gym_owner')
-    localStorage.setItem('gym_state_v1', JSON.stringify({ ...clone(DEF), _ts: 100, workouts: [w('g1')] }))
+    localStorage.setItem(WEB_STATE_KEY, JSON.stringify({ ...clone(DEF), _ts: 100, workouts: [w('g1')] }))
     const A = await openTab(null)
     const B = await openTab(null)
     A.getState().update(s => { s.workouts.push(w('g2', '2026-09-03')) })
@@ -146,7 +147,7 @@ describe('two tabs of one browser keep each other\'s changes', () => {
   // wrote its copy over a weigh-in and a running workout another tab had logged.
   it('a tab that just signed in sees the other tab\'s saves and keeps them, running workout included', async () => {
     localStorage.removeItem('gym_owner')
-    localStorage.setItem('gym_state_v1', JSON.stringify({ ...clone(DEF), _ts: 100, workouts: [w('g1')] }))
+    localStorage.setItem(WEB_STATE_KEY, JSON.stringify({ ...clone(DEF), _ts: 100, workouts: [w('g1')] }))
     const srv = server(null)
     const A = await openTab(null)
     A.getState().setUser({ id: OWNER, name: 'Tess' })   // signs up here; nothing saved since
@@ -167,7 +168,7 @@ describe('two tabs of one browser keep each other\'s changes', () => {
 
   it('a tab that just signed in joins a closed tab\'s save on its next change', async () => {
     localStorage.removeItem('gym_owner')
-    localStorage.setItem('gym_state_v1', JSON.stringify({ ...clone(DEF), _ts: 100, workouts: [w('g1')] }))
+    localStorage.setItem(WEB_STATE_KEY, JSON.stringify({ ...clone(DEF), _ts: 100, workouts: [w('g1')] }))
     const srv = server(null)
     const A = await openTab(null)
     A.getState().setUser({ id: OWNER, name: 'Tess' })
@@ -193,7 +194,7 @@ describe('two tabs of one browser keep each other\'s changes', () => {
   })
   it('a sign-in asks about what another guest tab saved too, and then joins only the account\'s saves', async () => {
     localStorage.removeItem('gym_owner')
-    localStorage.setItem('gym_state_v1', JSON.stringify({ ...clone(DEF), _ts: 100, workouts: [w('g1')] }))
+    localStorage.setItem(WEB_STATE_KEY, JSON.stringify({ ...clone(DEF), _ts: 100, workouts: [w('g1')] }))
     server(null)
     const A = await openTab(null)
     const B = await openTab(null)

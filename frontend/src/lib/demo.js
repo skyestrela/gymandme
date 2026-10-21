@@ -11,4 +11,6 @@
 // lands in a self-hosted bundle.
 export const DEMO = import.meta.env.VITE_DEMO === '1'
 export const DEMO_SEEDED = 'gym_demo_seeded_v1'
-export const REPO = 'https://gitlab.com/DuarteSantos8/opengym'
+// Gym&Me has no publishing destination yet. Keep release/source calls-to-action absent rather
+// than sending people to the upstream project's repository.
+export const REPO = null

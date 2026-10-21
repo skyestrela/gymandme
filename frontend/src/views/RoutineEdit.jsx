@@ -8,20 +8,24 @@ import { uid, exerciseNameText } from '../lib/format.js'
 import { t, exerciseNameFor, exerciseNameClass } from '../lib/i18n.js'
 import { supersetUnits, moveRoutineEntry, cleanupSg, exLine, defaultConfig } from '../lib/history.js'
 import { Thumb } from '../components/Media.jsx'
-import { glyphPicker, exercisePicker, exConfigSheet, confirmSheet } from '../sheets.jsx'
+import { glyphPicker, exercisePicker, exConfigSheet, confirmSheet, moveExerciseSheet, exerciseAnimationSheet } from '../sheets.jsx'
 import Icon from '../components/Icon.jsx'
 import { glyphOf } from '../lib/glyphs.js'
 import { Button, Row, SelectRow, Switch } from '../components/ui.jsx'
 import SwipeRow from '../components/SwipeRow.jsx'
 import { workoutControls } from '../lib/workout-controls.js'
 import { copyRoutine, deleteRoutine, replaceSlotExercise } from '../lib/routines.js'
+import { removeRoutineExercise } from '../lib/routine-actions.js'
 import { planPrintHTML, printPlan } from '../lib/plan-share.js'
-import { markEntryUndone } from '../lib/sync-merge.js'
 import { MOBILE, printHtml } from '../lib/mobile.js'
 import { speedUnitOf } from '../lib/speed.js'
 import { POLICIES_FOR, POLICY_NAME, POLICY_DESC } from '../lib/progression.js'
 import BodyMap from '../components/BodyMap.jsx'
 import { loadOfRoutine, rankOf, MUSCLE_NAME } from '../lib/muscles.js'
+
+// The removal and its Undo live with the other routine actions now (lib/routine-actions.js),
+// so Plan can take an exercise out too. Re-exported here: this is where they were born.
+export { removeRoutineExercise }
 
 export const ROUTINE_LONG_PRESS_MS = 380
 export const ROUTINE_DRAG_SLOP = 8
@@ -319,47 +323,6 @@ function useRoutineReorder(routineIdentity, exercises, onDrop) {
   return { listRef, drag, onClickCapture, lifted }
 }
 
-/**
- * Takes exercise `i` out of routine `routineId` with an Undo (v1.3.11: the row's swipe and the
- * exercise sheet's Remove). While the routine's exercises are still what the removal left, Undo
- * puts the list back as it was, superset links included (a partner left alone loses its link,
- * cleanupSg). Once something else changed them, the exercise goes back in at its old place.
- */
-export function removeRoutineExercise(routineId, i) {
-  const st = useStore.getState()
-  const routine = st.S.routines.find(x => x.id === routineId)
-  const slot = routine?.ex?.[i]
-  if (!slot) return false
-  const before = structuredClone(routine.ex)
-  const base = Number(routine._f?.ex) || 0
-  st.update(s => {
-    const ex = s.routines.find(x => x.id === routineId)?.ex
-    if (!ex) return
-    ex.splice(i, 1); cleanupSg(ex)
-  })
-  const now = useStore.getState().S.routines.find(x => x.id === routineId)
-  const after = JSON.stringify(now?.ex)
-  const del = Number(now?._f?.ex) || 0
-  useUI.getState().toast(t('“{0}” left the routine.', exerciseNameText(exOr(slot.id))),
-    { action: t('Undo'), onAction: () => undoRemoveRoutineExercise({ routineId, i, before, after, base, del }) })
-  return true
-}
-export function undoRemoveRoutineExercise({ routineId, i, before, after, base, del }) {
-  if (!useStore.getState().S.routines.some(x => x.id === routineId)) {
-    useUI.getState().toast(t('Too late, that one’s gone'))
-    return false
-  }
-  useStore.getState().update(s => {
-    const routine = s.routines.find(x => x.id === routineId)
-    // Put back exactly, so a change another device made to these exercises before it saw the
-    // removal still wins (lib/sync-merge.js, "Undo").
-    if (JSON.stringify(routine.ex) === after) { routine.ex = structuredClone(before); if (del) markEntryUndone(routine, 'ex', base, del); return }
-    routine.ex.splice(Math.min(i, routine.ex.length), 0, structuredClone(before[i]))
-    cleanupSg(routine.ex)
-  })
-  return true
-}
-
 export default function RoutineEdit() {
   const nav = useNavigate()
   const { id } = useParams()
@@ -514,7 +477,7 @@ export default function RoutineEdit() {
       // screen reader would lose inside one): the name is, a real <button> a click bubbles up
       // from. The long press treats it as the row (data-row-open, useRoutineReorder).
       const item = <div className={'item' + (inSS.has(i) ? ' in-ss' : '')} onClick={() => {
-          exConfigSheet(ex, e, cfg => edit(x => { x[i] = { id: x[i].id, sg: x[i].sg, ...cfg } }), removeHere, r, null, () => replace(i))
+          exConfigSheet(ex, e, cfg => edit(x => { x[i] = { id: x[i].id, sg: x[i].sg, ...cfg } }), removeHere, r, null, () => replace(i), null, () => moveExerciseSheet(ex, id, i))
         }}>
           {/* Shown on pointer devices only (index.css .routine-grip); the Move buttons and the
               long press stay the way in for a keyboard and a finger. */}
@@ -525,6 +488,9 @@ export default function RoutineEdit() {
           {noEquip && <span className="tag" style={{ color: 'var(--orange)', borderColor: 'var(--orange)' }} title={t('Needs {0}, which isn’t in your active profile', t(ex.eq))}><Icon name="warning" /></span>}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 2, flex: 'none', alignItems: 'center' }}>
             {i > 0 && <button className={'iconbtn' + (linkedPrev ? ' on-ss' : '')} title={t('Superset with exercise above')} style={{ width: 32, height: 28, borderRadius: 8, fontSize: 15 }} onClick={ev => { ev.stopPropagation(); toggleLink(i) }}><Icon name="link" /></button>}
+            {/* The movement itself, next to the chain button: the exercise's sheet is about the
+                numbers, this one is about how the movement looks. */}
+            <button className="iconbtn" aria-label={t('Show the animation')} title={t('Show the animation')} style={{ width: 32, height: 28, borderRadius: 8, fontSize: 15 }} onClick={ev => { ev.stopPropagation(); exerciseAnimationSheet(ex) }}><Icon name="play" /></button>
             <div style={{ display: 'flex', gap: 2 }}>
               <button className="iconbtn" aria-label={t('Move up')} title={leavesUp ? t('Move out of the superset') : t('Move up')} disabled={!moveRoutineEntry(r.ex, i, -1)} style={{ width: 28, height: 24, borderRadius: 7, fontSize: 12 }} onClick={ev => { ev.stopPropagation(); move(i, -1) }}><Icon name="chevronUp" /></button>
               <button className="iconbtn" aria-label={t('Move down')} title={leavesDown ? t('Move out of the superset') : t('Move down')} disabled={!moveRoutineEntry(r.ex, i, 1)} style={{ width: 28, height: 24, borderRadius: 7, fontSize: 12 }} onClick={ev => { ev.stopPropagation(); move(i, 1) }}><Icon name="chevronDown" /></button>

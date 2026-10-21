@@ -1,17 +1,23 @@
-import { useRef, useState } from 'react'
+import { Fragment, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useStore } from '../store/useStore.js'
 import { useUI } from '../store/useUI.js'
-import { DAYN, DAYS, weekOrder, weekStartOf, uid, exCount, routineCount, todayISO, fmtDate } from '../lib/format.js'
-import { t } from '../lib/i18n.js'
+import { DAYN, DAYS, weekOrder, weekStartOf, uid, exCount, routineCount, todayISO, fmtDate, exerciseNameText } from '../lib/format.js'
+import { t, exerciseNameFor, exerciseNameClass } from '../lib/i18n.js'
 import {
   dayAssignSheet, starterPlanSheet, confirmSheet, menuSheet,
   planHasRoutines, exportPlanFile, printWholePlan, importPlanFile,
+  exercisePicker, exConfigSheet, moveExerciseSheet,
 } from '../sheets.jsx'
 import Icon from '../components/Icon.jsx'
+import Media from '../components/Media.jsx'
 import { Button, Row, Section, Segmented } from '../components/ui.jsx'
 import SwipeRow from '../components/SwipeRow.jsx'
 import { copyRoutine, deleteRoutine, restoreRoutine, routineSnapshot } from '../lib/routines.js'
+import { removeRoutineExercise } from '../lib/routine-actions.js'
+import { exOr } from '../lib/exercises.js'
+import { cleanupSg, defaultConfig, exLine, moveRoutineEntry } from '../lib/history.js'
+import { speedUnitOf } from '../lib/speed.js'
 import { workoutControls } from '../lib/workout-controls.js'
 import { tappable } from '../lib/use-sheet-keyboard.js'
 import { useListReorder, moved } from '../lib/use-list-reorder.js'
@@ -148,7 +154,7 @@ export default function Plan() {
       title: t('Plan'),
       subtitle: has ? null : t('Add an exercise to a routine first. An empty plan has nothing to share.'),
       items: [
-        { icon: 'share', label: t('Export plan file'), sub: t('A small file a friend can import into their own openGym. Routines only, none of your workouts or weigh-ins.'), disabled: !has, onClick: exportPlanFile },
+        { icon: 'share', label: t('Export plan file'), sub: t('A small file a friend can import into their own Gym&Me. Routines only, none of your workouts or weigh-ins.'), disabled: !has, onClick: exportPlanFile },
         { icon: 'note', label: t('Print / Save as PDF'), disabled: !has, onClick: printWholePlan },
         { icon: 'download', label: t('Import a plan file'), onClick: () => fileRef.current?.click() },
         { icon: 'clipboard', label: t('Load starter plan'), onClick: starterPlanSheet },
@@ -240,7 +246,7 @@ function Schedule({ S, update, nav, mode }) {
   const replacesOwn = ownSeq.length > 0 && (ownSeq.length !== seq.length || ownSeq.some((id, i) => id !== seq[i]))
   const adopt = () => confirmSheet({
     title: t('Use this rotation?'),
-    message: t('Your coach gives up control of this week: openGym owns the queue from here on and repeats these sessions by itself once they are all done. A new week from the coach’s app would replace this rotation.')
+    message: t('Your coach gives up control of this week: Gym&Me owns the queue from here on and repeats these sessions by itself once they are all done. A new week from the coach’s app would replace this rotation.')
       + (replacesOwn ? ' ' + t('Your own loop gets replaced.') : ''),
     confirmText: t('Use this rotation'),
     onConfirm: () => update(s => saveRotation(s, seq, '')),
@@ -377,6 +383,10 @@ function Schedule({ S, update, nav, mode }) {
 function Routines({ S, update, nav }) {
   const [edit, setEdit] = useState(false)
   const [flash, setFlash] = useState(null)
+  // Which routine's plan is open here, if any. One at a time: the plan of a routine is read
+  // against the routine above it, so two of them open at once would only make the screen
+  // harder to read.
+  const [open, setOpen] = useState(null)
   const swipe = workoutControls(S).swipeSets
   const routines = S.routines
   // The order of this list is the order of `S.routines`, and every other screen reads the same
@@ -437,20 +447,109 @@ function Routines({ S, update, nav }) {
           const row = <div key={r.id} className="item plan-routine" {...tappable(() => nav('/plan/r/' + r.id))}>
             <span className="lrow-i"><Icon name={glyphOf(r.emoji)} /></span>
             <div className="grow"><div className="tt">{r.name}</div><div className="ss">{sub(r)}</div></div>
+            {/* The plan of this routine, right here: the exercises edited where the routines
+                are listed, without a screen away. The row's own tap still opens the full
+                editor — this is the quick way in, not the only one. */}
+            <button className="iconbtn plan-open" aria-label={t('Edit plan')} title={t('Edit plan')}
+              onClick={ev => { ev.stopPropagation(); setOpen(open === r.id ? null : r.id) }}>
+              <Icon name={open === r.id ? 'chevronDown' : 'list'} /></button>
             <Icon name="chevronRight" className="chev" /></div>
           // Swipe (v1.3.11, Settings → Swipe actions): toward the start deletes with an Undo,
           // toward the end duplicates. Edit's minus and the routine's own page stay the way in
           // for a keyboard and a screen reader.
-          return swipe
+          const listed = swipe
             ? <SwipeRow key={r.id} className="swrow-item" copyLabel={t('Duplicate')}
               onDelete={() => remove(r)} onCopy={() => duplicate(r)}
               flash={flash?.id === r.id ? flash.n : 0}>{row}</SwipeRow>
             : row
+          return <Fragment key={r.id}>
+            {listed}
+            {open === r.id && <RoutinePlanPanel r={r} S={S} update={update} nav={nav} />}
+          </Fragment>
         })}</div>}
-      <p className="sect-f">{edit ? t('Drag to reorder. Tap the minus to delete.') : t('Tap a routine to edit it. Reorder and delete are behind Edit.')}</p>
+      <p className="sect-f">{edit ? t('Drag to reorder. Tap the minus to delete.') : t('Tap a routine to edit it. The list button opens its plan right here. Reorder and delete are behind Edit.')}</p>
     </> : <>
       <div className="empty"><div className="ico"><Icon name="clipboard" /></div>{t('No routines yet.')}<br />{t('Make one, or grab the starter plan to get going.')}</div>
       <Button icon="clipboard" onClick={starterPlanSheet}>{t('Load starter plan')}</Button>
     </>}
   </>
+}
+
+/* The routine's own plan, opened from Plan: the exercises edited where the routines are
+   listed. The same sheet the routine editor opens, writing into the same routine — so an
+   exercise set here is the exercise the session will open with, and one moved to another
+   routine leaves this one. The full editor stays one tap away for the rest (drag to reorder
+   a superset, print, delete the routine). */
+function RoutinePlanPanel({ r, S, update, nav }) {
+  const toast = useUI(s => s.toast)
+  const speedUnit = speedUnitOf(S)
+  const ex = r.ex || []
+  // The slot keeps its own id and superset link; the sheet writes the rest.
+  const editSlot = (i, cfg) => update(s => {
+    const rt = s.routines.find(x => x.id === r.id)
+    if (!rt?.ex?.[i]) return
+    rt.ex[i] = { id: rt.ex[i].id, sg: rt.ex[i].sg, ...cfg }
+  })
+  const removeHere = i => removeRoutineExercise(r.id, i)
+  const openSlot = i => {
+    const slot = ex[i]
+    if (!slot) return
+    const one = exOr(slot.id)
+    exConfigSheet(one, slot, cfg => editSlot(i, cfg), removeHere, r, null, null, null, () => moveExerciseSheet(one, r.id, i))
+  }
+  const addExercise = () => exercisePicker((one, quick) => {
+    if (quick) {
+      update(s => {
+        const rt = s.routines.find(x => x.id === r.id)
+        if (rt) rt.ex.push({ id: one.id, ...defaultConfig(one.id) })
+      })
+      toast(t('“{0}” added to {1}', exerciseNameText(one), r.name))
+    } else {
+      exConfigSheet(one, null, cfg => update(s => {
+        const rt = s.routines.find(x => x.id === r.id)
+        if (rt) rt.ex.push({ id: one.id, ...cfg })
+      }), null, r)
+    }
+  })
+  // The same arrows the routine editor has, moving one exercise at a time.
+  const move = (i, dir) => {
+    if (!moveRoutineEntry(ex, i, dir)) return
+    update(s => {
+      const rt = s.routines.find(x => x.id === r.id)
+      if (!rt) return
+      const reordered = moveRoutineEntry(rt.ex, i, dir)
+      if (!reordered) return
+      rt.ex.splice(0, rt.ex.length, ...reordered)
+      cleanupSg(rt.ex)
+    })
+  }
+  return <div className="plan-panel">
+    {ex.length ? <div className="list">
+      {ex.map((e, i) => {
+        const one = exOr(e.id)
+        const inSS = (i > 0 && e.sg && ex[i - 1].sg === e.sg) || (i + 1 < ex.length && e.sg && ex[i + 1].sg === e.sg)
+        return <div key={i} className={'item plan-ex' + (inSS ? ' in-ss' : '')}>
+          {/* The exercise's own animation, in front of the name: the same demo the routine
+              editor shows, so a row here reads like the routine it belongs to. */}
+          <Media ex={one} tiny />
+          <button type="button" className="grow item-open" onClick={() => openSlot(i)}>
+            <span className={`tt ${exerciseNameClass(one)}`}>{exerciseNameFor(one)}</span>
+            <span className="ss">{exLine(e, S.unit, speedUnit)}</span>
+          </button>
+          <div style={{ display: 'flex', gap: 2, flex: 'none' }}>
+            <button className="iconbtn" aria-label={t('Move up')} title={t('Move up')} disabled={!moveRoutineEntry(ex, i, -1)}
+              style={{ width: 28, height: 24, borderRadius: 7, fontSize: 12 }} onClick={() => move(i, -1)}><Icon name="chevronUp" /></button>
+            <button className="iconbtn" aria-label={t('Move down')} title={t('Move down')} disabled={!moveRoutineEntry(ex, i, 1)}
+              style={{ width: 28, height: 24, borderRadius: 7, fontSize: 12 }} onClick={() => move(i, 1)}><Icon name="chevronDown" /></button>
+            <button className="iconbtn" aria-label={t('Move to another routine')} title={t('Move to another routine')}
+              style={{ width: 30, height: 24, borderRadius: 7, fontSize: 13 }} onClick={() => moveExerciseSheet(one, r.id, i)}><Icon name="merge" /></button>
+          </div>
+        </div>
+      })}
+    </div> : <div className="small dim">{t('No exercises yet.')}</div>}
+    <div className="row" style={{ gap: 8, flexWrap: 'wrap' }}>
+      <Button size="sm" variant="tinted" icon="plus" onClick={addExercise}>{t('Add exercise')}</Button>
+      <Button size="sm" icon="list" onClick={() => nav('/plan/r/' + r.id)}>{t('Open full editor')}</Button>
+    </div>
+  </div>
 }

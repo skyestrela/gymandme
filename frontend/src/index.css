@@ -1,5 +1,5 @@
 /* ============================================================================
-   openGym — design system
+   Gym&Me — design system
    ----------------------------------------------------------------------------
    Rebuilt around four rules, each aimed at a specific "generated" tell in the
    previous sheet:
@@ -847,6 +847,14 @@ body.chips-dragging *{cursor:inherit}
    at 180px you had to scroll a full screen between two exercises done back-to-back */
 .exmedia.compact img{height:120px}
 .exmedia.mini img{height:84px}
+/* The animation in front of a plan row: the same demo the exercise's own sheet shows, sized to
+   sit beside the name instead of above it. */
+.exmedia.tiny{margin:0;border-radius:var(--r-md);width:46px;height:46px;flex:none}
+.exmedia.tiny img,.exmedia.tiny video{width:46px;height:46px;object-fit:cover}
+.exmedia.tiny .exmedia-x{height:46px;font-size:18px}
+/* The hint is the icon alone here: a pill with words would cover the whole picture. */
+.exmedia.tiny .gifhint{inset-inline-end:3px;bottom:3px;padding:3px 4px;font-size:0;gap:0}
+.exmedia.tiny .gifhint .icn{font-size:11px}
 /* both the animation and the still failed to load: a neutral tile instead of the browser's
    broken-image glyph; same heights as the picture so the card does not jump. tap retries. */
 .exmedia.broken{background:var(--surface-2)}
@@ -1934,6 +1942,17 @@ body.no-tabbar.resting #toast{bottom:calc(100px + var(--sab))}
 }
 .plan-handle:active{cursor:grabbing;color:var(--label-2)}
 .plan [data-reorder-row]{transition:transform var(--fast) var(--ease)}
+/* The routine's own plan, opened from Plan: a column under the routine it belongs to, so the
+   plan reads as part of that routine and not as another screen. */
+.plan-panel{display:flex;flex-direction:column;gap:8px;padding:0 0 4px 12px;margin:-2px 0 2px;
+  border-inline-start:2px solid var(--surface-3)}
+.plan-panel .list{gap:6px}
+.item.plan-ex{min-height:52px;gap:8px}
+.item.plan-ex.in-ss{background:var(--surface-2)}
+/* The button that opens a routine's plan where the routines are listed: a quiet control,
+   so it does not compete with the chevron that opens the full editor. */
+.plan-open{width:32px;height:32px;background:transparent;color:var(--label-3)}
+.plan-open:active{background:var(--surface-2)}
 .plan-link{margin-top:24px}
 .plan-empty{padding:28px 20px}
 /* Stats: the card Plan links to clears the sticky banners when it is scrolled to */
@@ -2034,3 +2053,96 @@ body.no-tabbar.resting #toast{bottom:calc(100px + var(--sab))}
 [dir="rtl"] .hm-wrap,[dir="rtl"] .cal-grid{direction:ltr}
 /* Tight tracking is tuned for Latin; Arabic is a connected script and gets none. */
 [dir="rtl"] *{letter-spacing:0}
+
+/* ---- daily essentials (water, fasting, food) ---- */
+/* The same thin bar the muscle rows use (`.mrow .bar`), freed from its row so the Home card can
+   put one under each of its three rows. */
+.wl-bar{height:5px;border-radius:3px;background:var(--surface-2);overflow:hidden}
+.wl-bar>i{display:block;height:100%;border-radius:3px;transition:width .35s var(--fast)}
+/* The day's total, read like the weigh-in's (.bw-read) with the unit beside it. */
+.wl-read{display:flex;align-items:baseline;gap:3px;font-size:2rem;font-weight:600;letter-spacing:-.021em}
+.wl-read .u{font-size:1rem;color:var(--label-3);font-weight:500}
+/* One of the four numbers a food is made of (or aimed at): value over label, both centred, so a
+   long label wraps under the box rather than pushing the row wide. */
+.wl-macro{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:2px;text-align:center}
+.wl-macro input{width:100%;text-align:center}
+.wl-macro .small{font-size:11px;line-height:1.2}
+/* The food entry being corrected, in the list above the form. */
+.row.ed{background:var(--surface-2);border-radius:10px}
+
+/* The calories goal (MacroSheet, and the line under it on the Home card). The three parts of a
+   plan you are meant to be able to argue with: what it was worked out from, what came out of it,
+   and the floor underneath that it will not go below. */
+/* A tile laid out like .wl-macro, for a number you read rather than one you type. */
+.wl-num{font-size:1.15rem;font-weight:600;letter-spacing:-.021em;line-height:1.2}
+/* One line of the working-out: what it came from on the left, what it came to on the right. */
+.wl-line{display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding:6px 0;border-bottom:1px solid var(--surface-2)}
+.wl-line:last-child{border-bottom:0}
+/* A floor: the number itself, and underneath it the reason that number exists. */
+.wl-floor{padding:9px 0;border-bottom:1px solid var(--surface-2)}
+.wl-floor:last-child{border-bottom:0}
+
+/* ---- the body that fills (WaterBody) ----
+   The day's water drawn as a person instead of a bar. One geometry set does three jobs — it is
+   the clip the water is poured through, the empty shell behind it, and the outline on top — so the
+   level is body-shaped at every height without a second silhouette to keep in step. */
+.wl-bench{display:flex;align-items:center;gap:14px}
+.wl-bench.wide{align-items:flex-start;gap:16px}
+.wl-figure{flex:none;display:flex;flex-direction:column;align-items:center;gap:3px}
+.wl-body{display:block;overflow:visible}
+.wl-body.sm{width:60px;height:85px}
+.wl-body.lg{width:104px;height:147px}
+.wl-body-shell{fill:var(--surface-2)}
+.wl-body-line{fill:none;stroke:var(--label-4);stroke-width:1.6;stroke-linejoin:round}
+.wl-body-fill{fill:var(--blue);opacity:.3;transition:y var(--med) var(--ease),height var(--med) var(--ease)}
+.wl-body-surface{fill:var(--blue);opacity:.5;transition:y var(--med) var(--ease)}
+.wl-pct{font-size:11px;font-weight:600;color:var(--label-3);letter-spacing:-.01em}
+.wl-detail{flex:1;min-width:0}
+.wl-detail-main{font-size:13px;color:var(--label)}
+
+/* The bubbles are the one thing in the app that moves for no reason except that it looks right:
+   a deliberate exception to design-system rule 4 ("nothing bounces or slides for decoration").
+   Three things keep it honest — transform and opacity only, so it never touches layout; not
+   rendered at all when the body is empty or the goal is met, so nothing loops forever; and the
+   global prefers-reduced-motion rule (index.css:147) already switches it off. Delete .wl-bubble
+   and @keyframes bubble to take the whole thing back out again. */
+.wl-bubble{fill:#fff;opacity:0;animation:bubble 5.5s linear infinite;will-change:transform,opacity}
+@keyframes bubble{
+  0%{transform:translateY(0);opacity:0}
+  12%{opacity:.5}
+  75%{opacity:.3}
+  100%{transform:translateY(-116px);opacity:0}
+}
+
+/* What hydration is doing, one row per part of the body. A locked row stays exactly where it is,
+   dimmed, rather than disappearing — so the list never reflows while you are drinking. */
+.wl-bench-list{list-style:none;margin:8px 0 0;padding:0}
+.wl-bench-row{display:flex;gap:9px;align-items:flex-start;padding:6px 0;opacity:.42;transition:opacity var(--med) var(--ease)}
+.wl-bench-row.on{opacity:1}
+.wl-bench-dot{width:7px;height:7px;border-radius:50%;background:var(--label-4);flex:none;margin-top:5px;transition:background var(--med) var(--ease)}
+.wl-bench-row.on .wl-bench-dot{background:var(--blue)}
+.wl-bench-title{font-size:13px;font-weight:500;color:var(--label)}
+.wl-bench-note{font-size:11.5px;line-height:1.35}
+/* On the card the list is four titles and nothing else: enough to remember what you are
+   drinking towards, short enough that it does not push the other two rows off the screen.
+   The reasons behind them live in the sheet, which has the room for them. */
+.wl-bench-list.compact{margin-top:6px}
+.wl-bench-list.compact .wl-bench-row{padding:5px 0;align-items:center}
+.wl-bench-list.compact .wl-bench-dot{margin-top:0}
+.wl-bench-list.compact .wl-bench-title{font-size:12.5px}
+/* The leaders are drawn at fixed coordinates inside the body (see BEN in WaterBody.jsx), so they
+   only line up while .wl-figure and .wl-body keep the sizes set above — the arrows are not
+   measured, and changing either size without moving BEN will misalign them. */
+.wl-body-leaders{fill:none;stroke:var(--label-4);stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round;transition:stroke var(--med) var(--ease)}
+.wl-body-leaders.on{stroke:var(--blue)}
+.wl-body-leaders circle{fill:currentColor}
+
+/* "900 ml behind for the time of day" — only ever rendered when it is worth saying. */
+.wl-pace{color:var(--label-3)}
+
+/* One bar per day (DayBars). The goal is a line across the plot; a day that reached it is the
+   full tint, the rest the muted one, so a run of good days shows without reading a number. */
+.daybars{position:relative;display:flex;align-items:flex-end;gap:2px;height:92px;padding-top:4px}
+.daybars-col{flex:1;min-width:0;height:100%;display:flex;align-items:flex-end}
+.daybars-col i{display:block;width:100%;min-height:2px;border-radius:2px 2px 0 0;background:var(--surface-3)}
+.daybars-goal{position:absolute;inset-inline:0;height:1px;background:var(--label-3);opacity:.55}

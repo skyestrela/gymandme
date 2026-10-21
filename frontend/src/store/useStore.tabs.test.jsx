@@ -6,6 +6,7 @@
    answers like api/server.js: GET /api/data and /api/data/rev, PUT /api/data refused with the
    current document when `baseRev` is given and not the current revision. */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { WEB_STATE_KEY } from '../lib/product.js'
 
 const h = vi.hoisted(() => ({ api: null }))
 vi.mock('../lib/api.js', () => ({ api: (...a) => h.api(...a), setRemoteAuth: () => {} }))
@@ -16,7 +17,7 @@ const w = (id, d = '2026-09-01') => ({ id, d, start: 1, entries: [] })
 const ids = st => (st?.workouts || []).map(x => x.id)
 const httpError = (status, data) => Object.assign(new Error(data?.error || 'HTTP ' + status), { status, data })
 const tick = (ms = 30) => new Promise(r => setTimeout(r, ms))
-const saved = () => JSON.parse(localStorage.getItem('gym_state_v1'))
+const saved = () => JSON.parse(localStorage.getItem(WEB_STATE_KEY))
 
 let tabs = []
 let DEF
@@ -59,7 +60,7 @@ function server(doc) {
 const savedCopy = (doc, rev) => {
   const S = clone(doc)
   delete S._rev
-  localStorage.setItem('gym_state_v1', JSON.stringify(S))
+  localStorage.setItem(WEB_STATE_KEY, JSON.stringify(S))
   localStorage.setItem('gym_sync', JSON.stringify({ rev, ts: S._ts }))
 }
 
@@ -203,7 +204,7 @@ describe('other ways a push could go out without a conflict check', () => {
     const srv = server({ ...clone(DEF), _ts: 100, workouts: [w('w1')], _rev: 1 })
     savedCopy(srv.doc, 1)
     const A = await openTab()
-    h.api = async () => { throw Object.assign(new Error('not openGym data'), { status: 200, code: 'bad-response' }) }
+    h.api = async () => { throw Object.assign(new Error('not Gym&Me data'), { status: 200, code: 'bad-response' }) }
     A.getState().update(s => { s.workouts.push(w('local', '2026-09-03')) })
     await A.getState().pushState()
     expect(localStorage.getItem('gym_dirty')).toBe('1')
