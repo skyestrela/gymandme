@@ -2088,6 +2088,15 @@ export default {
   'Nothing from an animal at all. The protein arithmetic is the same as plant-based; the nutrients need more planning.': 'Hiçbir şey hayvansal değil. Protein hesabı bitkisel beslenmeyle aynı; besinlerin planlanması daha fazla emek istiyor.',
   'Plant protein digests less completely and carries less leucine, so your protein floor is about {0}% higher than it would be otherwise. Soy and peas are the densest; tofu, tempeh, lentils and seitan do the rest.': 'Bitkisel protein daha az tam sindirilir ve daha az lösin içerir, bu yüzden protein tabanın normalde olacağından yaklaşık {0}% daha yüksek. Soya ve bezelye en yoğun olanlarıdır; tofu, tempeh, mercimek ve seitan gerisini halleder.',
   'B12 does not occur naturally in plant foods, so it comes from fortified foods or a supplement. Iron and omega-3 take more planning than they would otherwise.': 'B12 doğal olarak bitkisel gıdalarda bulunmaz, bu yüzden zenginleştirilmiş gıdalardan veya bir takviyeden gelir. Demir ve omega-3 normalden daha fazla planlama gerektirir.',
+  'Calendar': 'Takvim',
+  'Fasts': 'Oruçlar',
+  'No fast logged': 'Kayıtlı oruç yok',
+  'Nothing logged this day': 'Bu gün hiçbir şey kayıtlı değil',
+  'Nothing logged yet this month': 'Bu ay henüz hiçbir şey kayıtlı değil',
+  'Each bar fills against that thing’s own target. An empty bar means nothing was logged.': 'Her çubuk kendi hedefine göre dolar. Boş çubuk, hiçbir şeyin kaydedilmediği anlamına gelir.',
+  '{0} h asked': '{0} saat istendi',
+  '{0} day logged': '{0} gün kayıtlı',
+  '{0} days logged': '{0} gün kayıtlı',
 }
 
 

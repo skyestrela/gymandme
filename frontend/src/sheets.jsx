@@ -55,10 +55,10 @@ import { editCompletedSession, editLeftEmpty, editedRecord, editChangesNothing }
 import { stampWorkout } from './lib/sync-merge.js'
 import { weeklyWeights } from './lib/bodyweight.js'
 import {
-  DEFAULT_FAST, FAST_PRESETS, WATER_QUICK, fastElapsedMs, fastHitGoal, fastPreset,
-  fastRemainingMs, fastStreak, foodEntry, foodOn, foodTotal, goalOf, isFasting, profilePlan,
-  addFood, recentFoods, removeFood, startFast, stopFast, updateFood, waterGoalFor, waterGoalOf,
-  waterSet, waterTotal,
+  DEFAULT_FAST, FAST_PRESETS, WATER_QUICK, dayEssentials, essentialsMonth, fastElapsedMs,
+  fastHitGoal, fastPreset, fastRemainingMs, fastStreak, foodEntry, foodOn, foodTotal, goalOf,
+  isFasting, profilePlan, addFood, recentFoods, removeFood, startFast, stopFast, updateFood,
+  waterGoalFor, waterGoalOf, waterSet, waterTotal,
 } from './lib/wellness.js'
 import { clampGoal, DIETS, dietOf, PLANT_PROTEIN_FACTOR, sessionsPerWeek } from './lib/macros.js'
 import { workoutText } from './lib/workout-text.js'
@@ -2878,6 +2878,121 @@ function Calendar({ start, close }) {
   </>
 }
 export const calendarSheet = start => ui().openSheet(close => <Calendar start={start} close={close} />)
+
+/* -------------------- daily essentials calendar -------------------- */
+/* One bar per essential, filled to its own fraction. Width carries the magnitude, which is
+   what a dot cannot: a full bar and a three-quarter bar are both "some water" as a dot.
+   An empty track is not a bar at zero — nothing logged is a real state, and drawing it as a
+   failed day would be a lie about a day the user simply did not record. */
+const EssentialBar = ({ pct, cls }) => (
+  <span className={'cal-eb ' + cls}><i style={{ width: pct === null ? '0%' : Math.round(pct * 100) + '%' }} /></span>
+)
+
+const CalendarBar = ({ pct, tint }) => (
+  <div style={{ marginTop: 6, height: 4, borderRadius: 2, background: 'var(--surface-2)', overflow: 'hidden' }}>
+    <i style={{ display: 'block', height: '100%', width: pct === null ? '0%' : Math.round(pct * 100) + '%', background: tint }} />
+  </div>
+)
+
+function EssentialsCalendar({ start, close }) {
+  const st = useStore(s => s.S)
+  const [cur, setCur] = useState(() => { const d = start ? new Date(start) : new Date(); d.setDate(1); return d })
+  const y = cur.getFullYear(), mo = cur.getMonth()
+  const kcalGoal = goalOf(st).kcal
+  const waterGoal = waterGoalOf(st)
+
+  const summary = essentialsMonth({
+    water: st.water, food: st.food, fastLog: st.fastLog, y, mo, waterGoal, kcalGoal,
+  })
+
+  const ws = weekStartOf(st)
+  const startOffset = weekDayOffset(new Date(y, mo, 1).getDay(), ws)
+  const daysIn = new Date(y, mo + 1, 0).getDate()
+
+  const cells = []
+  for (let i = 0; i < startOffset; i++) cells.push(<div key={'e' + i} />)
+  for (let d = 1; d <= daysIn; d++) {
+    const iso = `${y}-${String(mo + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`
+    const e = dayEssentials({ water: st.water, food: st.food, fastLog: st.fastLog, d: iso, waterGoal, kcalGoal })
+    cells.push(
+      <button key={d} className={'cal-d cal-e' + (iso === todayISO() ? ' today' : '')}
+        aria-label={fmtDate(iso, true)} onClick={() => { close(); essentialsDaySheet(iso) }}>
+        <span>{d}</span>
+        <EssentialBar pct={e.waterPct} cls="w" />
+        <EssentialBar pct={e.kcalPct} cls="k" />
+        <EssentialBar pct={e.fastPct} cls="f" />
+      </button>,
+    )
+  }
+
+  return <>
+    <div className="row between" style={{ marginBottom: 2 }}>
+      <button className="iconbtn" onClick={() => setCur(new Date(y, mo - 1, 1))} aria-label={t('Previous month')}><Icon name="chevronLeft" /></button>
+      <h3 style={{ margin: 0 }}>{t(MONTHS_LONG[mo])} {y}</h3>
+      <button className="iconbtn" onClick={() => setCur(new Date(y, mo + 1, 1))} aria-label={t('Next month')}><Icon name="chevronRight" /></button>
+    </div>
+
+    <div className="small muted" style={{ textAlign: 'center' }}>
+      {summary.logged
+        ? `${tn('{0} day logged', '{0} days logged', summary.logged)} · ${t('Water')} ${summary.waterHit} · ${t('Calories')} ${summary.kcalHit} · ${t('Fasts')} ${summary.fasts}`
+        : t('Nothing logged yet this month')}
+    </div>
+
+    <div className="cal-grid">{weekOrder(ws).map(d => <div key={d} className="cal-h">{t(DAYS[d])}</div>)}{cells}</div>
+
+    <div className="cal-legend">
+      <span><i style={{ background: 'var(--blue)' }} />{t('Water')}</span>
+      <span><i style={{ background: 'var(--acc)' }} />{t('Calories')}</span>
+      <span><i style={{ background: 'var(--orange)' }} />{t('Fasting')}</span>
+    </div>
+    <div className="small dim" style={{ textAlign: 'center', marginTop: 10 }}>{t('Each bar fills against that thing’s own target. An empty bar means nothing was logged.')}</div>
+  </>
+}
+
+function EssentialsDaySheet({ d, close }) {
+  const st = useStore(s => s.S)
+  const goal = goalOf(st)
+  const waterGoal = waterGoalOf(st)
+  const e = dayEssentials({ water: st.water, food: st.food, fastLog: st.fastLog, d, waterGoal, kcalGoal: goal.kcal })
+  const macros = foodTotal(st.food, d)
+
+  const Row = ({ icon, tint, label, value, sub, pct }) => (
+    <div style={{ marginTop: 14 }}>
+      <div className="row between" style={{ gap: 10 }}>
+        <span className="small"><Icon name={icon} tint={tint} /> {label}</span>
+        <span className="small">{value}</span>
+      </div>
+      {sub && <div className="dim small" style={{ marginTop: 2 }}>{sub}</div>}
+      {pct !== null && <CalendarBar pct={pct} tint={tint} />}
+    </div>
+  )
+
+  const fastValue = e.fastPct === null
+    ? t('Not fasting')
+    : `${t('{0} h fasted', fmtNum(e.fastH))} · ${e.fastPreset} · ${e.fastHit ? t('Goal reached') : t('{0} h asked', fmtNum(e.fastGoal))}`
+
+  return <>
+    <h3>{fmtDate(d, true)}</h3>
+    {!e.logged
+      ? <div className="dim small" style={{ marginTop: 10 }}>{t('Nothing logged this day')}</div>
+      : <>
+        <Row icon="drop" tint="var(--blue)" label={t('Water')}
+          value={`${fmtNum(e.ml)} / ${fmtNum(waterGoal)} ml`} pct={e.waterPct} />
+        <Row icon="hourglass" tint="var(--orange)" label={t('Fasting')}
+          value={fastValue} sub={e.fastPct === null ? t('No fast logged') : undefined} pct={e.fastPct} />
+        <Row icon="meal" tint="var(--acc)" label={t('Calories')}
+          value={`${fmtNum(macros.kcal)} / ${fmtNum(goal.kcal || 0)} kcal`}
+          sub={macros.n ? `${t('Protein')} ${fmtNum(macros.p)} g · ${t('Carbs')} ${fmtNum(macros.c)} g · ${t('Fat')} ${fmtNum(macros.f)} g` : undefined}
+          pct={e.kcalPct} />
+      </>}
+    <div style={{ height: 14 }} />
+    <Button size="sm" variant="ghost" onClick={close}>{t('Close')}</Button>
+  </>
+}
+
+export const essentialsCalendarSheet = start => ui().openSheet(close => <EssentialsCalendar start={start} close={close} />)
+export const essentialsDaySheet = d => ui().openSheet(close => <EssentialsDaySheet d={d} close={close} />)
+
 
 /* shared small workout row (used in lists) */
 export function WorkoutRow({ w, onClick }) {

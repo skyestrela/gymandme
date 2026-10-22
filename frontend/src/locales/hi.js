@@ -2088,6 +2088,15 @@ export default {
   'Nothing from an animal at all. The protein arithmetic is the same as plant-based; the nutrients need more planning.': 'पशु से कुछ नहीं। प्रोटीन का हिसाब वही रहता है; पोषक तत्वों की योजना ज़्यादा माँगती है।',
   'Plant protein digests less completely and carries less leucine, so your protein floor is about {0}% higher than it would be otherwise. Soy and peas are the densest; tofu, tempeh, lentils and seitan do the rest.': 'पौधों का प्रोटीन कम पूरा पचता है और उसमें ल्यूसिन कम होता है, इसलिए आपका प्रोटीन न्यूनतम सामान्य से लगभग {0}% ऊँचा है। सोया और मटर सबसे घने हैं; टोफू, टेम्पेह, दाल और सीटान बाकी का काम करते हैं।',
   'B12 does not occur naturally in plant foods, so it comes from fortified foods or a supplement. Iron and omega-3 take more planning than they would otherwise.': 'B12 प्राकृतिक रूप से पौधों के भोजन में नहीं मिलता, इसलिए यह फोर्टिफाइड भोजन या सप्लीमेंट से आता है। आयरन और ओमेगा-3 को सामान्य से ज़्यादा योजना चाहिए।',
+  'Calendar': 'कैलेंडर',
+  'Fasts': 'उपवास',
+  'No fast logged': 'कोई उपवास दर्ज नहीं',
+  'Nothing logged this day': 'इस दिन कुछ भी दर्ज नहीं',
+  'Nothing logged yet this month': 'इस महीने अभी कुछ भी दर्ज नहीं',
+  'Each bar fills against that thing’s own target. An empty bar means nothing was logged.': 'हर पट्टी अपने लक्ष्य के मुकाबले भरती है। खाली पट्टी का मतलब है कि कुछ भी दर्ज नहीं हुआ।',
+  '{0} h asked': '{0} घंटे का लक्ष्य',
+  '{0} day logged': '{0} दिन दर्ज',
+  '{0} days logged': '{0} दिन दर्ज',
 }
 
 

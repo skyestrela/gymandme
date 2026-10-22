@@ -2081,6 +2081,15 @@ export default {
   'Nothing from an animal at all. The protein arithmetic is the same as plant-based; the nutrients need more planning.': '完全不含動物來源。蛋白質的算法和植物性一樣；需要更多規劃的是營養素。',
   'Plant protein digests less completely and carries less leucine, so your protein floor is about {0}% higher than it would be otherwise. Soy and peas are the densest; tofu, tempeh, lentils and seitan do the rest.': '植物性蛋白質消化得更不完全，亮胺酸含量也更低，所以你的蛋白質下限比平時高約 {0}%。大豆和豌豆密度最高；豆腐、天貝、扁豆和麵筋負責其餘部分。',
   'B12 does not occur naturally in plant foods, so it comes from fortified foods or a supplement. Iron and omega-3 take more planning than they would otherwise.': 'B12 在植物性食物中天然不存在，所以只能從強化食品或補充劑中取得。鐵和 Omega-3 需要比平時更多的規劃。',
+  'Calendar': '日曆',
+  'Fasts': '斷食次數',
+  'No fast logged': '沒有記錄斷食',
+  'Nothing logged this day': '這天沒有記錄',
+  'Nothing logged yet this month': '本月還沒有記錄',
+  'Each bar fills against that thing’s own target. An empty bar means nothing was logged.': '每條進度條按它自己的目標填充。空條表示沒有記錄。',
+  '{0} h asked': '要求 {0} 小時',
+  '{0} day logged': '記錄 {0} 天',
+  '{0} days logged': '記錄 {0} 天',
 }
 
 

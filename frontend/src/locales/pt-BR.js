@@ -1335,6 +1335,15 @@ export const PT_BR_OVERRIDES = {
   'Nothing from an animal at all. The protein arithmetic is the same as plant-based; the nutrients need more planning.': 'Nada de origem animal. A conta da proteína é a mesma que na base vegetal; os nutrientes é que exigem mais planejamento.',
   'Plant protein digests less completely and carries less leucine, so your protein floor is about {0}% higher than it would be otherwise. Soy and peas are the densest; tofu, tempeh, lentils and seitan do the rest.': 'A proteína vegetal tem digestão menos completa e menos leucina, então seu mínimo de proteína fica cerca de {0}% maior do que seria. Soja e ervilha são as mais densas; tofu, tempeh, lentilha e gliúten de trigo fazem o resto.',
   'B12 does not occur naturally in plant foods, so it comes from fortified foods or a supplement. Iron and omega-3 take more planning than they would otherwise.': 'A B12 não ocorre naturalmente nos alimentos vegetais, então vem de alimentos enriquecidos ou de um suplemento. Ferro e ômega-3 exigem mais planejamento do que o normal.',
+  'Calendar': 'Calendário',
+  'Fasts': 'Jejuns',
+  'No fast logged': 'Nenhum jejum anotado',
+  'Nothing logged this day': 'Nada anotado neste dia',
+  'Nothing logged yet this month': 'Ainda nada anotado neste mês',
+  'Each bar fills against that thing’s own target. An empty bar means nothing was logged.': 'Cada barra preenche em relação à própria meta. Uma barra vazia significa que nada foi anotado.',
+  '{0} h asked': '{0} h pedidos',
+  '{0} day logged': '{0} dia anotado',
+  '{0} days logged': '{0} dias anotados',
 }
 
 export default { ...pt, ...PT_BR_OVERRIDES }

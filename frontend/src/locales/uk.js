@@ -2085,6 +2085,15 @@ export default {
   'Nothing from an animal at all. The protein arithmetic is the same as plant-based; the nutrients need more planning.': 'Нічого тваринного походження. Розрахунок білка такий самий, як на рослинній основі; більше планування потребують поживні речовини.',
   'Plant protein digests less completely and carries less leucine, so your protein floor is about {0}% higher than it would be otherwise. Soy and peas are the densest; tofu, tempeh, lentils and seitan do the rest.': 'Рослинний білок перетравлюється гірше і має менше лейцину, тому ваш мінімум білка приблизно на {0}% вищий за звичайний. Найщільніші — соя та горох; тофу, темпе, сочевиця та сетан роблять решту.',
   'B12 does not occur naturally in plant foods, so it comes from fortified foods or a supplement. Iron and omega-3 take more planning than they would otherwise.': 'B12 у рослинних продуктах у природі не трапляється, тож він надходить із збагачених продуктів або добавки. Залізо та омега-3 потребують більше планування, ніж зазвичай.',
+  'Calendar': 'Календар',
+  'Fasts': 'Пости',
+  'No fast logged': 'Пост не записано',
+  'Nothing logged this day': 'У цей день нічого не записано',
+  'Nothing logged yet this month': 'Цього місяця ще нічого не записано',
+  'Each bar fills against that thing’s own target. An empty bar means nothing was logged.': 'Кожна смуга заповнюється за своєю ціллю. Порожня смуга означає, що нічого не записано.',
+  '{0} h asked': 'запитано {0} год',
+  '{0} day logged': '{0} день записано',
+  '{0} days logged': { one: '{0} день записано', few: '{0} дні записано', many: '{0} днів записано' },
 }
 
 

@@ -542,3 +542,61 @@ export function goalOf(S) {
     overridden: ['kcal', 'p', 'c', 'f'].some(k => Number(over[k]) > 0),
   }
 }
+
+/* ============================================================ essentials calendar */
+
+/**
+ * The three essentials for one day, each as a fraction of its own target.
+ *
+ * `null` for a fraction means nothing was logged for that thing, which the calendar draws
+ * as an empty track rather than a bar at zero. The three can disagree: a day can have water
+ * and no food, and saying so is the point.
+ */
+export function dayEssentials({ water, food, fastLog, d, waterGoal, kcalGoal }) {
+  const ml = waterTotal(water, d)
+  const kcal = foodTotal(food, d).kcal
+  const fast = fastOn(fastLog, d)
+  const fastH = fast ? Number(fast.h) || 0 : 0
+  const fastGoal = fast ? Number(fast.goal) || 0 : 0
+  const frac = (v, g) => (g > 0 ? Math.min(1, Math.max(0, v / g)) : 0)
+
+  return {
+    d,
+    ml,
+    kcal,
+    fastH: Math.round(fastH * 100) / 100,
+    fastGoal,
+    fastPreset: fast?.preset || null,
+    fastHit: !!fast?.hit,
+    waterPct: ml > 0 ? frac(ml, waterGoal) : null,
+    kcalPct: kcal > 0 ? frac(kcal, kcalGoal) : null,
+    fastPct: fastH > 0 ? frac(fastH, fastGoal) : null,
+    logged: ml > 0 || kcal > 0 || !!fast,
+  }
+}
+
+const pad2 = n => String(n).padStart(2, '0')
+const isoIn = (y, mo, d) => `${y}-${pad2(mo + 1)}-${pad2(d)}`
+
+/**
+ * The month's tally, counting only days that have actually happened.
+ *
+ * `today` bounds the walk: a month viewed from the 3rd has nine days left that are not
+ * misses, and a streak-style number that included them would be telling the user off for
+ * days that have not arrived yet.
+ */
+export function essentialsMonth({ water, food, fastLog, y, mo, waterGoal, kcalGoal, today = todayISO() }) {
+  const days = new Date(y, mo + 1, 0).getDate()
+  let logged = 0, waterHit = 0, kcalHit = 0, fasts = 0, fastHit = 0
+  for (let d = 1; d <= days; d++) {
+    const iso = isoIn(y, mo, d)
+    if (iso > today) break
+    const e = dayEssentials({ water, food, fastLog, d: iso, waterGoal, kcalGoal })
+    if (!e.logged) continue
+    logged++
+    if (e.waterPct !== null && e.waterPct >= 1) waterHit++
+    if (e.kcalPct !== null && e.kcalPct >= 1) kcalHit++
+    if (e.fastPct !== null) { fasts++; if (e.fastHit) fastHit++ }
+  }
+  return { logged, waterHit, kcalHit, fasts, fastHit, days }
+}

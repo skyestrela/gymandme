@@ -2141,6 +2141,15 @@ export default {
   'Nothing from an animal at all. The protein arithmetic is the same as plant-based; the nutrients need more planning.': 'لا شيء من أصل حيواني. حساب البروتين هو نفسه في النظام النباتي، لكن العناصر الغذائية تحتاج تخطيطًا أكثر.',
   'Plant protein digests less completely and carries less leucine, so your protein floor is about {0}% higher than it would be otherwise. Soy and peas are the densest; tofu, tempeh, lentils and seitan do the rest.': 'البروتين النباتي يُهضم أقل اكتمالاً ويحمل ليوسين أقل، لذا الحد الأدنى لبروتينك أعلى بنحو {0}% مما كان سيكون. الصويا والبازلاء هما الأكثر كثافة؛ والتوفو والتمبتي والعدس والسيتان تتولى الباقي.',
   'B12 does not occur naturally in plant foods, so it comes from fortified foods or a supplement. Iron and omega-3 take more planning than they would otherwise.': 'B12 لا يوجد طبيعيًا في الغذاء النباتي، لذا يأتي من الأغذية المدعّمة أو من مكمّل غذائي. الحديد وأوميغا-3 يحتاجان تخطيطًا أكثر من المعتاد.',
+  'Calendar': 'التقويم',
+  'Fasts': 'الصيامات',
+  'No fast logged': 'لا صيام مسجل',
+  'Nothing logged this day': 'لا شيء مسجل في هذا اليوم',
+  'Nothing logged yet this month': 'لا شيء مسجل في هذا الشهر بعد',
+  'Each bar fills against that thing’s own target. An empty bar means nothing was logged.': 'كل شريط يمتلئ مقابل هدفه. الشريط الفارغ يعني أنه لم يسجل شيء.',
+  '{0} h asked': '{0} س مطلوبة',
+  '{0} day logged': '{0} يوم مسجل',
+  '{0} days logged': '{0} أيام مسجلة',
 }
 
 

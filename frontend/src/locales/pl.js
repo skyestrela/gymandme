@@ -2088,6 +2088,15 @@ export default {
   'Nothing from an animal at all. The protein arithmetic is the same as plant-based; the nutrients need more planning.': 'Nic z pochodzenia zwierzęcego. Wyliczenie białka jest takie samo jak w diecie roślinnej; to składniki odżywcze wymagają większego planowania.',
   'Plant protein digests less completely and carries less leucine, so your protein floor is about {0}% higher than it would be otherwise. Soy and peas are the densest; tofu, tempeh, lentils and seitan do the rest.': 'Białko roślinne jest trawione mniej dokładnie i dostarcza mniej leucyny, więc twoje minimum białka jest około {0}% wyższe niż zwykle. Soja i groch są najgęstsze; tofu, tempeh, soczewica i seitan robią resztę.',
   'B12 does not occur naturally in plant foods, so it comes from fortified foods or a supplement. Iron and omega-3 take more planning than they would otherwise.': 'B12 nie występuje naturalnie w pokarmach roślinnych, więc pochodzi z żywności fortyfikowanych lub z suplementu. Żelazo i kwasy omega-3 wymagają więcej planowania niż zwykle.',
+  'Calendar': 'Kalendarz',
+  'Fasts': 'Posty',
+  'No fast logged': 'Brak zapisanych postów',
+  'Nothing logged this day': 'Nic nie zapisano tego dnia',
+  'Nothing logged yet this month': 'Nic jeszcze nie zapisano w tym miesiącu',
+  'Each bar fills against that thing’s own target. An empty bar means nothing was logged.': 'Każdy pasek wypełnia się względem własnego celu. Pusty pasek oznacza, że nic nie zapisano.',
+  '{0} h asked': '{0} h postulano',
+  '{0} day logged': '{0} dzień zapisany',
+  '{0} days logged': { one: '{0} dzień zapisany', few: '{0} dni zapisane', many: '{0} dni zapisanych' },
 }
 
 

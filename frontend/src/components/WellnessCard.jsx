@@ -15,7 +15,7 @@ import {
   DEFAULT_FAST, WATER_QUICK, fastElapsedMs, fastHitGoal, fastPreset, fastRemainingMs, fastStreak,
   fastSeries, foodSeries, foodTotal, goalOf, isFasting, startFast, stopFast, waterAdd,
   waterGoalOf, waterPace, waterSeries, waterSet, waterStreak, waterTotal, waterLineFor } from '../lib/wellness.js'
-import { fastingSheet, foodSheet, macroSheet, waterSheet } from '../sheets.jsx'
+import { essentialsCalendarSheet, fastingSheet, foodSheet, macroSheet, waterSheet } from '../sheets.jsx'
 import Icon from './Icon.jsx'
 import WaterBody from './WaterBody.jsx'
 import DayBars from './DayBars.jsx'
@@ -98,9 +98,12 @@ export default function WellnessCard() {
   })
 
   return <div className="card">
-    <div className="row between" style={{ marginBottom: 12 }}>
+    <div className="row between" style={{ marginBottom: 12, gap: 8 }}>
       <h2 style={{ margin: 0 }}>{t('Daily essentials')}</h2>
-      <span className="dim small">{t('Today')}</span>
+      {/* The calendar lives here because this is where the data it reads lives. */}
+      <button className="chip" onClick={() => essentialsCalendarSheet()}>
+        <Icon name="calendar" />{t('Calendar')}
+      </button>
     </div>
 
     {/* ---- water ---- */}

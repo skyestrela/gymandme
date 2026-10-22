@@ -5,7 +5,8 @@ import {
   fastSeries, fastStreak, foodEntry, foodOn, foodSeries, foodTotal, goalOf, isFasting, lastDays,
   profilePlan, macroShare, recentFoods, removeFood, startFast, stopFast, updateFood, waterAdd,
   waterGoalFor, waterGoalOf, waterOn, waterPace, waterRemaining, waterSeries, waterSet,
-  waterStreak, waterTotal, dayOrdinal, waterLineFor, WATER_LINES, waterBenefits } from './wellness.js'
+  waterStreak, waterTotal, dayEssentials, essentialsMonth, dayOrdinal, waterLineFor,
+  WATER_LINES, waterBenefits } from './wellness.js'
 
 
 // Day ordinal -> ISO, for the tests that walk consecutive days.
@@ -548,5 +549,78 @@ describe('diet in the water row', () => {
     expect(waterLineFor(D, 'maintain', 'vegan')).toBe(waterLineFor(D, 'cut', 'plant'))
     // No diet is the old behaviour, untouched.
     expect(waterLineFor(D, 'bulk')).toBe(anyLine)
+  })
+})
+
+describe('the essentials calendar', () => {
+  const D = '2026-10-12'
+  const GOALS = { waterGoal: 2000, kcalGoal: 3000 }
+
+  it('scores each essential against its OWN target, never against another one', () => {
+    const e = dayEssentials({
+      water: [{ d: D, ml: 1000, t: 1 }],                                    // half the water goal
+      food: [{ d: D, kcal: 1500, p: 0, c: 0, f: 0, n: 'x', at: 1 }],        // half the calorie goal
+      fastLog: [{ d: D, h: 8, goal: 16, preset: '16:8', hit: false }],
+      d: D, ...GOALS,
+    })
+    expect(e.waterPct).toBe(0.5)   // 1000 ml of 2000
+    expect(e.kcalPct).toBe(0.5)     // 1500 kcal of 3000
+    expect(e.fastPct).toBe(0.5)     // 8 h of 16
+  })
+
+  it('says nothing was logged rather than scoring it zero', () => {
+    const e = dayEssentials({ water: [], food: [], fastLog: [], d: D, ...GOALS })
+    expect(e.waterPct).toBeNull()
+    expect(e.kcalPct).toBeNull()
+    expect(e.fastPct).toBeNull()
+    expect(e.logged).toBe(false)
+    // A null and a genuine zero are different claims, so they are different values.
+    expect(e.waterPct).not.toBe(0)
+  })
+
+  it('lets a day have one thing without implying the others', () => {
+    const e = dayEssentials({ water: [{ d: D, ml: 1000, t: 1 }], food: [], fastLog: [], d: D, ...GOALS })
+    expect(e.waterPct).toBe(0.5)
+    expect(e.kcalPct).toBeNull()
+    expect(e.fastPct).toBeNull()
+    expect(e.logged).toBe(true)
+  })
+
+  it('caps a fraction at one rather than overflowing the bar', () => {
+    const e = dayEssentials({ water: [{ d: D, ml: 9000, t: 1 }], food: [], fastLog: [], d: D, ...GOALS })
+    expect(e.waterPct).toBe(1)
+  })
+
+  it('counts a fast against the hours it asked for, which that record carries itself', () => {
+    const e = dayEssentials({
+      water: [], food: [],
+      fastLog: [{ d: D, h: 17, goal: 18, preset: '18:6', hit: false }],
+      d: D, ...GOALS,
+    })
+    expect(e.fastPct).toBeCloseTo(17 / 18, 10)
+    expect(e.fastHit).toBe(false)
+    expect(e.fastPreset).toBe('18:6')
+  })
+
+  it('counts a month only over days that have happened', () => {
+    const water = ['2026-10-01', '2026-10-02', '2026-10-03', '2026-10-04'].map(d => ({ d, ml: 2000, t: 1 }))
+    // Looking at October on the 3rd: three days have happened. The fourth is not a miss.
+    const seen = essentialsMonth({ water, food: [], fastLog: [], y: 2026, mo: 9, ...GOALS, today: '2026-10-03' })
+    expect(seen.logged).toBe(3)
+    expect(seen.waterHit).toBe(3)
+    expect(seen.days).toBe(31)
+    // With the whole month behind us, all four count.
+    const full = essentialsMonth({ water, food: [], fastLog: [], y: 2026, mo: 9, ...GOALS, today: '2026-10-31' })
+    expect(full.logged).toBe(4)
+  })
+
+  it('counts an empty month as zero rather than dividing by nothing', () => {
+    const seen = essentialsMonth({ water: [], food: [], fastLog: [], y: 2026, mo: 9, ...GOALS, today: '2026-10-31' })
+    expect(seen).toMatchObject({ logged: 0, waterHit: 0, kcalHit: 0, fasts: 0, days: 31 })
+  })
+
+  it('does not count a hit when no goal was ever set to reach', () => {
+    const e = dayEssentials({ water: [{ d: D, ml: 500, t: 1 }], food: [], fastLog: [], d: D, waterGoal: 0, kcalGoal: 0 })
+    expect(e.waterPct).toBe(0)
   })
 })

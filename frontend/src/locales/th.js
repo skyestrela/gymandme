@@ -2099,6 +2099,15 @@ export default {
   'Nothing from an animal at all. The protein arithmetic is the same as plant-based; the nutrients need more planning.': 'ไม่มีอะไรจากสัตว์เลย การคำนวณโปรตีนเหมือนกับการกินอาหารจากพืช ส่วนสารอาหารต้องวางแผนมากกว่า',
   'Plant protein digests less completely and carries less leucine, so your protein floor is about {0}% higher than it would be otherwise. Soy and peas are the densest; tofu, tempeh, lentils and seitan do the rest.': 'โปรตีนจากพืชย่อยได้ไม่สมบูรณ์และมีลิวซีนน้อยกว่า ค่าขั้นต่ำของโปรตีนจึงสูงกว่าปกติประมาณ {0}% ถั่วเหลืองและลันเป็นตัวที่หนาแน่นที่สุด ส่วนเต้าหู้ เทมเป ถั่วแดง และเซตันทำหน้าที่ที่เหลือ',
   'B12 does not occur naturally in plant foods, so it comes from fortified foods or a supplement. Iron and omega-3 take more planning than they would otherwise.': 'B12 ไม่พบตามธรรมชาติในอาหารจากพืช จึงต้องมาจากอาหารเสริมหรืออาหารเสริมเฉพาะทาง ธาตุเหล็กและโอเมก้า-3 ต้องวางแผนมากกว่าปกติ',
+  'Calendar': 'ปฏิทิน',
+  'Fasts': 'การถือศีลอด',
+  'No fast logged': 'ไม่มีการถือศีลอดที่บันทึกไว้',
+  'Nothing logged this day': 'ไม่มีการบันทึกอะไรในวันนี้',
+  'Nothing logged yet this month': 'เดือนนี้ยังไม่มีการบันทึกอะไร',
+  'Each bar fills against that thing’s own target. An empty bar means nothing was logged.': 'แต่ละแถบเติมเทียบกับเป้าหมายของมันเอง แถบที่ว่างเปล่าหมายความว่ายังไม่มีการบันทึกอะไร',
+  '{0} h asked': 'ขอ {0} ชั่วโมง',
+  '{0} day logged': '{0} วันที่บันทึก',
+  '{0} days logged': '{0} วันที่บันทึก',
 }
 
 

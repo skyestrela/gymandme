@@ -22,7 +22,7 @@ vi.mock('./store/useUI.js', () => {
   return { useUI }
 })
 
-import { waterSheet, fastingSheet, foodSheet, macroSheet } from './sheets.jsx'
+import { waterSheet, fastingSheet, foodSheet, macroSheet, essentialsCalendarSheet } from './sheets.jsx'
 
 globalThis.IS_REACT_ACT_ENVIRONMENT = true
 // The clock every sheet in here sees. TODAY has to be built from THIS, not from the real one:
@@ -372,5 +372,75 @@ describe('the diet picker', () => {
     open(macroSheet)
     await click(byText('button', 'Vegan'))
     expect(state().S.macroGoal.p).toBe(210)
+  })
+})
+
+describe('the essentials calendar sheet', () => {
+  // Local parts, so the month lands where the grid arithmetic expects it regardless of zone.
+  const OCT = new Date(2026, 9, 1)
+  const cells = () => [...host.querySelectorAll('.cal-d')]
+  const barsOf = cell => [...cell.querySelectorAll('.cal-eb i')].map(i => i.style.width)
+
+  it('draws every day of the month, with three bars each', () => {
+    Object.assign(mocks.store.S, PROFILE)
+    open(() => essentialsCalendarSheet(OCT))
+    expect(cells()).toHaveLength(31)                       // October
+    expect(host.querySelectorAll('.cal-h')).toHaveLength(7)
+    for (const cell of cells()) {
+      expect(cell.querySelectorAll('.cal-eb')).toHaveLength(3)
+    }
+  })
+
+  it('leaves an unlogged day with three empty bars rather than three full ones', () => {
+    Object.assign(mocks.store.S, PROFILE)
+    open(() => essentialsCalendarSheet(OCT))
+    // Nothing is logged in October, so every bar is an empty track.
+    for (const widths of cells().map(barsOf)) {
+      expect(widths).toEqual(['0%', '0%', '0%'])
+    }
+    expect(host.textContent).toContain('Nothing logged yet this month')
+  })
+
+  it('fills only the bars that have something behind them', () => {
+    Object.assign(mocks.store.S, PROFILE, {
+      water: [{ d: '2026-10-06', ml: 1000, t: 1 }],        // half of the 2,000 ml goal
+      food: [], fastLog: [],
+    })
+    open(() => essentialsCalendarSheet(OCT))
+    // The 6th cell is the 6th: one cell per day, in order.
+    expect(barsOf(cells()[5])).toEqual(['50%', '0%', '0%'])
+    expect(barsOf(cells()[4])).toEqual(['0%', '0%', '0%'])
+    expect(host.textContent).toContain('1 day logged')
+  })
+
+  it('gives a fast its own bar, scored against the hours it asked for', () => {
+    Object.assign(mocks.store.S, PROFILE, {
+      water: [], food: [],
+      fastLog: [{ id: 'f1', d: '2026-10-09', h: 8, goal: 16, preset: '16:8', hit: false }],
+    })
+    open(() => essentialsCalendarSheet(OCT))
+    expect(barsOf(cells()[8])).toEqual(['0%', '0%', '50%'])
+  })
+
+  it('opens the day it was tapped, with that day\u2019s numbers', async () => {
+    Object.assign(mocks.store.S, PROFILE, {
+      water: [{ d: '2026-10-06', ml: 1000, t: 1 }], food: [], fastLog: [],
+    })
+    open(() => essentialsCalendarSheet(OCT))
+    await click(cells()[5])
+    // Tapping the day closes the month and opens the day.
+    expect(mocks.closed).toBe(true)
+    const render = mocks.sheets.at(-1)
+    act(() => root.render(render(() => {})))
+    expect(host.textContent).toContain('1,000 / 2,000 ml')
+  })
+
+  it('says plainly when a day has nothing on it', async () => {
+    Object.assign(mocks.store.S, PROFILE)
+    open(() => essentialsCalendarSheet(OCT))
+    await click(cells()[5])
+    const render = mocks.sheets.at(-1)
+    act(() => root.render(render(() => {})))
+    expect(host.textContent).toContain('Nothing logged this day')
   })
 })

@@ -590,12 +590,23 @@ body.chips-dragging *{cursor:inherit}
 
 /* =========================== CONTROLS ==================================== */
 
+/* Tell the user agent which scheme we are in, so spinners, date pickers and scrollbars are
+   painted for the theme the app is actually showing. Without it the UA assumes light and
+   hands a dark app white native widgets - and, worse, a white input background behind text
+   that the base rule has already painted in the theme's near-white label colour. */
+:root{color-scheme:dark}
+:root[data-theme="light"]{color-scheme:light}
+
 /* --- text field --- */
-.field,.input{
+.field,.input,input.num{
   width:100%;background:var(--surface);border:none;border-radius:var(--r);
   padding:13px 15px;font-size:17px;letter-spacing:-.012em;outline:none;
   transition:box-shadow var(--fast);
 }
+/* The four macro boxes sit four across, so they get slightly tighter padding than a
+   full-width field. Still its own box, unlike the stepper and weight read-out above. */
+.wl-macro input.num{padding:11px 8px}
+.wl-macro input.num:focus,.field:focus,.input:focus,input.num:focus{box-shadow:inset 0 0 0 2px var(--acc)}
 .field::placeholder,.input::placeholder{color:var(--label-3)}
 .field:focus,.input:focus{box-shadow:inset 0 0 0 2px var(--acc)}
 .field.area,textarea.input{min-height:92px;resize:vertical;line-height:1.42}
@@ -1697,6 +1708,18 @@ body.no-tabbar.resting #toast{bottom:calc(100px + var(--sab))}
 .cal-d i.ovr{background:var(--orange)}
 .cal-legend{display:flex;gap:14px;justify-content:center;margin-top:12px;font-size:12px;color:var(--label-3)}
 .cal-legend i{display:inline-block;width:6px;height:6px;border-radius:50%;margin-inline-end:5px}
+
+/* Daily essentials month. Three bars per cell, one per essential, each filled to its own
+   fraction of its own target. Empty track = nothing logged, which is not the same as a bar
+   at zero, so the two never look alike. These override the workout calendar's dot on
+   purpose — that dot says "something happened"; a bar says how much. */
+.cal-e{gap:2px;padding-top:5px;font-size:14px}
+.cal-e .cal-eb{display:block;width:68%;height:3px;border-radius:2px;background:var(--surface-2);overflow:hidden}
+.cal-e .cal-eb i{display:block;width:0;height:3px;border-radius:2px;background:transparent;transition:width var(--fast)}
+.cal-e .cal-eb.w i{background:var(--blue)}
+.cal-e .cal-eb.k i{background:var(--acc)}
+.cal-e .cal-eb.f i{background:var(--orange)}
+.cal-e.today{box-shadow:inset 0 0 0 1.8px var(--acc)}
 
 /* --- accent swatches --- */
 .swatches{display:flex;gap:12px;flex-wrap:wrap}

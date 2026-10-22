@@ -2088,6 +2088,15 @@ export default {
   'Nothing from an animal at all. The protein arithmetic is the same as plant-based; the nutrients need more planning.': 'Nada de origem animal. A conta da proteína é a mesma que na base vegetal; os nutrientes é que exigem mais planeamento.',
   'Plant protein digests less completely and carries less leucine, so your protein floor is about {0}% higher than it would be otherwise. Soy and peas are the densest; tofu, tempeh, lentils and seitan do the rest.': 'A proteína vegetal digere-se menos por completo e tem menos leucina, por isso o seu mínimo de proteína é cerca de {0}% mais alto do que seria. Soja e ervilha são as mais densas; tofu, tempeh, lentilhas e seitão fazem o resto.',
   'B12 does not occur naturally in plant foods, so it comes from fortified foods or a supplement. Iron and omega-3 take more planning than they would otherwise.': 'A B12 não ocorre naturalmente nos alimentos vegetais, por isso vem de alimentos enriquecidos ou de um suplemento. O ferro e os ômega-3 exigem mais planeamento do que normalmente.',
+  'Calendar': 'Calendário',
+  'Fasts': 'Jejuns',
+  'No fast logged': 'Nenhum jejum registado',
+  'Nothing logged this day': 'Nada registado neste dia',
+  'Nothing logged yet this month': 'Ainda nada registado este mês',
+  'Each bar fills against that thing’s own target. An empty bar means nothing was logged.': 'Cada barra preenche-se em relação ao seu próprio objetivo. Uma barra vazia significa que nada foi registado.',
+  '{0} h asked': '{0} h pedidos',
+  '{0} day logged': '{0} dia registado',
+  '{0} days logged': '{0} dias registados',
 }
 
 

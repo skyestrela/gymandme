@@ -2088,6 +2088,15 @@ export default {
   'Nothing from an animal at all. The protein arithmetic is the same as plant-based; the nutrients need more planning.': '동물 성분은 전혀 없습니다. 단백질 계산은 식물성 기준과 같고, 영양소는 더 계획이 필요합니다.',
   'Plant protein digests less completely and carries less leucine, so your protein floor is about {0}% higher than it would be otherwise. Soy and peas are the densest; tofu, tempeh, lentils and seitan do the rest.': '식물성 단백질은 덜 완전히 소화되고 류신도 적어, 단백질 기준이 평소보다 약 {0}% 높습니다.콩과 완두콩이 가장 밀도가 높고, 두부·템페·렌틸콩·세이탄이 나머지를 채웁니다.',
   'B12 does not occur naturally in plant foods, so it comes from fortified foods or a supplement. Iron and omega-3 take more planning than they would otherwise.': 'B12는 식물성 음식에 자연적으로 없으므로 강화식품이나 보충제로得来야 합니다. 철분과 오메가-3도 평소보다 더 계획이 필요합니다.',
+  'Calendar': '달력',
+  'Fasts': '단식',
+  'No fast logged': '기록된 단식이 없습니다',
+  'Nothing logged this day': '이 날 기록된 것이 없습니다',
+  'Nothing logged yet this month': '이번 달에는 아직 기록된 것이 없습니다',
+  'Each bar fills against that thing’s own target. An empty bar means nothing was logged.': '각 막대는 각자의 목표에 따라 차오릅니다. 빈 막대는 아무것도 기록되지 않았다는 뜻입니다.',
+  '{0} h asked': '{0}시간 요청',
+  '{0} day logged': '{0}일 기록됨',
+  '{0} days logged': '{0}일 기록됨',
 }
 
 

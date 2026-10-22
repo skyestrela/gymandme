@@ -2091,6 +2091,15 @@ export default {
   'Nothing from an animal at all. The protein arithmetic is the same as plant-based; the nutrients need more planning.': 'Semmi állati eredetű. A fehérjeszámítás ugyanaz, mint a növényi alapnál; a tápanyagok igényelnek több tervezést.',
   'Plant protein digests less completely and carries less leucine, so your protein floor is about {0}% higher than it would be otherwise. Soy and peas are the densest; tofu, tempeh, lentils and seitan do the rest.': 'A növényi fehérje kevésbé teljesen emésztődik és kevesebb leucint tartalmaz, így a fehérjemeg Minimumod körülbelül {0}%-kal magasabb a szokásosnál. A szója és a borsó a legtömörebb; a tofu, a tempeh, a lencse és a seitan teszi a többit.',
   'B12 does not occur naturally in plant foods, so it comes from fortified foods or a supplement. Iron and omega-3 take more planning than they would otherwise.': 'A B12 természetesen nem fordul elő növényi táplálékokban, így dúsított élelmiszerből vagy kiegészítőből származik. A vas és az omega-3 több tervezést igényel a szokásosnál.',
+  'Calendar': 'Naptár',
+  'Fasts': 'Böjtök',
+  'No fast logged': 'Nincs rögzített böjt',
+  'Nothing logged this day': 'Ezen a napon nincs rögzítve semmi',
+  'Nothing logged yet this month': 'Ebben a hónapban még nincs rögzítve semmi',
+  'Each bar fills against that thing’s own target. An empty bar means nothing was logged.': 'Minden sáv a saját célja szerint töltődik ki. Az üres sáv azt jelenti, hogy semmi sincs rögzítve.',
+  '{0} h asked': '{0} óra kérve',
+  '{0} day logged': '{0} nap rögzítve',
+  '{0} days logged': '{0} nap rögzítve',
 }
 
 

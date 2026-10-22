@@ -2092,6 +2092,15 @@ export default {
   'Nothing from an animal at all. The protein arithmetic is the same as plant-based; the nutrients need more planning.': 'Ничего животного происхождения. Расчёт белка такой же, как на растительной основе; больше планирования требуют питательные вещества.',
   'Plant protein digests less completely and carries less leucine, so your protein floor is about {0}% higher than it would be otherwise. Soy and peas are the densest; tofu, tempeh, lentils and seitan do the rest.': 'Растительный белок переваривается хуже и содержит меньше лейцина, поэтому ваш минимум белка примерно на {0}% выше обычного. Самыми плотными являются соя и горох; тофу, темпе, чечевица и сетан делают остальное.',
   'B12 does not occur naturally in plant foods, so it comes from fortified foods or a supplement. Iron and omega-3 take more planning than they would otherwise.': 'B12 в растительных продуктах в природе не встречается, поэтому он поступает из обогащённых продуктов или добавки. Железо и омега-3 требуют больше планирования, чем обычно.',
+  'Calendar': 'Календарь',
+  'Fasts': 'Посты',
+  'No fast logged': 'Пост не записан',
+  'Nothing logged this day': 'В этот день ничего не записано',
+  'Nothing logged yet this month': 'В этом месяце пока ничего не записано',
+  'Each bar fills against that thing’s own target. An empty bar means nothing was logged.': 'Каждая полоска заполняется по своей цели. Пустая полоска означает, что ничего не записано.',
+  '{0} h asked': 'запрошено {0} ч',
+  '{0} day logged': '{0} день записан',
+  '{0} days logged': { one: '{0} день записан', few: '{0} дня записано', many: '{0} дней записано' },
 }
 
 
