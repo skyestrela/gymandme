@@ -2055,6 +2055,14 @@ export default {
   'training day': 'Edzésnap',
   'Use this': 'Ezt használom',
   'About a fifth of what you drink comes from food.': 'Amiből iszál körülbelül ötöde ételből származik.',
+  'You are not behind. You are drinking.': 'Nem vagy lemaradva. Iszál.',
+  'A glass now beats a headache later.': 'Egy pohár most jobb, mint a későbbi fejfájás.',
+  'Small sips, often, beat one big glass.': 'A gyakori kis kortyogás nyer egy nagy pohárral szemben.',
+  'Your body is mostly water. Keep the top up.': 'A tested főként víz. Tartsd tele a tartályt.',
+  'Still water bored you? Sparkling counts just the same.': 'Unalmas a csapvíz? A pezsgő ugyanúgy számít.',
+  'The goal is a reference, not a rule.': 'A cél irányelv, nem szabály.',
+  'Every glass is a vote for the session you want.': 'Minden pohár egy szavazat arra az edzésre, amit szeretnél.',
+  'Hydration is the cheapest performance gain there is.': 'A hidratálás a legolcsóbb teljesítménynövekedés.',
 }
 
 

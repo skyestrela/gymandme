@@ -108,6 +108,53 @@ export function waterPace(water, goal, d = todayISO(), now = Date.now()) {
   return { behind: Math.max(0, expected - waterTotal(water, d)), expected, remaining, quiet: false }
 }
 
+/**
+ * Days since 1970-01-01 for an ISO day, worked out from the parts alone.
+ *
+ * Deliberately no `new Date(iso)`: that parses as UTC and lands a day early west of
+ * Greenwich, which would mean the line below quietly changed at a different hour for half
+ * the planet. This is days_from_civil, arithmetically identical and Date-free.
+ */
+export function dayOrdinal(d) {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(d || ''))
+  if (!m) return 0
+  const y = +m[1], mo = +m[2], da = +m[3]
+  // A month or day that cannot exist is a bad key, not a day to be guessed at: without this
+  // '2026-13-45' came back as a confident number three weeks into the future.
+  if (mo < 1 || mo > 12 || da < 1 || da > 31) return 0
+  const yy = y - (mo <= 2 ? 1 : 0)
+  const era = Math.floor(yy / 400)
+  const yoe = yy - era * 400
+  const doy = Math.floor((153 * (mo + (mo > 2 ? -3 : 9)) + 2) / 5) + da - 1
+  const doe = yoe * 365 + Math.floor(yoe / 4) - Math.floor(yoe / 100) + doy
+  return era * 146097 + doe - 719468
+}
+
+/**
+ * One line a day, under the water row.
+ *
+ * The app's own words, not a quotation from anyone: there is nothing here to attribute,
+ * because an invented attribution would be worse than no line at all. Chosen from the date
+ * rather than at random, so it holds for the whole day and does not shuffle on re-render.
+ */
+export const WATER_LINES = [
+  'You are not behind. You are drinking.',
+  'A glass now beats a headache later.',
+  'Small sips, often, beat one big glass.',
+  'Your body is mostly water. Keep the top up.',
+  'Still water bored you? Sparkling counts just the same.',
+  'The goal is a reference, not a rule.',
+  'Every glass is a vote for the session you want.',
+  'Hydration is the cheapest performance gain there is.',
+]
+
+/** Today's line. */
+export const waterLineFor = (d = todayISO()) => {
+  const n = WATER_LINES.length
+  // The double modulo keeps a pre-1970 date from indexing off the front of the array.
+  return WATER_LINES[((dayOrdinal(d) % n) + n) % n]
+}
+
 /** Consecutive days up to today that reached `goal`, today excluded while it is still short. */
 export function waterStreak(water, goal, d = todayISO()) {
   const g = Number(goal) || 0

@@ -14,8 +14,7 @@ import { fmtDur, fmtNum, todayISO } from '../lib/format.js'
 import {
   DEFAULT_FAST, WATER_QUICK, fastElapsedMs, fastHitGoal, fastPreset, fastRemainingMs, fastStreak,
   fastSeries, foodSeries, foodTotal, goalOf, isFasting, startFast, stopFast, waterAdd,
-  waterGoalOf, waterPace, waterSeries, waterSet, waterStreak, waterTotal,
-} from '../lib/wellness.js'
+  waterGoalOf, waterPace, waterSeries, waterSet, waterStreak, waterTotal, waterLineFor } from '../lib/wellness.js'
 import { fastingSheet, foodSheet, macroSheet, waterSheet } from '../sheets.jsx'
 import Icon from './Icon.jsx'
 import WaterBody from './WaterBody.jsx'
@@ -123,6 +122,8 @@ export default function WellnessCard() {
         </div>
         {wStreak > 1 && <span className="dim small" style={{ whiteSpace: 'nowrap' }}>{t('{0} day streak', wStreak)}</span>}
       </div>
+
+      <p className="wl-quip">{t(waterLineFor())}</p>
     </div>
 
     {/* ---- fasting ---- */}

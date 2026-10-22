@@ -5,8 +5,16 @@ import {
   fastSeries, fastStreak, foodEntry, foodOn, foodSeries, foodTotal, goalOf, isFasting, lastDays,
   profilePlan, macroShare, recentFoods, removeFood, startFast, stopFast, updateFood, waterAdd,
   waterGoalFor, waterGoalOf, waterOn, waterPace, waterRemaining, waterSeries, waterSet,
-  waterStreak, waterTotal,
-} from './wellness.js'
+  waterStreak, waterTotal, dayOrdinal, waterLineFor, WATER_LINES } from './wellness.js'
+
+
+// Day ordinal -> ISO, for the tests that walk consecutive days.
+const isoDay = n => {
+  const ms = Date.UTC(1970, 0, 1) + n * 86400000
+  const d = new Date(ms)
+  return d.getUTCFullYear() + '-' + String(d.getUTCMonth() + 1).padStart(2, '0') + '-' +
+    String(d.getUTCDate()).padStart(2, '0')
+}
 
 describe('water', () => {
   it('keeps one entry per day, so a second log changes that day instead of stacking', () => {
@@ -341,5 +349,77 @@ describe('goals', () => {
   it('plans the same body in lb as in kg', () => {
     const lb = { ...PROFILE, unit: 'lb', bodyweight: [{ d: '2026-10-20', w: 176.4, t: 1 }], targetW: 165 }
     expect(Math.abs(goalOf(lb).kcal - goalOf(PROFILE).kcal)).toBeLessThan(30)
+  })
+})
+
+describe('the day ordinal', () => {
+  it('counts days from the epoch, from the parts alone', () => {
+    expect(dayOrdinal('1970-01-01')).toBe(0)
+    expect(dayOrdinal('2000-01-01')).toBe(10957)
+    expect(dayOrdinal('2026-10-22')).toBe(20748)
+  })
+
+  it('steps by exactly one across day, month, year and leap boundaries', () => {
+    for (const [a, b] of [
+      ['2026-10-21', '2026-10-22'],
+      ['2026-10-31', '2026-11-01'],
+      ['2026-12-31', '2027-01-01'],
+      ['2024-02-28', '2024-02-29'],
+      ['2023-02-28', '2023-03-01'],
+    ]) {
+      expect(dayOrdinal(b) - dayOrdinal(a)).toBe(1)
+    }
+  })
+
+  it('does not build a Date, so it cannot slip a day west of Greenwich', () => {
+    // The whole reason this is not `new Date(iso)`: that parses as UTC.
+    expect(String(dayOrdinal)).not.toContain('new Date')
+    expect(String(dayOrdinal)).toContain('146097')
+  })
+
+  it('is 0 rather than NaN for something that is not a day', () => {
+    for (const bad of ['', 'nonsense', null, undefined, '2026-13-45']) {
+      expect(dayOrdinal(bad)).toBe(0)
+    }
+  })
+})
+
+describe("the day's line", () => {
+  it('is always one of the lines, never undefined', () => {
+    for (const d of ['2026-10-22', '1970-01-01', '2000-01-01', '1900-06-15']) {
+      expect(WATER_LINES).toContain(waterLineFor(d))
+    }
+  })
+
+  it('holds still for the whole day and does not reshuffle', () => {
+    expect(waterLineFor('2026-10-22')).toBe(waterLineFor('2026-10-22'))
+  })
+
+  it('changes day to day', () => {
+    // Consecutive days are not always the same line, or it would read as static.
+    let changes = 0
+    let d = dayOrdinal('2026-01-01')
+    for (let i = 0; i < 40; i++) {
+      if (waterLineFor(isoDay(d)) !== waterLineFor(isoDay(d + 1))) changes++
+      d += 1
+    }
+    expect(changes).toBeGreaterThan(30)
+  })
+
+  it('cycles rather than running out, and covers every line', () => {
+    expect(WATER_LINES.length).toBeGreaterThanOrEqual(8)
+    const seen = new Set()
+    for (let i = 0; i < WATER_LINES.length; i++) seen.add(waterLineFor(isoDay(dayOrdinal('2026-01-01') + i)))
+    expect(seen.size).toBe(WATER_LINES.length)
+  })
+
+  it('survives a date before the epoch without indexing off the front', () => {
+    expect(WATER_LINES).toContain(waterLineFor('1900-01-01'))
+  })
+
+  it('is the app\'s own words, with nobody\'s name on it', () => {
+    // An invented attribution is worse than no line, so nothing here may look like a citation.
+    WATER_LINES.forEach(l => expect(l).not.toMatch(/[—“”"]/))
+    WATER_LINES.forEach(l => expect(l).not.toMatch(/—\s*[A-Z][a-z]+$/))
   })
 })

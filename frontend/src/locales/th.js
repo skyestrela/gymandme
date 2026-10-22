@@ -2063,6 +2063,14 @@ export default {
   'training day': 'วันออกกำลังกาย',
   'Use this': 'ใช้ค่านี้',
   'About a fifth of what you drink comes from food.': 'ประมาณหนึ่งในห้าของที่คุณดื่มมาจากอาหาร',
+  'You are not behind. You are drinking.': 'คุณไม่ได้ตามหลัง แค่กำลังดื่ม',
+  'A glass now beats a headache later.': 'ดื่มแก้วหนึ่งแก้วตอนนี้ ดีกว่าปวดหัวทีหลัง',
+  'Small sips, often, beat one big glass.': 'จิบน้ำทีละน้อยบ่อย ๆ ดีกว่าดื่มรวดเดียวแก้วใหญ่',
+  'Your body is mostly water. Keep the top up.': 'ร่างกายของคุณเป็นน้ำเกือบทั้งหมด เติมให้เต็มเสมอ',
+  'Still water bored you? Sparkling counts just the same.': 'เบื่อน้ำเปล่าแล้วหรือ น้ำอัดลมก็นับเหมือนกัน',
+  'The goal is a reference, not a rule.': 'เป้าหมายคือจุดอ้างอิง ไม่ใช่กฎ',
+  'Every glass is a vote for the session you want.': 'ทุกแก้วคือหนึ่งเสียงที่สนับสนุนเซสชันที่คุณต้องการ',
+  'Hydration is the cheapest performance gain there is.': 'การเติมน้ำคือวิธีเพิ่มประสิทธิภาพที่ถูกที่สุด',
 }
 
 

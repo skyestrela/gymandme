@@ -2052,6 +2052,14 @@ export default {
   'training day': '训练日',
   'Use this': '使用这个',
   'About a fifth of what you drink comes from food.': '你喝的水约有五分之一来自食物。',
+  'You are not behind. You are drinking.': '你没有落后，你在喝水。',
+  'A glass now beats a headache later.': '现在喝一杯，胜过之后头疼。',
+  'Small sips, often, beat one big glass.': '少量多次，胜过一整杯。',
+  'Your body is mostly water. Keep the top up.': '你的身体大部分是水，随时补满。',
+  'Still water bored you? Sparkling counts just the same.': '喝腻了白水？气泡水同样算数。',
+  'The goal is a reference, not a rule.': '目标是参考，不是规则。',
+  'Every glass is a vote for the session you want.': '每一杯，都是为想要的那次训练投的一票。',
+  'Hydration is the cheapest performance gain there is.': '补水是最划算的表现提升。',
 }
 
 

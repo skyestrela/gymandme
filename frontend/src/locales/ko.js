@@ -2052,6 +2052,14 @@ export default {
   'training day': '운동하는 날',
   'Use this': '이 값 사용',
   'About a fifth of what you drink comes from food.': '마시는 물의 약 5분의 1은 음식에서 와요.',
+  'You are not behind. You are drinking.': '뒤처진 게 아니에요. 지금 마시고 있어요.',
+  'A glass now beats a headache later.': '지금 마시는 한 잔이 나중 두통보다 나아요.',
+  'Small sips, often, beat one big glass.': '자주 조금씩 마시는 게 한 번에 크게 마시는 것보다 좋아요.',
+  'Your body is mostly water. Keep the top up.': '몸의 대부분은 물이에요. 항상 채워 두세요.',
+  'Still water bored you? Sparkling counts just the same.': '미네랄물이 지루한가요? 탄산수도 똑같이 인정돼요.',
+  'The goal is a reference, not a rule.': '목표는 기준이지 규칙이 아니에요.',
+  'Every glass is a vote for the session you want.': '한 잔마다가 원하는 운동을 한 표예요.',
+  'Hydration is the cheapest performance gain there is.': '수분 보충은 성능을 끌어올리는 가장 값싼 방법이에요.',
 }
 
 

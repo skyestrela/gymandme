@@ -2052,6 +2052,14 @@ export default {
   'training day': 'प्रशिक्षण का दिन',
   'Use this': 'इसे इस्तेमाल करें',
   'About a fifth of what you drink comes from food.': 'आप जो पीते हैं उसका लगभग पाँचवाँ हिस्सा खाने से आता है।',
+  'You are not behind. You are drinking.': 'आप पीछे नहीं हैं। आप पी रहे हैं।',
+  'A glass now beats a headache later.': 'अभी का एक गिलास बाद की सिरदर्द से बेहतर है।',
+  'Small sips, often, beat one big glass.': 'बार-बार छोटे घूँट, एक बड़े गिलास से बेहतर हैं।',
+  'Your body is mostly water. Keep the top up.': 'आपका शरीर मुख्यतः पानी है। टंकी भरती रखें।',
+  'Still water bored you? Sparkling counts just the same.': 'सादा पानी बोरिंग लग रहा है? सोडा वॉटर भी उतना ही गिना जाता है।',
+  'The goal is a reference, not a rule.': 'लक्ष्य एक संदर्भ है, नियम नहीं।',
+  'Every glass is a vote for the session you want.': 'हर गिलास उस अभ्यास की एक वोट है जो आप चाहते हैं।',
+  'Hydration is the cheapest performance gain there is.': 'हाइड्रेशन प्रदर्शन बढ़ाने का सबसे सस्ता तरीका है।',
 }
 
 

@@ -5,6 +5,7 @@ import { createRoot } from 'react-dom/client'
 import { useStore } from '../store/useStore.js'
 import { useUI } from '../store/useUI.js'
 import WellnessCard from './WellnessCard.jsx'
+import { WATER_LINES, waterLineFor } from '../lib/wellness.js'
 
 const waterSheet = vi.fn()
 const fastingSheet = vi.fn()
@@ -239,5 +240,42 @@ describe('the whole card', () => {
     const labels = [...host.querySelectorAll('.lbl2')].map(el => el.textContent)
     expect(labels).toEqual(['Water', 'Fasting', 'Calories'])
     expect(buttons().length).toBeGreaterThan(0)
+  })
+})
+
+describe("the day's line", () => {
+  it('shows exactly one line, under the water row, and it is one of ours', () => {
+    mount()
+    const quips = host.querySelectorAll('.wl-quip')
+    expect(quips).toHaveLength(1)
+    const said = quips[0].textContent
+    expect(WATER_LINES).toContain(said)
+    expect(said).toBe(waterLineFor())
+  })
+
+  it('does not rename a line or attach anybody to it', () => {
+    mount()
+    const said = host.querySelector('.wl-quip').textContent
+    expect(said).not.toMatch(/[—""]/)
+  })
+
+  it('lives in the water block, below the figure and the quick-adds', () => {
+    mount()
+    const quip = host.querySelector('.wl-quip')
+    const figure = host.querySelector('.wl-body')
+    const block = quip.parentElement
+    // Same block as the body it belongs to, not floating somewhere else on the card.
+    expect(block.contains(figure)).toBe(true)
+    // Document order: the figure is rendered before the line.
+    expect(figure.compareDocumentPosition(quip) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    // And the line is not inside the figure's own bench, so it cannot be clipped by it.
+    expect(quip.closest('.wl-bench')).toBeNull()
+  })
+
+  it('does not change when water is logged', () => {
+    mount()
+    const before = host.querySelector('.wl-quip').textContent
+    act(() => { /* re-render with water on the day */ })
+    expect(host.querySelector('.wl-quip').textContent).toBe(before)
   })
 })

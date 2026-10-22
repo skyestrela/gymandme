@@ -2072,6 +2072,14 @@ export default {
   'training day': 'Trainingstag',
   'Use this': 'Übernehmen',
   'About a fifth of what you drink comes from food.': 'Etwa ein Fünftel dessen, was du trinkst, kommt aus der Nahrung.',
+  'You are not behind. You are drinking.': 'Du bist nicht im Rückstand. Du trinkst.',
+  'A glass now beats a headache later.': 'Ein Glas jetzt schlägt Kopfschmerzen später.',
+  'Small sips, often, beat one big glass.': 'Viele kleine Schlucke schlagen ein großes Glas.',
+  'Your body is mostly water. Keep the top up.': 'Dein Körper besteht hauptsächlich aus Wasser. Füll ihn auf.',
+  'Still water bored you? Sparkling counts just the same.': 'Stillwasser langweilig? Sprudel zählt genauso.',
+  'The goal is a reference, not a rule.': 'Das Ziel ist ein Richtwert, keine Vorschrift.',
+  'Every glass is a vote for the session you want.': 'Jedes Glas ist eine Stimme für die Einheit, die du willst.',
+  'Hydration is the cheapest performance gain there is.': 'Gute Hydration ist die billigste Leistungssteigerung, die es gibt.',
 }
 
 

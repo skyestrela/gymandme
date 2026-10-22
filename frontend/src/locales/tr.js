@@ -2052,6 +2052,14 @@ export default {
   'training day': 'Antrenman günü',
   'Use this': 'Bunu kullan',
   'About a fifth of what you drink comes from food.': 'İçtiğinizin yaklaşık beşte biri yiyecekten geliyor.',
+  'You are not behind. You are drinking.': 'Geride değilsin. İçiyorsun.',
+  'A glass now beats a headache later.': 'Şimdi bir bardak, sonrasındaki baş ağrısından iyidir.',
+  'Small sips, often, beat one big glass.': 'Az az, sık sık içmek tek büyük bardaktan iyidir.',
+  'Your body is mostly water. Keep the top up.': 'Vücudun büyük kısmı su. Deposunu dolu tut.',
+  'Still water bored you? Sparkling counts just the same.': 'Düz su sıkıldı mı? Gazlı su da aynı şekilde sayılır.',
+  'The goal is a reference, not a rule.': 'Hedef bir referans, bir kural değil.',
+  'Every glass is a vote for the session you want.': 'Her bardak, istediğin antrenman için bir oy.',
+  'Hydration is the cheapest performance gain there is.': 'Bolca su içmek, performans artışının en ucuz yoludur.',
 }
 
 

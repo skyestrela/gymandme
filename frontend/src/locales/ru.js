@@ -2056,6 +2056,14 @@ export default {
   'training day': 'День тренировки',
   'Use this': 'Использовать',
   'About a fifth of what you drink comes from food.': 'Около пятой части выпитого приходит с едой.',
+  'You are not behind. You are drinking.': 'Вы не отстаёте. Вы пьёте.',
+  'A glass now beats a headache later.': 'Стакан сейчас — лучше, чем головная боль потом.',
+  'Small sips, often, beat one big glass.': 'Частые маленькие глотки лучше одного большого стакана.',
+  'Your body is mostly water. Keep the top up.': 'Ваше тело почти целиком состоит из воды. Поддерживайте запас.',
+  'Still water bored you? Sparkling counts just the same.': 'Надоела негазированная? Газированная считается точно так же.',
+  'The goal is a reference, not a rule.': 'Цель — это ориентир, а не правило.',
+  'Every glass is a vote for the session you want.': 'Каждый стакан — голос за ту тренировку, которую вы хотите.',
+  'Hydration is the cheapest performance gain there is.': 'Гидратация — самая дешёвая прибавка к результату.',
 }
 
 

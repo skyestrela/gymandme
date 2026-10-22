@@ -2105,6 +2105,14 @@ export default {
   'training day': 'يوم تدريب',
   'Use this': 'استخدم هذا',
   'About a fifth of what you drink comes from food.': 'حوالي خمس مما تشرب يأتي من الطعام.',
+  'You are not behind. You are drinking.': 'لست متأخرًا. أنت تشرب.',
+  'A glass now beats a headache later.': 'كوب الآن أفضل من صداع الرأس لاحقًا.',
+  'Small sips, often, beat one big glass.': 'رشفات صغيرة متكررة أفضل من كوب كبير دفعة واحدة.',
+  'Your body is mostly water. Keep the top up.': 'جسمك ماء في معظمه. املأ الخزان.',
+  'Still water bored you? Sparkling counts just the same.': 'مللت من الماء العادي؟ الفوار يحتسب بالقدر نفسه.',
+  'The goal is a reference, not a rule.': 'الهدف مرجع وليس قاعدة.',
+  'Every glass is a vote for the session you want.': 'كل كوب صوت لصالح التمرين الذي تريده.',
+  'Hydration is the cheapest performance gain there is.': 'الترطيب أرخص طريقة لزيادة الأداء.',
 }
 
 
