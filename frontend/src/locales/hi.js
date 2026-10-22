@@ -2060,6 +2060,14 @@ export default {
   'Progress is quiet. Keep going anyway.': 'प्रगति शांत होती है। फिर भी आगे बढ़ते रहिए।',
   'You showed up today. That is the whole trick.': 'आप आज यहाँ हैं। यही पूरी बात है।',
   'The person you are becoming starts with this glass.': 'आप जिस व्यक्ति के बन रहे हैं, उसकी शुरुआत इस गिलास से है।',
+  'Easier to eat your surplus': 'अपना सरप्लस खाना आसान हो जाता है।',
+  'A glass before a big meal makes the volume easier to finish. A surplus you cannot eat is not a surplus.': 'बड़े भोजन से पहले एक गिलास पानी उस मात्रा को पूरा करना आसान बना देता है। जो सरप्लस आप खा नहीं सकते, वह सरप्लस नहीं है।',
+  'More food means more fuel for the session, and the session is where the gain comes from. Water does not build muscle, but it keeps the training that does.': 'ज़्यादा खाना यानी सेशन के लिए ज़्यादा ईंधन, और बढ़त उसी सेशन से आती है। पानी मांसपेशियाँ नहीं बनाता, पर वह उस अभ्यास को चलाए रखता है जो बनाता है।',
+  'A glass before a meal sometimes saves you half of it.': 'भोजन से पहले एक गिलास कभी-कभी आधा बचा देता है।',
+  'A surplus is only muscle if the training earns it.': 'सरप्लस तभी मांसपेशी बनता है जब अभ्यास उसके योग्य हो।',
+  'The weight goes on. What it turns into is decided in the session.': 'वज़न बढ़ता है। वह किसमें बदलता है, यह सेशन में तय होता है।',
+  'A deficit is easy. Holding your strength in it is not.': 'कमी आसान है। उसमें अपनी ताकत रखना आसान नहीं।',
+  'Losing the weight is arithmetic. Keeping the muscle is the work.': 'वज़न घटाना हिसाब है। मांसपेशियाँ बचाना असली काम है।',
 }
 
 

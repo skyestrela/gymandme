@@ -187,3 +187,36 @@ describe('the quarter bar on the card', () => {
     bars().forEach(b => expect(b.getAttribute('aria-hidden')).toBe('true'))
   })
 })
+
+describe('the goal reaches the card', () => {
+  it('says "easier to eat your surplus" when the goal is to gain muscle', () => {
+    mount({ ml: 500, goal: 2000, mode: 'bulk', size: 'sm', showBenefits: true, compact: true })
+    expect(host.textContent).toContain('Easier to eat your surplus')
+    expect(host.textContent).not.toContain('Less hungry')
+  })
+
+  it('says "less hungry" on a deficit', () => {
+    mount({ ml: 500, goal: 2000, mode: 'cut', size: 'sm', showBenefits: true, compact: true })
+    expect(host.textContent).toContain('Less hungry')
+    expect(host.textContent).not.toContain('surplus')
+  })
+
+  it('still marks the same row lit at the same level', () => {
+    const lit = mode => {
+      mount({ ml: 1500, goal: 2000, mode, size: 'sm', showBenefits: true, compact: true })
+      return onRows().length
+    }
+    expect(lit('bulk')).toBe(3)
+    expect(lit('cut')).toBe(3)
+  })
+
+  it('defaults to holding steady when no goal is passed', () => {
+    mount({ ml: 500, goal: 2000, size: 'sm', showBenefits: true, compact: true })
+    expect(host.textContent).toContain('Less hungry')
+  })
+
+  it('keeps the sheet honest too: the surplus note reaches it', () => {
+    mount({ ml: 2000, goal: 2000, mode: 'bulk', size: 'lg', showBenefits: true })
+    expect(host.textContent).toContain('does not build muscle')
+  })
+})

@@ -2060,6 +2060,14 @@ export default {
   'Progress is quiet. Keep going anyway.': 'Le progrès est discret. Continue quand même.',
   'You showed up today. That is the whole trick.': 'Tu es venu aujourd\'hui. C\'est tout le truc.',
   'The person you are becoming starts with this glass.': 'La personne que tu deviens commence par ce verre.',
+  'Easier to eat your surplus': 'Plus facile d\'avaler ton surplus.',
+  'A glass before a big meal makes the volume easier to finish. A surplus you cannot eat is not a surplus.': 'Un verre avant un gros repas rend le volume plus facile à finir. Un surplus que tu ne manges pas n\'est pas un surplus.',
+  'More food means more fuel for the session, and the session is where the gain comes from. Water does not build muscle, but it keeps the training that does.': 'Manger plus, c\'est plus de carburant pour la séance, et c\'est la séance qui fait le gain. L\'eau ne construit pas de muscle, mais elle entretient l\'entraînement qui le construit.',
+  'A glass before a meal sometimes saves you half of it.': 'Un verre avant un repas t\'épargne parfois la moitié.',
+  'A surplus is only muscle if the training earns it.': 'Un surplus n\'est du muscle que si l\'entraînement le mérite.',
+  'The weight goes on. What it turns into is decided in the session.': 'Le poids arrive. Ce qu\'il devient se décide à la séance.',
+  'A deficit is easy. Holding your strength in it is not.': 'Un déficit, c\'est facile. Garder sa force dedans, non.',
+  'Losing the weight is arithmetic. Keeping the muscle is the work.': 'Perdre du poids, c\'est de l\'arithmétique. Garder le muscle, c\'est le travail.',
 }
 
 

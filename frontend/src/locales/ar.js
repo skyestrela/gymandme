@@ -2113,6 +2113,14 @@ export default {
   'Progress is quiet. Keep going anyway.': 'التقدّم هادئ. واصل على أي حال.',
   'You showed up today. That is the whole trick.': 'حضرت اليوم. هذه هي الحيلة كلها.',
   'The person you are becoming starts with this glass.': 'الشخص الذي تصبحه يبدأ بهذا الكوب.',
+  'Easier to eat your surplus': 'أسهل أن تأكل فائضك.',
+  'A glass before a big meal makes the volume easier to finish. A surplus you cannot eat is not a surplus.': 'كوب قبل وجبة كبيرة يجعل حجم الطعام أسهل لإنهائه. الفائض الذي لا تأكله ليس فائضًا.',
+  'More food means more fuel for the session, and the session is where the gain comes from. Water does not build muscle, but it keeps the training that does.': 'الأكل أكثر يعني وقودًا أكثر للحصة، والنتيجة تأتي من الحصة. الماء لا يبني العضلات، لكنه يبقي التمرين الذي يبنيها.',
+  'A glass before a meal sometimes saves you half of it.': 'كوب قبل الطعام يوفّر عليك نصفه أحيانًا.',
+  'A surplus is only muscle if the training earns it.': 'الفائض لا يصير عضلات إلا إذا استحقه التمرين.',
+  'The weight goes on. What it turns into is decided in the session.': 'الوزن يزداد. وما يتحول إليه يُحسم في التمرين.',
+  'A deficit is easy. Holding your strength in it is not.': 'العجز سهل. والحفاظ على قوته داخله ليس سهلًا.',
+  'Losing the weight is arithmetic. Keeping the muscle is the work.': 'نزول الوزن مسألة حساب. والعضلات هي العمل الحقيقي.',
 }
 
 

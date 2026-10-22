@@ -5,7 +5,7 @@ import {
   fastSeries, fastStreak, foodEntry, foodOn, foodSeries, foodTotal, goalOf, isFasting, lastDays,
   profilePlan, macroShare, recentFoods, removeFood, startFast, stopFast, updateFood, waterAdd,
   waterGoalFor, waterGoalOf, waterOn, waterPace, waterRemaining, waterSeries, waterSet,
-  waterStreak, waterTotal, dayOrdinal, waterLineFor, WATER_LINES } from './wellness.js'
+  waterStreak, waterTotal, dayOrdinal, waterLineFor, WATER_LINES, waterBenefits } from './wellness.js'
 
 
 // Day ordinal -> ISO, for the tests that walk consecutive days.
@@ -421,5 +421,91 @@ describe("the day's line", () => {
     // An invented attribution is worse than no line, so nothing here may look like a citation.
     WATER_LINES.forEach(l => expect(l).not.toMatch(/[—“”"]/))
     WATER_LINES.forEach(l => expect(l).not.toMatch(/—\s*[A-Z][a-z]+$/))
+  })
+})
+
+describe('the benefits follow the goal', () => {
+  it('keeps the first two rows the same whatever you are trying to do', () => {
+    // Hydration does not care whether the goal is a deficit or a surplus.
+    for (const mode of ['cut', 'maintain', 'bulk']) {
+      const b = waterBenefits(mode)
+      expect(b[0].title).toBe('Fewer headaches')
+      expect(b[1].title).toBe('Clearer head')
+    }
+  })
+
+  it('aims "less hungry" at a deficit, where it is the mechanism', () => {
+    expect(waterBenefits('cut')[2].title).toBe('Less hungry')
+    expect(waterBenefits('maintain')[2].title).toBe('Less hungry')
+  })
+
+  it('aims the third row the other way in a surplus', () => {
+    // The commonest way a bulk fails is not eating enough, so "less hungry" would be
+    // pointing at the wrong problem.
+    expect(waterBenefits('bulk')[2].title).toBe('Easier to eat your surplus')
+    expect(waterBenefits('bulk')[2].title).not.toBe('Less hungry')
+  })
+
+  it('unlocks at the same four quarters in every mode', () => {
+    for (const mode of ['cut', 'maintain', 'bulk']) {
+      expect(waterBenefits(mode).map(b => b.need)).toEqual([0.25, 0.50, 0.75, 1.00])
+    }
+  })
+
+  it('gives the session row a different reason depending on the goal', () => {
+    expect(waterBenefits('cut')[3].note).toContain('2%')
+    expect(waterBenefits('bulk')[3].note).toContain('session')
+    expect(waterBenefits('bulk')[3].note).not.toBe(waterBenefits('cut')[3].note)
+  })
+
+  it('says plainly that water does not build muscle', () => {
+    // The one line in the app that must never overclaim.
+    expect(waterBenefits('bulk')[3].note).toMatch(/does not build muscle/)
+  })
+
+  it('falls back to holding steady for a mode it does not recognise', () => {
+    for (const odd of ['nonsense', undefined, null, '', 'BULK']) {
+      expect(waterBenefits(odd).map(b => b.title))
+        .toEqual(waterBenefits('maintain').map(b => b.title))
+    }
+  })
+
+  it('always returns four rows with a title and a note', () => {
+    for (const mode of ['cut', 'maintain', 'bulk']) {
+      expect(waterBenefits(mode)).toHaveLength(4)
+      waterBenefits(mode).forEach(b => {
+        expect(b.title).toBeTruthy()
+        expect(b.note).toBeTruthy()
+      })
+    }
+  })
+})
+
+describe("the day's line follows the goal too", () => {
+  it('says something specific to a bulk', () => {
+    expect(waterLineFor('2026-10-22', 'bulk')).toBe('A surplus is only muscle if the training earns it.')
+    expect(waterLineFor('2026-10-23', 'bulk')).toBe('The weight goes on. What it turns into is decided in the session.')
+  })
+
+  it('says something specific to a deficit', () => {
+    expect(waterLineFor('2026-10-22', 'cut')).toBe('A deficit is easy. Holding your strength in it is not.')
+    expect(waterLineFor('2026-10-23', 'cut')).toBe('Losing the weight is arithmetic. Keeping the muscle is the work.')
+  })
+
+  it('keeps the general pool when the goal is holding steady', () => {
+    expect(WATER_LINES).toContain(waterLineFor('2026-10-22', 'maintain'))
+    expect(WATER_LINES).toContain(waterLineFor('2026-10-22'))
+  })
+
+  it('never mixes a bulk line into a cut day', () => {
+    const cut = ['A deficit is easy. Holding your strength in it is not.',
+                 'Losing the weight is arithmetic. Keeping the muscle is the work.']
+    const bulk = ['A surplus is only muscle if the training earns it.',
+                  'The weight goes on. What it turns into is decided in the session.']
+    for (let i = 0; i < 14; i++) {
+      const d = isoDay(dayOrdinal('2026-10-01') + i)
+      expect(cut).toContain(waterLineFor(d, 'cut'))
+      expect(bulk).toContain(waterLineFor(d, 'bulk'))
+    }
   })
 })

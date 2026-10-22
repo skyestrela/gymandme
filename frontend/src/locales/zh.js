@@ -2060,6 +2060,14 @@ export default {
   'Progress is quiet. Keep going anyway.': '进步是安静的，但请继续走下去。',
   'You showed up today. That is the whole trick.': '你今天到场了，这就是全部秘诀。',
   'The person you are becoming starts with this glass.': '你正在成为的那个人，从这一杯开始。',
+  'Easier to eat your surplus': '吃下盈余变得更容易。',
+  'A glass before a big meal makes the volume easier to finish. A surplus you cannot eat is not a surplus.': '大餐前喝一杯水，这顿的量就更容易吃完。吃不下的盈余不是盈余。',
+  'More food means more fuel for the session, and the session is where the gain comes from. Water does not build muscle, but it keeps the training that does.': '吃得更多意味着训练时有更多燃料，而增长恰恰来自训练。水不会长出肌肉，但它让真正会长肌肉的训练继续下去。',
+  'A glass before a meal sometimes saves you half of it.': '饭前喝一杯，有时能省下一半。',
+  'A surplus is only muscle if the training earns it.': '盈余只有在训练挣得它时才是肌肉。',
+  'The weight goes on. What it turns into is decided in the session.': '体重会上去。它会变成什么，由训练决定。',
+  'A deficit is easy. Holding your strength in it is not.': '缺口很容易，在缺口里保住力量不容易。',
+  'Losing the weight is arithmetic. Keeping the muscle is the work.': '掉体重是算术，保住肌肉才是工作。',
 }
 
 

@@ -109,9 +109,9 @@ export default function WellnessCard() {
         icon="drop" tint="var(--blue)" label={t('Water')}
         right={<span className="small dim">{fmtNum(ml)} / {fmtNum(wGoal)} ml</span>}
       />
-      <div style={{ marginTop: 10 }}><WaterBody ml={ml} goal={wGoal} size="sm" showBenefits compact /></div>
+      <div style={{ marginTop: 10 }}><WaterBody ml={ml} goal={wGoal} mode={goal.plan.mode} size="sm" showBenefits compact /></div>
 
-      <p className="wl-quip">{t(waterLineFor())}</p>
+      <p className="wl-quip">{t(waterLineFor(undefined, goal.plan.mode))}</p>
       {wPace.behind > 0 && <div className="dim small wl-pace" style={{ marginTop: 4 }}>
         {t('{0} ml behind for the time of day', fmtNum(wPace.behind))}
       </div>}

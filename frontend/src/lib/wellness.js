@@ -108,6 +108,42 @@ export function waterPace(water, goal, d = todayISO(), now = Date.now()) {
   return { behind: Math.max(0, expected - waterTotal(water, d)), expected, remaining, quiet: false }
 }
 
+/* ---- what the water is for, which depends on what you are trying to do ----
+ *
+ * The first two rows are hydration, and hydration does not care about your goal. The third and
+ * fourth do, because the failure mode inverts between a deficit and a surplus.
+ *
+ * Cutting: "less hungry" is the mechanism, not a side effect. A glass before a meal cuts how
+ * much you eat, and that is most of what a cut actually is.
+ *
+ * Bulking: the commonest way a bulk fails is not eating enough, so a benefit phrased "less
+ * hungry" points at the wrong problem and works against the goal. Same mechanism, aimed the
+ * other way — preload water lowers early satiety, which is exactly why dietitians prescribe it
+ * to stop people overeating, and exactly why it makes a large meal easier to finish.
+ *
+ * The fourth row gains most in a bulk, because that is where the causal chain actually is:
+ * more food -> more fuel available -> a better session -> and the session is where the gain
+ * comes from. It says outright that water does not build muscle. It does not; pretending
+ * otherwise would be the one genuinely dishonest line in the app.
+ *
+ * The thresholds are unchanged at a quarter of the goal each. They are quarters of a day, not
+ * of a diet.
+ */
+const HEADACHE = { need: 0.25, title: 'Fewer headaches', note: 'Mild dehydration is a common trigger.' }
+const HEAD = { need: 0.50, title: 'Clearer head', note: 'Alertness and mood dip with even a little water short.' }
+const CUT_APPETITE = { need: 0.75, title: 'Less hungry', note: 'A glass before a meal cuts how much you eat.' }
+const HOLD_APPETITE = { need: 0.75, title: 'Less hungry', note: 'A glass before a meal sometimes saves you half of it.' }
+const SURPLUS_APPETITE = { need: 0.75, title: 'Easier to eat your surplus', note: 'A glass before a big meal makes the volume easier to finish. A surplus you cannot eat is not a surplus.' }
+const CUT_OUTPUT = { need: 1.00, title: 'Stronger in the session', note: 'Past about 2% of your weight you start losing output.' }
+const BULK_OUTPUT = { need: 1.00, title: 'Stronger in the session', note: 'More food means more fuel for the session, and the session is where the gain comes from. Water does not build muscle, but it keeps the training that does.' }
+
+/** The four rows, ordered by when the day earns them, for the goal you are actually on. */
+export const waterBenefits = mode => {
+  if (mode === 'bulk') return [HEADACHE, HEAD, SURPLUS_APPETITE, BULK_OUTPUT]
+  if (mode === 'cut') return [HEADACHE, HEAD, CUT_APPETITE, CUT_OUTPUT]
+  return [HEADACHE, HEAD, HOLD_APPETITE, CUT_OUTPUT]
+}
+
 /**
  * Days since 1970-01-01 for an ISO day, worked out from the parts alone.
  *
@@ -149,11 +185,26 @@ export const WATER_LINES = [
   'The person you are becoming starts with this glass.',
 ]
 
-/** Today's line. */
-export const waterLineFor = (d = todayISO()) => {
-  const n = WATER_LINES.length
+/* Two lines per goal, because the thing worth being told is different. Bulking: a surplus is
+   only muscle if the training earns it, and most of a beginner's surplus does not. Cutting: the
+   weight is arithmetic, and keeping the muscle through it is the part that is actually hard. */
+const WATER_LINES_BULK = [
+  'A surplus is only muscle if the training earns it.',
+  'The weight goes on. What it turns into is decided in the session.',
+]
+const WATER_LINES_CUT = [
+  'A deficit is easy. Holding your strength in it is not.',
+  'Losing the weight is arithmetic. Keeping the muscle is the work.',
+]
+
+/** Today's line, for the goal you are on. */
+export const waterLineFor = (d = todayISO(), mode = 'maintain') => {
+  const pool = mode === 'bulk' ? WATER_LINES_BULK
+    : mode === 'cut' ? WATER_LINES_CUT
+    : WATER_LINES
+  const n = pool.length
   // The double modulo keeps a pre-1970 date from indexing off the front of the array.
-  return WATER_LINES[((dayOrdinal(d) % n) + n) % n]
+  return pool[((dayOrdinal(d) % n) + n) % n]
 }
 
 /** Consecutive days up to today that reached `goal`, today excluded while it is still short. */

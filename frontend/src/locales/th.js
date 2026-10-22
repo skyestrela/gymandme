@@ -2071,6 +2071,14 @@ export default {
   'Progress is quiet. Keep going anyway.': 'ความคืบหน้าเงียบมาก แต่ก็เดินต่อไป',
   'You showed up today. That is the whole trick.': 'วันนี้คุณมาถึงแล้ว นี่แหละคือเคล็ดลับทั้งหมด',
   'The person you are becoming starts with this glass.': 'คนที่คุณกำลังจะเป็น เริ่มต้นจากแก้วนี้',
+  'Easier to eat your surplus': 'กินส่วนเกินให้สำเร็จง่ายขึ้น',
+  'A glass before a big meal makes the volume easier to finish. A surplus you cannot eat is not a surplus.': 'แก้วน้ำหนึ่งแก้วก่อนมื้อใหญ่ช่วยให้ทานจนหมดได้ ส่วนเกินที่คุณกินไม่ไหวก็ไม่นับเป็นส่วนเกิน',
+  'More food means more fuel for the session, and the session is where the gain comes from. Water does not build muscle, but it keeps the training that does.': 'กินมากขึ้นคือเชื้อเพลิงสำหรับเซสชันมากขึ้น และก็ที่ได้มาจากเซสชันนั้น น้ำไม่ได้สร้างกล้าม แต่มันรักษาการฝึกที่สร้างกล้ามไว้',
+  'A glass before a meal sometimes saves you half of it.': 'แก้วน้ำก่อนกินข้าวบางทีก็ช่วยให้ได้ครึ่งหนึ่ง',
+  'A surplus is only muscle if the training earns it.': 'ส่วนเกินจะเป็นกล้ามได้ก็ต่อเมื่อการฝึกเอาชนะมัน',
+  'The weight goes on. What it turns into is decided in the session.': 'น้ำหนักขึ้น แต่มันจะกลายเป็นอะไร ตัดสินกันที่เซสชัน',
+  'A deficit is easy. Holding your strength in it is not.': 'การขาดแคลอรีทำได้ง่าย การรักษาความแข็งแรงไว้ข้างในนั้นไม่ง่าย',
+  'Losing the weight is arithmetic. Keeping the muscle is the work.': 'การลดน้ำหนักเป็นเรื่องคณิตศาสตร์ การรักษากล้ามคืองานจริง',
 }
 
 

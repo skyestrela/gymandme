@@ -311,7 +311,7 @@ function WaterSheet({ close }) {
     <Slider value={Math.min(ml, 6000)} min={0} max={6000} step={50} onChange={setMl} />
 
     <div style={{ marginTop: 18 }}>
-      <WaterBody ml={ml} goal={goal} size="lg" showBenefits />
+      <WaterBody ml={ml} goal={goal} mode={profilePlan(st).mode} size="lg" showBenefits />
     </div>
 
     {suggestion && Math.abs(suggestion.ml - goal) >= 100 && <div className="row between" style={{ gap: 10, marginTop: 14 }}>

@@ -1307,6 +1307,14 @@ export const PT_BR_OVERRIDES = {
   'Progress is quiet. Keep going anyway.': 'O progresso é silencioso. Continue assim mesmo.',
   'You showed up today. That is the whole trick.': 'Você apareceu hoje. É esse o truque.',
   'The person you are becoming starts with this glass.': 'A pessoa que você está se tornando começa por este copo.',
+  'Easier to eat your surplus': 'Mais fácil comer o seu excedente.',
+  'A glass before a big meal makes the volume easier to finish. A surplus you cannot eat is not a surplus.': 'Um copo antes de uma refeição grande facilita terminar o volume. Um excedente que você não come não é excedente.',
+  'More food means more fuel for the session, and the session is where the gain comes from. Water does not build muscle, but it keeps the training that does.': 'Comer mais significa mais combustível para o treino, e é no treino que o ganho vem. A água não constrói músculo, mas mantém o treino que constrói.',
+  'A glass before a meal sometimes saves you half of it.': 'Um copo antes de uma refeição às vezes economiza metade.',
+  'A surplus is only muscle if the training earns it.': 'Um excedente só é músculo se o treino merecer.',
+  'The weight goes on. What it turns into is decided in the session.': 'O peso vem. Aquilo em que vira é decidido no treino.',
+  'A deficit is easy. Holding your strength in it is not.': 'Um déficit é fácil. Manter a força dentro dele não é.',
+  'Losing the weight is arithmetic. Keeping the muscle is the work.': 'Perder o peso é aritmética. Manter o músculo é o trabalho.',
 }
 
 export default { ...pt, ...PT_BR_OVERRIDES }

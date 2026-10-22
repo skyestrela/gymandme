@@ -2060,6 +2060,14 @@ export default {
   'Progress is quiet. Keep going anyway.': 'İlerleme sessizdir. Yine de devam et.',
   'You showed up today. That is the whole trick.': 'Bugün buradaydın. Bütün mesele bu.',
   'The person you are becoming starts with this glass.': 'Olmaya başladığın kişi bu kadekle başlıyor.',
+  'Easier to eat your surplus': 'Fazlayı yemen daha kolay.',
+  'A glass before a big meal makes the volume easier to finish. A surplus you cannot eat is not a surplus.': 'Büyük bir öğünden önce içtiğin bir bardak, o miktarı bitirmeyi kolaylaştırır. Yiyemediğin fazla fazla değildir.',
+  'More food means more fuel for the session, and the session is where the gain comes from. Water does not build muscle, but it keeps the training that does.': 'Daha fazla yemek, seans için daha fazla yakıt demek; kazanç da oradan gelir. Su kas yapmaz, ama kası yapan antrenmanı sürdürür.',
+  'A glass before a meal sometimes saves you half of it.': 'Yemekten önce bir bardak su bazen yarısını kazandırır.',
+  'A surplus is only muscle if the training earns it.': 'Fazla, antrenman hakkını kazandığında kas olur.',
+  'The weight goes on. What it turns into is decided in the session.': 'Kilo gelir. Neye dönüştüğü antrenmanda belli olur.',
+  'A deficit is easy. Holding your strength in it is not.': 'Açık kolaydır. Gücünü açıkta tutmak kolay değil.',
+  'Losing the weight is arithmetic. Keeping the muscle is the work.': 'Kilo vermek aritmetiktir. Kası korumak iştir.',
 }
 
 

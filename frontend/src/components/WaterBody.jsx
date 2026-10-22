@@ -23,6 +23,7 @@
 import { useId } from 'react'
 import { fmtNum } from '../lib/format.js'
 import { t } from '../lib/i18n.js'
+import { waterBenefits } from '../lib/wellness.js'
 
 const HEAD = { cx: 60, cy: 22, r: 13 }
 // Shoulders at the top, arms falling to the hips, then the legs as two tapered shapes. Geometry
@@ -31,22 +32,21 @@ const TORSO = 'M60 40C47 40 38 45 34 52L26 88C25 92 27 95 31 95H38L35 106H85L82 
 const LEG_L = 'M35 106H57L55 160C55 164 53 167 49 167H43C39 167 37 164 37 160Z'
 const LEG_R = 'M63 106H85L83 160C83 164 81 167 77 167H71C67 167 65 164 65 160Z'
 
-// One row per benefit, in the order the day earns them. `x` is where the leader leaves the body at
-// that height, `y` the height itself, `need` the fraction of the goal that unlocks it. Each is a
-// tendency, never a promise: a dry head is a real and common early sign, but nobody's headache is
-// guaranteed to be about water.
-const BEN = [
-  { x: 76, y: 20, need: 0.25, title: 'Fewer headaches', note: 'Mild dehydration is a common trigger.' },
-  { x: 94, y: 62, need: 0.50, title: 'Clearer head', note: 'Alertness and mood dip with even a little water short.' },
-  { x: 97, y: 92, need: 0.75, title: 'Less hungry', note: 'A glass before a meal cuts how much you eat.' },
-  { x: 87, y: 135, need: 1.00, title: 'Stronger in the session', note: 'Past about 2% of your weight you start losing output.' },
+/* Where each leader leaves the body at the height that benefit unlocks — pure geometry, so it
+   stays here. The wording comes from waterBenefits() in lib/wellness.js, which is goal-aware.
+   The two must agree row for row: this is four positions, that is four benefits. */
+const BEN_GEO = [
+  { x: 76, y: 20 },
+  { x: 94, y: 62 },
+  { x: 97, y: 92 },
+  { x: 87, y: 135 },
 ]
 
 // Five bubbles, staggered so they never rise in step. cy is near the foot, and the rise is capped
 // below the head so they run out of water rather than out of body.
 const BUBBLES = [[46, 0], [61, -1.15], [73, -2.3], [52, -3.45], [68, -4.6]]
 
-export default function WaterBody({ ml, goal, size = 'sm', showBenefits = false, compact = false }) {
+export default function WaterBody({ ml, goal, mode = 'maintain', size = 'sm', showBenefits = false, compact = false }) {
   // useId keeps the clip paths apart when a card and a sheet are both on screen. React's format
   // has changed between majors, so strip anything that is not safe inside url(#…).
   const raw = useId()
@@ -57,6 +57,9 @@ export default function WaterBody({ ml, goal, size = 'sm', showBenefits = false,
   const pct = g > 0 ? Math.min(1, m / g) : 0
   const top = 170 - 170 * pct
   const left = Math.max(0, Math.round(g - m))
+
+  // Geometry is fixed; the wording follows the goal.
+  const BEN = BEN_GEO.map((g, i) => ({ ...g, ...waterBenefits(mode)[i] }))
 
   const shapes = <>
     <circle cx={HEAD.cx} cy={HEAD.cy} r={HEAD.r} />

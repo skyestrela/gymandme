@@ -2063,6 +2063,14 @@ export default {
   'Progress is quiet. Keep going anyway.': 'A haladás csendes. Menj tovább, ettől függetlenül.',
   'You showed up today. That is the whole trick.': 'Ma itt voltál. Ennyi az egész.',
   'The person you are becoming starts with this glass.': 'Aki éppen vagy, ezzel a pohárral kezdődik.',
+  'Easier to eat your surplus': 'Könnyebb elfogyasztani a többletet.',
+  'A glass before a big meal makes the volume easier to finish. A surplus you cannot eat is not a surplus.': 'Egy pohár egy nagyobb étkezés előtt megkönnyíti a térfogat befejezését. A többlet, amit nem eszel meg, nem többlet.',
+  'More food means more fuel for the session, and the session is where the gain comes from. Water does not build muscle, but it keeps the training that does.': 'Több étel több üzemanyag az edzéshez, és a nyereség is onnan jön. A víz nem épít izmot, de fenntartja az edzést, ami igen.',
+  'A glass before a meal sometimes saves you half of it.': 'Egy pohár evés előtt néha megtakarít neked a felét.',
+  'A surplus is only muscle if the training earns it.': 'Többlet csak akkor izom, ha az edzés kiérdemli.',
+  'The weight goes on. What it turns into is decided in the session.': 'A súly feljön. Azzá válása az edzésen dől el.',
+  'A deficit is easy. Holding your strength in it is not.': 'A hiány könnyű. Az erőt tartani benne nem az.',
+  'Losing the weight is arithmetic. Keeping the muscle is the work.': 'A súly leadása aritmetika. Az izom megőrzése a munka.',
 }
 
 

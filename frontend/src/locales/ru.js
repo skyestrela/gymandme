@@ -2064,6 +2064,14 @@ export default {
   'Progress is quiet. Keep going anyway.': 'Прогресс незаметен. Продолжайте всё равно.',
   'You showed up today. That is the whole trick.': 'Вы появились сегодня. В этом весь секрет.',
   'The person you are becoming starts with this glass.': 'Тот, кем вы становитесь, начинается с этого стакана.',
+  'Easier to eat your surplus': 'Проще съесть профицит.',
+  'A glass before a big meal makes the volume easier to finish. A surplus you cannot eat is not a surplus.': 'Стакан перед большой едой помогает осилить объём. Профицит, который вы не съедите, профицитом не является.',
+  'More food means more fuel for the session, and the session is where the gain comes from. Water does not build muscle, but it keeps the training that does.': 'Больше еды — больше топлива для тренировки, а набор идёт именно на тренировке. Вода не строит мышцы, но она поддерживает тренировку, которая их строит.',
+  'A glass before a meal sometimes saves you half of it.': 'Стакан перед едой иногда экономит вам половину.',
+  'A surplus is only muscle if the training earns it.': 'Профицит становится мышцами только если тренировка его отработала.',
+  'The weight goes on. What it turns into is decided in the session.': 'Вес набирается. Во что он превратится, решается на тренировке.',
+  'A deficit is easy. Holding your strength in it is not.': 'Дефицит — это легко. Удержать в нём силу — нет.',
+  'Losing the weight is arithmetic. Keeping the muscle is the work.': 'Похудеть — арифметика. Сохранить мышцы — работа.',
 }
 
 

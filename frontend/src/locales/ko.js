@@ -2060,6 +2060,14 @@ export default {
   'Progress is quiet. Keep going anyway.': '진행은 조용합니다. 그래도 계속하세요.',
   'You showed up today. That is the whole trick.': '오늘 여기까지 왔네요. 그게 핵심이에요.',
   'The person you are becoming starts with this glass.': '지금의 당신이 되는 건 이 한 잔부터예요.',
+  'Easier to eat your surplus': '여유분을 먹는 게 더 쉬워져요.',
+  'A glass before a big meal makes the volume easier to finish. A surplus you cannot eat is not a surplus.': '큰 식사 전에 물 한 잔을 마시면 그 양을 다 먹기 쉬워져요. 먹지 못하는 여유분은 여유분이 아니에요.',
+  'More food means more fuel for the session, and the session is where the gain comes from. Water does not build muscle, but it keeps the training that does.': '더 먹으면 트레이닝에 쓸 연료가 늘고, 몸이 늘리는 건 바로 그 트레이닝에서 나옵니다. 물은 근육을 만들지 않습니다. 다만 근육을 만드는 트레이닝을 이어 가게 합니다.',
+  'A glass before a meal sometimes saves you half of it.': '식사 전에 물 한 잔이 때때로 반 그릇을 아껴 줘요.',
+  'A surplus is only muscle if the training earns it.': '여유분이 근육이 되려면 트레이닝이 그 값을 치러야 해요.',
+  'The weight goes on. What it turns into is decided in the session.': '체중은 붙습니다. 그것이 무엇이 되는지는 트레이닝에서 정해져요.',
+  'A deficit is easy. Holding your strength in it is not.': '적자기는 쉬워요. 그 안에서 힘을 지키는 건 쉬우지 않아요.',
+  'Losing the weight is arithmetic. Keeping the muscle is the work.': '체중을 줄이는 건 산술이에요. 근질을 지키는 게 일이에요.',
 }
 
 
