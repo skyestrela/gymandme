@@ -2097,6 +2097,16 @@ export default {
   '{0} h asked': '{0} saat istendi',
   '{0} day logged': '{0} gün kayıtlı',
   '{0} days logged': '{0} gün kayıtlı',
+  'a handful': 'bir avuç',
+  'a spoon': 'bir kaşık',
+  'a cup': 'bir fincan',
+  'a medium one': 'bir orta boy',
+  'a slice': 'bir dilim',
+  'a fillet': 'bir porsiyon',
+  'a piece': 'bir parça',
+  'How much?': 'Ne kadar?',
+  'kcal per 100 g': '100 g başına kcal',
+  'Search foods': 'Gıda ara',
 }
 
 

@@ -61,6 +61,7 @@ import {
   waterGoalFor, waterGoalOf, waterSet, waterTotal,
 } from './lib/wellness.js'
 import { clampGoal, DIETS, dietOf, PLANT_PROTEIN_FACTOR, sessionsPerWeek } from './lib/macros.js'
+import { PORTIONS, foodLabel, macrosFor, portionGrams, searchFoods } from './lib/foods.js'
 import { workoutText } from './lib/workout-text.js'
 import { copyText } from './lib/clipboard.js'
 import { queueRemaining, pinState } from './lib/queue.js'
@@ -430,13 +431,19 @@ function FoodSheet({ close }) {
   const [p, setP] = useState(0)
   const [c, setC] = useState(0)
   const [f, setF] = useState(0)
+  const [picked, setPicked] = useState(null)       // the table entry behind the numbers, if any
+  const [grams, setGrams] = useState(0)
 
-  const reset = () => { setEditing(null); setName(''); setKcal(0); setP(0); setC(0); setF(0) }
+  const matches = useMemo(() => (name.trim() && !picked ? searchFoods(name) : []), [name, picked])
+  const reset = () => {
+    setEditing(null); setName(''); setKcal(0); setP(0); setC(0); setF(0); setPicked(null); setGrams(0)
+  }
   const load = e => {
     setEditing(e); setName(e.name); setKcal(e.kcal); setP(e.p); setC(e.c); setF(e.f)
   }
   const save = () => {
-    const label = name.trim()
+    // A picked food records the size with it: "Walnuts, 30 g" is a log you can read later.
+    const label = picked ? foodLabel(picked, grams) : name.trim()
     if (!label) { toast(t('Give it a name')); return }
     update(s => {
       const entry = foodEntry({ name: label, kcal, p, c, f, d, at: editing?.at })
@@ -450,6 +457,22 @@ function FoodSheet({ close }) {
     toast(t('Food logged'))
   }
   const drop = id => { update(s => { s.food = removeFood(s.food, id) }); if (editing?.id === id) reset() }
+
+  /* Typing over a picked name drops the table behind it, so the portions on screen can never
+     describe a food the user has since renamed by hand. */
+  const onType = v => {
+    setName(v)
+    if (picked && v !== picked.name) { setPicked(null); setGrams(0) }
+  }
+  const weigh = (food, g) => {
+    const m = macrosFor(food, g)
+    setGrams(m.grams); setKcal(m.kcal); setP(m.p); setC(m.c); setF(m.f)
+  }
+  const pickFood = food => {
+    const first = portionGrams(food, food.portions[0]) ?? 100
+    setPicked(food); setName(food.name); weigh(food, first)
+  }
+  const pickPortion = portion => { if (picked) weigh(picked, portionGrams(picked, portion)) }
 
   return <>
     <h3>{t('Food')}</h3>
@@ -470,7 +493,38 @@ function FoodSheet({ close }) {
     ))}
 
     <h4 className="sec" style={{ marginTop: 16 }}>{editing ? t('Edit') : t('Add food')}</h4>
-    <TextField value={name} onChange={e => setName(e.target.value)} placeholder={t('What did you eat?')} aria-label={t('Food name')} />
+    <TextField value={name} onChange={e => onType(e.target.value)} placeholder={t('What did you eat?')}
+      aria-label={t('Food name')} autoComplete="off" />
+
+    {matches.length > 0 && <div className="foodhits">
+      {matches.map(food => (
+        <button key={food.id} className="foodhit" onClick={() => pickFood(food)}>
+          <span className="fh-n">{food.name}</span>
+          <span className="fh-k dim small">{fmtNum(food.kcal)} {t('kcal per 100 g')}</span>
+        </button>
+      ))}
+    </div>}
+
+    {picked && <>
+      <div className="dim small" style={{ margin: '10px 0 6px' }}>{t('How much?')}</div>
+      <div className="chips">
+        {picked.portions.map(part => (
+          <button key={part} className={'chip' + (grams === portionGrams(picked, part) ? ' on' : '')}
+            aria-pressed={grams === portionGrams(picked, part)} onClick={() => pickPortion(part)}>
+            {t(PORTIONS[part].label)} <span className="nocap">· {fmtNum(PORTIONS[part].g)} g</span>
+          </button>
+        ))}
+        <label className="wl-macro" style={{ flex: '0 0 88px' }}>
+          <NumberField value={grams} onChange={g => weigh(picked, g)}
+            aria-label={t('How much?')} style={{ textAlign: 'center' }} />
+          <span className="dim small">g</span>
+        </label>
+      </div>
+      <div className="dim small" style={{ marginTop: 6 }}>
+        {foodLabel(picked, grams)} · {fmtNum(macrosFor(picked, grams).kcal)} kcal
+      </div>
+    </>}
+
     <div className="row" style={{ gap: 8, marginTop: 8 }}>
       {[
         [kcal, setKcal, t('Calories')],

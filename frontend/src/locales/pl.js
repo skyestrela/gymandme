@@ -2097,6 +2097,16 @@ export default {
   '{0} h asked': '{0} h postulano',
   '{0} day logged': '{0} dzień zapisany',
   '{0} days logged': { one: '{0} dzień zapisany', few: '{0} dni zapisane', many: '{0} dni zapisanych' },
+  'a handful': 'garść',
+  'a spoon': 'łyżka',
+  'a cup': 'kubek',
+  'a medium one': 'średnia sztuka',
+  'a slice': 'plasterek',
+  'a fillet': 'filet',
+  'a piece': 'kawałek',
+  'How much?': 'Ile?',
+  'kcal per 100 g': 'kcal na 100 g',
+  'Search foods': 'Szukaj jedzenia',
 }
 
 

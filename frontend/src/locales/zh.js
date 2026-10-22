@@ -2097,6 +2097,16 @@ export default {
   '{0} h asked': '要求 {0} 小时',
   '{0} day logged': '记录 {0} 天',
   '{0} days logged': '记录 {0} 天',
+  'a handful': '一把',
+  'a spoon': '一勺',
+  'a cup': '一杯',
+  'a medium one': '一个中等',
+  'a slice': '一片',
+  'a fillet': '一份鱼柳',
+  'a piece': '一块',
+  'How much?': '多少？',
+  'kcal per 100 g': '每 100 克千卡',
+  'Search foods': '搜索食物',
 }
 
 

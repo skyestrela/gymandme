@@ -444,3 +444,66 @@ describe('the essentials calendar sheet', () => {
     expect(host.textContent).toContain('Nothing logged this day')
   })
 })
+
+describe('the food lookup', () => {
+  // The portion chips render "{label} · {grams} g", so match on the label rather than the
+  // whole string and keep these tests from breaking on a separator.
+  const chip = label => [...host.querySelectorAll('button.chip')].find(b => b.textContent.includes(label))
+
+  it('offers matches while you are still typing', async () => {
+    open(foodSheet)
+    await type(input('Food name'), 'walnut')
+    expect(host.querySelector('.foodhits')).toBeTruthy()
+    expect(host.querySelector('.fh-n').textContent).toBe('Walnuts')
+    expect(host.textContent).toContain('654 kcal per 100 g')
+  })
+
+  it('weighs a picked food down to the portion you chose', async () => {
+    open(foodSheet)
+    await type(input('Food name'), 'walnut')
+    await click(host.querySelector('.foodhit'))
+    // Walnuts are 654 kcal per 100 g and the first portion offered is a handful, 30 g.
+    expect(input('Calories').value).toBe('196')
+    expect(input('Protein').value).toBe('5')
+    expect(chip('a handful')).toBeTruthy()
+    await click(chip('a spoon'))
+    expect(input('Calories').value).toBe('98')          // 15 g
+  })
+
+  it('does not offer a portion that means nothing for that food', async () => {
+    open(foodSheet)
+    await type(input('Food name'), 'walnut')
+    await click(host.querySelector('.foodhit'))
+    expect(chip('a fillet')).toBeFalsy()
+    expect(chip('a handful')).toBeTruthy()
+  })
+
+  it('stops offering portions once the name is typed over', async () => {
+    open(foodSheet)
+    await type(input('Food name'), 'walnut')
+    await click(host.querySelector('.foodhit'))
+    expect(host.textContent).toContain('a handful')
+    await type(input('Food name'), 'my own thing')
+    // Otherwise the chips would be describing a food the user has just renamed by hand.
+    expect(host.textContent).not.toContain('a handful')
+  })
+
+  it('records the size with the entry, so the log reads back', async () => {
+    open(foodSheet)
+    await type(input('Food name'), 'walnut')
+    await click(host.querySelector('.foodhit'))
+    await click(byText('button', 'Save'))
+    expect(state().S.food).toHaveLength(1)
+    expect(state().S.food[0].name).toBe('Walnuts, 30 g')
+    expect(state().S.food[0].kcal).toBe(196)
+  })
+
+  it('still logs by hand when the table has nothing to offer', async () => {
+    open(foodSheet)
+    await type(input('Food name'), 'my own thing')
+    expect(host.querySelector('.foodhits')).toBeNull()
+    await type(input('Calories'), '300')
+    await click(byText('button', 'Save'))
+    expect(state().S.food[0]).toMatchObject({ name: 'my own thing', kcal: 300 })
+  })
+})

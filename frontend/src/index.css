@@ -615,6 +615,23 @@ body.chips-dragging *{cursor:inherit}
   line-height:1.45;white-space:pre-wrap;font-size:15px;margin-bottom:10px;color:var(--label-2);
 }
 
+/* Food lookup results: what the table matched while you are still typing. Full-width rows,
+   the name on the left and the figure that justifies picking it on the right. Sits close
+   under the field the finger is already on, and must not read as the logged-items list. */
+.foodhits{
+  margin-top:8px;border-radius:var(--r);overflow:hidden;
+  background:var(--surface);border:1px solid var(--surface-2);
+}
+.foodhit{
+  display:flex;width:100%;align-items:baseline;justify-content:space-between;gap:12px;
+  padding:11px 14px;text-align:start;background:none;border:none;
+  border-bottom:1px solid var(--surface-2);
+}
+.foodhit:last-child{border-bottom:none}
+.foodhit:active{background:var(--surface-2)}
+.fh-n{font-size:15px;color:var(--label);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fh-k{flex:none;font-size:12.5px;white-space:nowrap}
+
 /* --- search field --- */
 .searchf{position:relative;display:flex;align-items:center}
 .searchf .lead{

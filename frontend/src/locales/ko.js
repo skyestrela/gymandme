@@ -2097,6 +2097,16 @@ export default {
   '{0} h asked': '{0}시간 요청',
   '{0} day logged': '{0}일 기록됨',
   '{0} days logged': '{0}일 기록됨',
+  'a handful': '한 줌',
+  'a spoon': '한 숟갈',
+  'a cup': '한 컵',
+  'a medium one': '한 개',
+  'a slice': '한 장',
+  'a fillet': '한 토막',
+  'a piece': '한 조각',
+  'How much?': '얼마나?',
+  'kcal per 100 g': '100 g당 kcal',
+  'Search foods': '음식 검색',
 }
 
 

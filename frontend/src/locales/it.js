@@ -2097,6 +2097,16 @@ export default {
   '{0} h asked': '{0} h richiesti',
   '{0} day logged': '{0} giorno registrato',
   '{0} days logged': '{0} giorni registrati',
+  'a handful': 'una manciata',
+  'a spoon': 'un cucchiaio',
+  'a cup': 'una tazza',
+  'a medium one': 'uno di taglia media',
+  'a slice': 'una fetta',
+  'a fillet': 'un filetto',
+  'a piece': 'un pezzo',
+  'How much?': 'Quanto?',
+  'kcal per 100 g': 'kcal per 100 g',
+  'Search foods': 'Cerca alimenti',
 }
 
 

@@ -1344,6 +1344,16 @@ export const PT_BR_OVERRIDES = {
   '{0} h asked': '{0} h pedidos',
   '{0} day logged': '{0} dia anotado',
   '{0} days logged': '{0} dias anotados',
+  'a handful': 'um punhado',
+  'a spoon': 'uma colher',
+  'a cup': 'uma xícara',
+  'a medium one': 'um médio',
+  'a slice': 'uma fatia',
+  'a fillet': 'um filé',
+  'a piece': 'uma peça',
+  'How much?': 'Quanto?',
+  'kcal per 100 g': 'kcal por 100 g',
+  'Search foods': 'Buscar alimentos',
 }
 
 export default { ...pt, ...PT_BR_OVERRIDES }

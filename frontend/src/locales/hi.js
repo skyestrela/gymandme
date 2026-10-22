@@ -2097,6 +2097,16 @@ export default {
   '{0} h asked': '{0} घंटे का लक्ष्य',
   '{0} day logged': '{0} दिन दर्ज',
   '{0} days logged': '{0} दिन दर्ज',
+  'a handful': 'एक मुट्ठी',
+  'a spoon': 'एक चम्मच',
+  'a cup': 'एक कप',
+  'a medium one': 'एक मध्यम',
+  'a slice': 'एक टुकड़ा',
+  'a fillet': 'एक फिलेट',
+  'a piece': 'एक टुकड़ा',
+  'How much?': 'कितना?',
+  'kcal per 100 g': 'प्रति 100 ग्राम कैलोरी',
+  'Search foods': 'खोजें भोजन',
 }
 
 

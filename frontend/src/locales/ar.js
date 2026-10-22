@@ -2150,6 +2150,16 @@ export default {
   '{0} h asked': '{0} س مطلوبة',
   '{0} day logged': '{0} يوم مسجل',
   '{0} days logged': '{0} أيام مسجلة',
+  'a handful': 'حفنة',
+  'a spoon': 'ملعقة',
+  'a cup': 'كوب',
+  'a medium one': 'حبة متوسطة',
+  'a slice': 'شريحة',
+  'a fillet': 'فيليه',
+  'a piece': 'قطعة',
+  'How much?': 'كم؟',
+  'kcal per 100 g': 'سعرة لكل 100 غرام',
+  'Search foods': 'ابحث عن الطعام',
 }
 
 

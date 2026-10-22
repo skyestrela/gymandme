@@ -2117,6 +2117,16 @@ export default {
   '{0} h asked': '{0} h verlangt',
   '{0} day logged': '{0} Tag erfasst',
   '{0} days logged': '{0} Tage erfasst',
+  'a handful': 'eine Handvoll',
+  'a spoon': 'ein Löffel',
+  'a cup': 'eine Tasse',
+  'a medium one': 'eine mittlere',
+  'a slice': 'eine Scheibe',
+  'a fillet': 'ein Filet',
+  'a piece': 'ein Stück',
+  'How much?': 'Wie viel?',
+  'kcal per 100 g': 'kcal pro 100 g',
+  'Search foods': 'Lebensmittel suchen',
 }
 
 

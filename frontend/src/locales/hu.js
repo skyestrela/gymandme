@@ -2100,6 +2100,16 @@ export default {
   '{0} h asked': '{0} óra kérve',
   '{0} day logged': '{0} nap rögzítve',
   '{0} days logged': '{0} nap rögzítve',
+  'a handful': 'egy marok',
+  'a spoon': 'egy kanál',
+  'a cup': 'egy csésze',
+  'a medium one': 'egy közepes',
+  'a slice': 'egy szelet',
+  'a fillet': 'egy filé',
+  'a piece': 'egy darab',
+  'How much?': 'Mennyit?',
+  'kcal per 100 g': 'kcal / 100 g',
+  'Search foods': 'Ételek keresése',
 }
 
 
