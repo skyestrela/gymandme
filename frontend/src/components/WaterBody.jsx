@@ -113,7 +113,14 @@ export default function WaterBody({ ml, goal, size = 'sm', showBenefits = false,
       {showBenefits && <ul className={'wl-bench-list' + (compact ? ' compact' : '')}>
         {BEN.map(b => {
           const on = pct >= b.need
+          // How far through this quarter the day is: 0 when the quarter opens, 1 when the
+          // benefit it unlocks arrives. b.need is the quarter's end, so the span is the
+          // quarter that precedes it.
+          const within = Math.max(0, Math.min(1, (pct - (b.need - 0.25)) / 0.25))
           return <li key={b.title} className={'wl-bench-row' + (on ? ' on' : '')}>
+            {compact && <span className="wl-quarter-bar" aria-hidden="true">
+              <span className="wl-quarter-fill" style={{ width: (within * 100).toFixed(1) + '%' }} />
+            </span>}
             <span className="wl-bench-dot" aria-hidden="true" />
             <div>
               <div className="wl-bench-title">{b.title}</div>

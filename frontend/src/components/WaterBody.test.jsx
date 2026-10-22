@@ -22,6 +22,10 @@ const fill = () => host.querySelector('.wl-body-fill')
 const bubbles = () => host.querySelectorAll('.wl-bubble')
 const rows = () => [...host.querySelectorAll('.wl-bench-row')]
 const onRows = () => rows().filter(r => r.classList.contains('on'))
+const bars = () => [...host.querySelectorAll('.wl-quarter-bar')]
+const fills = () => [...host.querySelectorAll('.wl-quarter-fill')]
+// The bar's width is the one inline style the card sets, so it is what the test can read.
+const fillWidth = i => fills()[i].style.width
 const label = () => host.querySelector('svg').getAttribute('aria-label')
 
 describe('the fill', () => {
@@ -125,8 +129,61 @@ describe('what hydration is doing', () => {
     expect(host.textContent).toContain('Fewer headaches')
     expect(host.textContent).toContain('Stronger in the session')
     expect(host.textContent).not.toContain('Mild dehydration is a common trigger.')
-    // The elbow is drawn to a fixed point on a body big enough to carry it; at 60px it is a smudge.
+    // The elbow is drawn to a fixed point on a body big enough to carry it; on the card
+    // it is not worth the smudge it would leave, so the card uses the bar below instead.
     expect(host.querySelectorAll('.wl-body-leaders')).toHaveLength(0)
     expect(rows().every(r => r.querySelector('.wl-bench-dot'))).toBe(true)
+  })
+})
+
+describe('the quarter bar on the card', () => {
+  it('gives every benefit its own segment, in the order the day earns them', () => {
+    mount({ ml: 0, goal: 2000, size: 'sm', showBenefits: true, compact: true })
+    expect(bars()).toHaveLength(4)
+    // One bar per row, so a label can never sit over someone else's segment.
+    rows().forEach(r => expect(r.querySelectorAll('.wl-quarter-bar')).toHaveLength(1))
+    expect(rows().map(r => r.querySelector('.wl-bench-title').textContent)).toEqual([
+      'Fewer headaches', 'Clearer head', 'Less hungry', 'Stronger in the session',
+    ])
+  })
+
+  it('fills each segment only across the quarter that ends at its benefit', () => {
+    // 1000 of 2000 is exactly half, so the quarter that ends at 50% is finished and the one
+    // ending at 75% has not started.
+    mount({ ml: 1000, goal: 2000, size: 'sm', showBenefits: true, compact: true })
+    expect(fillWidth(0)).toBe('100.0%')
+    expect(fillWidth(1)).toBe('100.0%')
+    expect(fillWidth(2)).toBe('0.0%')
+    expect(fillWidth(3)).toBe('0.0%')
+  })
+
+  it('shows a part-drunk quarter rather than waiting for the next one', () => {
+    // 750 of 2000 is 37.5%: half way through the quarter that ends at 50%.
+    mount({ ml: 750, goal: 2000, size: 'sm', showBenefits: true, compact: true })
+    expect(fillWidth(0)).toBe('100.0%')
+    expect(fillWidth(1)).toBe('50.0%')
+  })
+
+  it('never fills a segment past full, however much is logged', () => {
+    mount({ ml: 5000, goal: 2000, size: 'sm', showBenefits: true, compact: true })
+    fills().forEach((_, i) => expect(fillWidth(i)).toBe('100.0%'))
+  })
+
+  it('is empty when nothing has been drunk', () => {
+    mount({ ml: 0, goal: 2000, size: 'sm', showBenefits: true, compact: true })
+    fills().forEach((_, i) => expect(fillWidth(i)).toBe('0.0%'))
+    expect(onRows()).toHaveLength(0)
+  })
+
+  it('stays out of the sheet, which keeps the leaders and the reasons', () => {
+    mount({ ml: 500, goal: 2000, size: 'lg', showBenefits: true })
+    expect(bars()).toHaveLength(0)
+    expect(host.querySelectorAll('.wl-body-leaders')).toHaveLength(4)
+    expect(host.textContent).toContain('Mild dehydration is a common trigger.')
+  })
+
+  it('is not read out twice — the list already carries the words', () => {
+    mount({ ml: 500, goal: 2000, size: 'sm', showBenefits: true, compact: true })
+    bars().forEach(b => expect(b.getAttribute('aria-hidden')).toBe('true'))
   })
 })

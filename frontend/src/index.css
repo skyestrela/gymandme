@@ -2090,7 +2090,7 @@ body.no-tabbar.resting #toast{bottom:calc(100px + var(--sab))}
 .wl-bench.wide{align-items:flex-start;gap:16px}
 .wl-figure{flex:none;display:flex;flex-direction:column;align-items:center;gap:3px}
 .wl-body{display:block;overflow:visible}
-.wl-body.sm{width:60px;height:85px}
+.wl-body.sm{width:76px;height:108px}
 .wl-body.lg{width:104px;height:147px}
 .wl-body-shell{fill:var(--surface-2)}
 .wl-body-line{fill:none;stroke:var(--label-4);stroke-width:1.6;stroke-linejoin:round}
@@ -2126,10 +2126,17 @@ body.no-tabbar.resting #toast{bottom:calc(100px + var(--sab))}
 /* On the card the list is four titles and nothing else: enough to remember what you are
    drinking towards, short enough that it does not push the other two rows off the screen.
    The reasons behind them live in the sheet, which has the room for them. */
-.wl-bench-list.compact{margin-top:6px}
-.wl-bench-list.compact .wl-bench-row{padding:5px 0;align-items:center}
+/* On the card the four benefits are laid out as four equal columns, each with its own segment of
+   the day's goal directly above its label. The columns are equal by construction — nothing here
+   is absolutely positioned — so a label cannot drift off the segment it belongs to, and the row
+   fills left to right in step with the body. The reasons behind each benefit live in the sheet,
+   which has the room for them. */
+.wl-bench-list.compact{margin-top:12px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.wl-bench-list.compact .wl-bench-row{flex-direction:column;align-items:flex-start;gap:5px;padding:0}
 .wl-bench-list.compact .wl-bench-dot{margin-top:0}
-.wl-bench-list.compact .wl-bench-title{font-size:12.5px}
+.wl-bench-list.compact .wl-bench-title{font-size:12px;line-height:1.3}
+.wl-quarter-bar{display:block;width:100%;height:5px;border-radius:3px;background:var(--surface-3);overflow:hidden}
+.wl-quarter-fill{display:block;height:100%;border-radius:3px;background:var(--blue);transition:width var(--med) var(--ease)}
 /* The leaders are drawn at fixed coordinates inside the body (see BEN in WaterBody.jsx), so they
    only line up while .wl-figure and .wl-body keep the sizes set above — the arrows are not
    measured, and changing either size without moving BEN will misalign them. */
