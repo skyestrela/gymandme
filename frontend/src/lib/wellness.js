@@ -13,6 +13,7 @@
  */
 
 import { isoOf, todayISO, uid } from './format.js'
+import { normalizeMediaRef } from './media-refs.js'
 import { effectiveRoutineIds, lastBW } from './history.js'
 import { isPlantDiet, macroPlan, sessionsPerWeek, toKg } from './macros.js'
 
@@ -398,7 +399,7 @@ export function foodTotal(food, d) {
 }
 
 /** A food entry, with an id and the energy it works out to when only macros were given. */
-export function foodEntry({ name, kcal, p, c, f, d, at }) {
+export function foodEntry({ name, kcal, p, c, f, d, at, media }) {
   const P = Math.max(0, Number(p) || 0)
   const C = Math.max(0, Number(c) || 0)
   const F = Math.max(0, Number(f) || 0)
@@ -414,9 +415,15 @@ export function foodEntry({ name, kcal, p, c, f, d, at }) {
     p: round1(P),
     c: round1(C),
     f: round1(F),
+    // Normalised on the way in: a ref that is malformed is dropped here rather than stored
+    // and trusted until something downstream tried to draw it.
+    media: normalizeMediaRef(media),
     _ts: Date.now(),
   }
 }
+
+/** A logged food entry's photo, or null. A bad stored ref reads as no photo, never as a crash. */
+export const foodMedia = entry => (entry && entry.media ? normalizeMediaRef(entry.media) : null)
 
 /** `food` with `entry` added (newest last). */
 export function addFood(food, entry) {

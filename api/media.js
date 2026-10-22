@@ -300,6 +300,11 @@ export function referencedHashes(state) {
     if (!isObj(w) || !Array.isArray(w.media)) continue;
     for (const m of w.media) if (isObj(m)) ref(m);
   }
+  // A photo on a logged food entry is media like any other: without this it is never
+  // uploaded, and the clean-up then takes a file the saved entry still points at.
+  for (const f of Array.isArray(state.food) ? state.food : []) {
+    if (isObj(f) && isObj(f.media)) ref(f.media);
+  }
   return out;
 }
 

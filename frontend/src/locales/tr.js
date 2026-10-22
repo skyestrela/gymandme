@@ -2107,6 +2107,7 @@ export default {
   'How much?': 'Ne kadar?',
   'kcal per 100 g': '100 g başına kcal',
   'Search foods': 'Gıda ara',
+  'Add a photo': 'Fotoğraf ekle',
 }
 
 

@@ -2107,6 +2107,7 @@ export default {
   'How much?': '얼마나?',
   'kcal per 100 g': '100 g당 kcal',
   'Search foods': '음식 검색',
+  'Add a photo': '사진 추가',
 }
 
 

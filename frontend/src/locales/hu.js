@@ -2110,6 +2110,7 @@ export default {
   'How much?': 'Mennyit?',
   'kcal per 100 g': 'kcal / 100 g',
   'Search foods': 'Ételek keresése',
+  'Add a photo': 'Fotó hozzáadása',
 }
 
 

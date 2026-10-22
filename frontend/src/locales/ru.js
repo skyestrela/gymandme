@@ -2111,6 +2111,7 @@ export default {
   'How much?': 'Сколько?',
   'kcal per 100 g': 'ккал на 100 г',
   'Search foods': 'Поиск продуктов',
+  'Add a photo': 'Добавить фото',
 }
 
 

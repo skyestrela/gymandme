@@ -2160,6 +2160,7 @@ export default {
   'How much?': 'كم؟',
   'kcal per 100 g': 'سعرة لكل 100 غرام',
   'Search foods': 'ابحث عن الطعام',
+  'Add a photo': 'أضف صورة',
 }
 
 

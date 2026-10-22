@@ -13,9 +13,10 @@ import { t, tn, dateLocale, instrFor, exerciseNameFor, exerciseNameClass, getLan
 import { nav, closeThenNav, navToWorkout } from './lib/nav.js'
 import { buildStarterPlan, starterPlanDays, starterPlanOptions } from './lib/starter.js'
 import Media, { Thumb } from './components/Media.jsx'
-import CustomMediaField from './components/CustomMediaField.jsx'
+import CustomMediaField, { useMediaPicker } from './components/CustomMediaField.jsx'
 import WorkoutMediaSection, { workoutMediaCount } from './components/WorkoutMedia.jsx'
 import { mediaOf, normalizeMediaRef, cleanUrl, workoutMediaOf } from './lib/media-refs.js'
+import { CustomThumb } from './components/CustomMedia.jsx'
 import { syncMedia } from './lib/media-sync.js'
 import LineChart from './components/LineChart.jsx'
 import Stepper from './components/Stepper.jsx'
@@ -56,7 +57,7 @@ import { stampWorkout } from './lib/sync-merge.js'
 import { weeklyWeights } from './lib/bodyweight.js'
 import {
   DEFAULT_FAST, FAST_PRESETS, WATER_QUICK, dayEssentials, essentialsMonth, fastElapsedMs,
-  fastHitGoal, fastPreset, fastRemainingMs, fastStreak, foodEntry, foodOn, foodTotal, goalOf,
+  fastHitGoal, fastPreset, fastRemainingMs, fastStreak, foodEntry, foodMedia, foodOn, foodTotal, goalOf,
   isFasting, profilePlan, addFood, recentFoods, removeFood, startFast, stopFast, updateFood,
   waterGoalFor, waterGoalOf, waterSet, waterTotal,
 } from './lib/wellness.js'
@@ -433,20 +434,31 @@ function FoodSheet({ close }) {
   const [f, setF] = useState(0)
   const [picked, setPicked] = useState(null)       // the table entry behind the numbers, if any
   const [grams, setGrams] = useState(0)
+  const [media, setMedia] = useState(null)
+  const picker = useMediaPicker()
+  const photoRef = useRef(null)
 
   const matches = useMemo(() => (name.trim() && !picked ? searchFoods(name) : []), [name, picked])
   const reset = () => {
-    setEditing(null); setName(''); setKcal(0); setP(0); setC(0); setF(0); setPicked(null); setGrams(0)
+    setEditing(null); setName(''); setKcal(0); setP(0); setC(0); setF(0)
+    setPicked(null); setGrams(0); setMedia(null)
   }
   const load = e => {
     setEditing(e); setName(e.name); setKcal(e.kcal); setP(e.p); setC(e.c); setF(e.f)
+    setMedia(foodMedia(e))
+  }
+  const onPhoto = async ev => {
+    const file = ev.target.files && ev.target.files[0]
+    ev.target.value = ''            // picking the same file again still fires onChange
+    const got = await picker.pick(file)
+    if (got) setMedia(got)
   }
   const save = () => {
     // A picked food records the size with it: "Walnuts, 30 g" is a log you can read later.
     const label = picked ? foodLabel(picked, grams) : name.trim()
     if (!label) { toast(t('Give it a name')); return }
     update(s => {
-      const entry = foodEntry({ name: label, kcal, p, c, f, d, at: editing?.at })
+      const entry = foodEntry({ name: label, kcal, p, c, f, d, at: editing?.at, media })
       s.food = editing ? updateFood(s.food, { ...entry, id: editing.id, at: editing.at }) : addFood(s.food, entry)
     })
     reset()
@@ -484,6 +496,7 @@ function FoodSheet({ close }) {
       <div key={e.id} className={'row between' + (editing?.id === e.id ? ' ed' : '')}
         style={{ padding: '9px 0', borderBottom: '1px solid var(--surface-2)', cursor: 'pointer' }}
         onClick={() => load(e)}>
+        {foodMedia(e) && <span className="food-thumb"><CustomThumb ex={{ custom: true, media: foodMedia(e) }} /></span>}
         <div style={{ minWidth: 0 }}>
           <div className="ttl">{e.name}</div>
           <div className="dim small">{fmtNum(e.kcal)} kcal · P {fmtNum(e.p)} · C {fmtNum(e.c)} · F {fmtNum(e.f)}</div>
@@ -524,6 +537,21 @@ function FoodSheet({ close }) {
         {foodLabel(picked, grams)} · {fmtNum(macrosFor(picked, grams).kcal)} kcal
       </div>
     </>}
+
+    <div className="row between" style={{ gap: 10, marginTop: 12 }}>
+      <span className="small dim">{t('Add a photo')}</span>
+      <div className="cmf-act">
+        {media && <span className="cmf-thumb"><CustomThumb ex={{ custom: true, media }} /></span>}
+        {picker.showAdd && <Button size="sm" variant="tinted" icon={picker.busy ? undefined : 'image'}
+          disabled={!picker.canAdd} onClick={() => photoRef.current?.click()}>
+          {picker.busy ? t('Loading…') : media ? t('Change') : t('Add')}
+        </Button>}
+        {media && <Button size="sm" variant="ghost" icon="xmark" aria-label={t('Remove')} title={t('Remove')}
+          disabled={picker.busy} onClick={() => setMedia(null)} />}
+      </div>
+    </div>
+    <input ref={photoRef} type="file" accept="image/*" hidden onChange={onPhoto} />
+    {picker.note && <div className="small dim" style={{ marginTop: 6 }}>{picker.note}</div>}
 
     <div className="row" style={{ gap: 8, marginTop: 8 }}>
       {[

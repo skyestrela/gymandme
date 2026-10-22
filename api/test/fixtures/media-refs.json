@@ -1,5 +1,5 @@
 {
-  "about": "Which blob hashes a state references. api/media.js referencedHashes() and frontend/src/lib/media-refs.js referencedHashes() must both give `expect` (compared as sorted lists) for every `state` here: the server keeps and the client keeps exactly this set. Each of customEx[].media.hash, customEx[].media.poster.hash and the same two of every entry of workouts[].media counts on its own when it matches /^[0-9a-f]{64}$/ — deliberately looser than normalizeMediaRef, because this set decides what is kept.",
+  "about": "Which blob hashes a state references. api/media.js referencedHashes() and frontend/src/lib/media-refs.js referencedHashes() must both give `expect` (compared as sorted lists) for every `state` here: the server keeps and the client keeps exactly this set. Each of customEx[].media.hash, customEx[].media.poster.hash, the same two of every entry of workouts[].media, and both of a food[].media, count on its own when it matches /^[0-9a-f]{64}$/ — deliberately looser than normalizeMediaRef, because this set decides what is kept.",
   "referencedHashes": [
     {
       "name": "no state at all",
@@ -867,6 +867,150 @@
           ]
         },
         "workouts": []
+      },
+      "expect": []
+    },
+    {
+      "name": "food that is not a list",
+      "state": {
+        "food": {
+          "id": "f1",
+          "media": {
+            "kind": "image",
+            "hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "mime": "image/webp",
+            "size": 1000,
+            "width": 800,
+            "height": 600,
+            "at": 1
+          }
+        }
+      },
+      "expect": []
+    },
+    {
+      "name": "a food entry with a photo",
+      "state": {
+        "food": [
+          {
+            "id": "f1",
+            "d": "2026-10-21",
+            "name": "Walnuts, 30 g",
+            "media": {
+              "kind": "image",
+              "hash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "mime": "image/webp",
+              "size": 1000,
+              "width": 800,
+              "height": 600,
+              "at": 1
+            }
+          }
+        ]
+      },
+      "expect": [
+        "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      ]
+    },
+    {
+      "name": "a food photo and its poster",
+      "state": {
+        "food": [
+          {
+            "id": "f1",
+            "name": "Oats",
+            "media": {
+              "kind": "image",
+              "hash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "mime": "image/webp",
+              "size": 1000,
+              "width": 800,
+              "height": 600,
+              "at": 1,
+              "poster": {
+                "hash": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+                "mime": "image/jpeg",
+                "size": 900,
+                "width": 800,
+                "height": 600
+              }
+            }
+          }
+        ]
+      },
+      "expect": [
+        "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+      ]
+    },
+    {
+      "name": "a food entry without media",
+      "state": {
+        "food": [
+          {
+            "id": "f1",
+            "name": "Oats",
+            "kcal": 400
+          }
+        ]
+      },
+      "expect": []
+    },
+    {
+      "name": "entries that are not food are skipped",
+      "state": {
+        "food": [
+          null,
+          3,
+          "f",
+          [],
+          {
+            "id": "f1",
+            "media": {
+              "kind": "image",
+              "hash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "mime": "image/webp",
+              "size": 1000,
+              "width": 800,
+              "height": 600,
+              "at": 1
+            }
+          },
+          {
+            "id": "f2",
+            "media": {
+              "kind": "image",
+              "hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "mime": "image/webp",
+              "size": 1000,
+              "width": 800,
+              "height": 600,
+              "at": 1
+            }
+          }
+        ]
+      },
+      "expect": [
+        "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      ]
+    },
+    {
+      "name": "a malformed food hash counts on neither side",
+      "state": {
+        "food": [
+          {
+            "id": "f1",
+            "media": {
+              "kind": "image",
+              "hash": "nope",
+              "mime": "image/webp",
+              "size": 1,
+              "width": 1,
+              "height": 1
+            }
+          }
+        ]
       },
       "expect": []
     }

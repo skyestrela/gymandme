@@ -1354,6 +1354,7 @@ export const PT_BR_OVERRIDES = {
   'How much?': 'Quanto?',
   'kcal per 100 g': 'kcal por 100 g',
   'Search foods': 'Buscar alimentos',
+  'Add a photo': 'Adicionar uma foto',
 }
 
 export default { ...pt, ...PT_BR_OVERRIDES }

@@ -2107,6 +2107,7 @@ export default {
   'How much?': 'कितना?',
   'kcal per 100 g': 'प्रति 100 ग्राम कैलोरी',
   'Search foods': 'खोजें भोजन',
+  'Add a photo': 'एक फ़ोटो जोड़ें',
 }
 
 

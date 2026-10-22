@@ -2118,6 +2118,7 @@ export default {
   'How much?': 'เท่าไหร่',
   'kcal per 100 g': 'กิโลแคลอรีต่อ 100 กรัม',
   'Search foods': 'ค้นหาอาหาร',
+  'Add a photo': 'เพิ่มรูปภาพ',
 }
 
 

@@ -2107,6 +2107,7 @@ export default {
   'How much?': '多少？',
   'kcal per 100 g': '每 100 克千卡',
   'Search foods': '搜索食物',
+  'Add a photo': '添加照片',
 }
 
 

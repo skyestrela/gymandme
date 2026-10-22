@@ -2104,6 +2104,7 @@ export default {
   'How much?': 'Скільки?',
   'kcal per 100 g': 'ккал на 100 г',
   'Search foods': 'Пошук продуктів',
+  'Add a photo': 'Додати фото',
 }
 
 

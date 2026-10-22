@@ -2107,6 +2107,7 @@ export default {
   'How much?': 'Quanto?',
   'kcal per 100 g': 'kcal per 100 g',
   'Search foods': 'Cerca alimenti',
+  'Add a photo': 'Aggiungi una foto',
 }
 
 
