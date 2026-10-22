@@ -103,6 +103,11 @@ export const DEF = {
   // work out for itself: a weigh-in gives the weight, but the resting-burn formula needs a
   // height and an age as well. `macroGoal` stays empty unless you type over the plan.
   macroMode: null, heightCm: null, age: null,
+  // What you eat: 'any' | 'plant' | 'vegan' (lib/macros.js). Unlike macroMode this has a real
+  // default - nobody has to be asked about their diet before they have picked a goal, and an
+  // absent value already reads as 'any'. On a plant diet the protein floor scales up, because
+  // plant protein is less completely digested and carries less leucine.
+  diet: 'any',
   queue: null,   // a planner's floating week (lib/queue.js) — via the API, or by this rotation feature (below)
   // The in-app rotation's reusable definition — { id, sequence, label } (lib/rotation.js). Never
   // a live queue: it only ever feeds `queue`, and `queue.rotationId` says the pass is managed here.

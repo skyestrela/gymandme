@@ -2067,6 +2067,20 @@ export default {
   'Two meals in six hours. Good for cutting harder while still eating properly at both of them.': '六小時內吃兩餐。適合在兩餐都吃好的前提下更狠地減脂。',
   'Four hours, usually around training. Hard to hit your protein in a window that short, so it suits people already tracking it.': '四小時，通常圍繞訓練安排。窗口這麼短很難吃夠蛋白質，所以更適合已經在記錄的人。',
   'One meal a day. The hardest to keep and the easiest to undereat. For experienced fasters, not a starting point.': '一天一餐。最難堅持，也最容易吃不夠。適合有經驗的斷食者，不適合作為起點。',
+  'A glass before a meal cuts how much you eat. Plant food is bulkier and fills for fewer calories, so it works in your favour here.': '飯前一杯水能減少你的進食量。植物性食物體積大、熱量低卻更容易有飽足感，所以在這裡對你有利。',
+  'A glass before a meal sometimes saves you half of it. Plant food is bulkier for fewer calories, so holding steady sits comfortably.': '飯前一杯水有時能幫你省下一半。植物性食物熱量低但體積大，所以保持體重並不難受。',
+  'A glass before a big meal helps. Plant food is bulkier for fewer calories, so a surplus comes easier by adding oil and nuts than by more volume.': '大餐前喝一杯水會有幫助。植物性食物熱量低但體積大，所以盈餘更容易靠加油和堅果，而不是靠更多食物體積來達成。',
+  'Plant food carries the plan. The session is what turns it into muscle.': '植物性食物撐起這個計畫。把它變成肌肉的是訓練。',
+  'The same plate most days is the whole trick. Nothing exotic about it.': '大多數日子吃同一盤菜，這就是全部訣竅。沒什麼神秘的。',
+  'What you eat': '你吃什麼',
+  'Eating anything': '什麼都吃',
+  'Plant-based': '植物性',
+  'Vegan': '純素',
+  'No change. Your numbers come out of whatever you already eat.': '沒有變化。你的數字來自你平常吃的東西。',
+  'Dairy and eggs are fine. Plant protein digests less completely, so your protein floor goes up a little to pay for it.': '乳製品和雞蛋都沒問題。植物性蛋白質消化得沒那麼完全，所以你的蛋白質下限會略微提高來彌補。',
+  'Nothing from an animal at all. The protein arithmetic is the same as plant-based; the nutrients need more planning.': '完全不含動物來源。蛋白質的算法和植物性一樣；需要更多規劃的是營養素。',
+  'Plant protein digests less completely and carries less leucine, so your protein floor is about {0}% higher than it would be otherwise. Soy and peas are the densest; tofu, tempeh, lentils and seitan do the rest.': '植物性蛋白質消化得更不完全，亮胺酸含量也更低，所以你的蛋白質下限比平時高約 {0}%。大豆和豌豆密度最高；豆腐、天貝、扁豆和麵筋負責其餘部分。',
+  'B12 does not occur naturally in plant foods, so it comes from fortified foods or a supplement. Iron and omega-3 take more planning than they would otherwise.': 'B12 在植物性食物中天然不存在，所以只能從強化食品或補充劑中取得。鐵和 Omega-3 需要比平時更多的規劃。',
 }
 
 

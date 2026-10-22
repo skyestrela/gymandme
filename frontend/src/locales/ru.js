@@ -2078,6 +2078,20 @@ export default {
   'Two meals in six hours. Good for cutting harder while still eating properly at both of them.': 'Два приёма пищи за шесть часов. Подходит для более жёсткого дефицита, когда оба приёма всё равно полноценные.',
   'Four hours, usually around training. Hard to hit your protein in a window that short, so it suits people already tracking it.': 'Четыре часа, обычно вокруг тренировки. В таком коротком окне трудно добрать белок, поэтому это для тех, кто уже следит за ним.',
   'One meal a day. The hardest to keep and the easiest to undereat. For experienced fasters, not a starting point.': 'Один приём пищи в день. Самое трудное из соблюдать и самое лёгкое из недобрать. Для опытных, это не точка отсчёта.',
+  'A glass before a meal cuts how much you eat. Plant food is bulkier and fills for fewer calories, so it works in your favour here.': 'Стакан перед едой уменьшает то, сколько вы съедите. Растительная пища объёмнее и насыщает меньшим количеством калорий, поэтому здесь это работает на вас.',
+  'A glass before a meal sometimes saves you half of it. Plant food is bulkier for fewer calories, so holding steady sits comfortably.': 'Стакан перед едой иногда экономит вам половину. Растительная пища объёмнее при меньшем количестве калорий, поэтому удерживать вес комфортно.',
+  'A glass before a big meal helps. Plant food is bulkier for fewer calories, so a surplus comes easier by adding oil and nuts than by more volume.': 'Стакан перед большим приёмом пищи помогает. Растительная пища объёмнее при меньшем количестве калорий, поэтому профицит легче набрать, добавляя масло и орехи, а не объём.',
+  'Plant food carries the plan. The session is what turns it into muscle.': 'Растительная пища держит план. В мышцы его превращает тренировка.',
+  'The same plate most days is the whole trick. Nothing exotic about it.': 'Одно и то же блюдо в большинство дней — это и есть весь секрет. Ничего экзотического.',
+  'What you eat': 'Что вы едите',
+  'Eating anything': 'Ем что хочу',
+  'Plant-based': 'Растительная основа',
+  'Vegan': 'Веганский',
+  'No change. Your numbers come out of whatever you already eat.': 'Без изменений. Ваши цифры выводятся из того, что вы уже едите.',
+  'Dairy and eggs are fine. Plant protein digests less completely, so your protein floor goes up a little to pay for it.': 'Молочные продукты и яйца — пожалуйста. Растительный белок переваривается хуже, поэтому ваш минимум белка немного повышается, чтобы это компенсировать.',
+  'Nothing from an animal at all. The protein arithmetic is the same as plant-based; the nutrients need more planning.': 'Ничего животного происхождения. Расчёт белка такой же, как на растительной основе; больше планирования требуют питательные вещества.',
+  'Plant protein digests less completely and carries less leucine, so your protein floor is about {0}% higher than it would be otherwise. Soy and peas are the densest; tofu, tempeh, lentils and seitan do the rest.': 'Растительный белок переваривается хуже и содержит меньше лейцина, поэтому ваш минимум белка примерно на {0}% выше обычного. Самыми плотными являются соя и горох; тофу, темпе, чечевица и сетан делают остальное.',
+  'B12 does not occur naturally in plant foods, so it comes from fortified foods or a supplement. Iron and omega-3 take more planning than they would otherwise.': 'B12 в растительных продуктах в природе не встречается, поэтому он поступает из обогащённых продуктов или добавки. Железо и омега-3 требуют больше планирования, чем обычно.',
 }
 
 

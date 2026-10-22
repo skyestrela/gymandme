@@ -2127,6 +2127,20 @@ export default {
   'Two meals in six hours. Good for cutting harder while still eating properly at both of them.': 'وجبتان في ست ساعات. مناسب للخفض بشكل أكبر مع الأكل الجيد في كلتيهما.',
   'Four hours, usually around training. Hard to hit your protein in a window that short, so it suits people already tracking it.': 'أربع ساعات، غالباً حول التمرين. يصعب بلوغ البروتين في نافذة قصيرة بهذا الشكل، لذا يناسب من يتابعه أصلاً.',
   'One meal a day. The hardest to keep and the easiest to undereat. For experienced fasters, not a starting point.': 'وجبة واحدة في اليوم. الأصعب في الاستمرار والأسهل في نقص الأكل. لمن اعتاد الصيام، لا كبداية.',
+  'A glass before a meal cuts how much you eat. Plant food is bulkier and fills for fewer calories, so it works in your favour here.': 'كوب قبل الوجبة يقلل مما تأكل. الغذاء النباتي أكبر حجمًا ويشبع بسعرات أقل، لذا هنا يعمل لصالحك.',
+  'A glass before a meal sometimes saves you half of it. Plant food is bulkier for fewer calories, so holding steady sits comfortably.': 'كوب قبل الوجبة يوفّر عليك نصفها أحيانًا. الغذاء النباتي أكبر حجمًا بسعرات أقل، لذا الثبات على الوزن مريح.',
+  'A glass before a big meal helps. Plant food is bulkier for fewer calories, so a surplus comes easier by adding oil and nuts than by more volume.': 'كوب قبل الوجبة الكبيرة يساعد. الغذاء النباتي أكبر حجمًا بسعرات أقل، لذا الوصول إلى الفائض أسهل بإضافة زيت ومكسرات لا بزيادة الحجم.',
+  'Plant food carries the plan. The session is what turns it into muscle.': 'الغذاء النباتي يحمل الخطة. التدريب هو ما يحوّله إلى عضلة.',
+  'The same plate most days is the whole trick. Nothing exotic about it.': 'الطبق نفسه في معظم الأيام هو السر كله. لا شيء غريب فيه.',
+  'What you eat': 'ما تأكله',
+  'Eating anything': 'آكل ما أرغب',
+  'Plant-based': 'قاعدة نباتية',
+  'Vegan': 'نباتي صرف',
+  'No change. Your numbers come out of whatever you already eat.': 'لا تغيير. أرقامك تأتي مما تأكله أصلاً.',
+  'Dairy and eggs are fine. Plant protein digests less completely, so your protein floor goes up a little to pay for it.': 'منتجات الألبان والبيض لا مشكلة فيها. بروتين النبات يُهضم أقل اكتمالاً، لذا يرتفع الحد الأدنى لبروتينك قليلاً للتعويض.',
+  'Nothing from an animal at all. The protein arithmetic is the same as plant-based; the nutrients need more planning.': 'لا شيء من أصل حيواني. حساب البروتين هو نفسه في النظام النباتي، لكن العناصر الغذائية تحتاج تخطيطًا أكثر.',
+  'Plant protein digests less completely and carries less leucine, so your protein floor is about {0}% higher than it would be otherwise. Soy and peas are the densest; tofu, tempeh, lentils and seitan do the rest.': 'البروتين النباتي يُهضم أقل اكتمالاً ويحمل ليوسين أقل، لذا الحد الأدنى لبروتينك أعلى بنحو {0}% مما كان سيكون. الصويا والبازلاء هما الأكثر كثافة؛ والتوفو والتمبتي والعدس والسيتان تتولى الباقي.',
+  'B12 does not occur naturally in plant foods, so it comes from fortified foods or a supplement. Iron and omega-3 take more planning than they would otherwise.': 'B12 لا يوجد طبيعيًا في الغذاء النباتي، لذا يأتي من الأغذية المدعّمة أو من مكمّل غذائي. الحديد وأوميغا-3 يحتاجان تخطيطًا أكثر من المعتاد.',
 }
 
 

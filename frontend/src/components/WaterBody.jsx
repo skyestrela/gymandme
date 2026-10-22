@@ -46,7 +46,7 @@ const BEN_GEO = [
 // below the head so they run out of water rather than out of body.
 const BUBBLES = [[46, 0], [61, -1.15], [73, -2.3], [52, -3.45], [68, -4.6]]
 
-export default function WaterBody({ ml, goal, mode = 'maintain', size = 'sm', showBenefits = false, compact = false }) {
+export default function WaterBody({ ml, goal, mode = 'maintain', diet, size = 'sm', showBenefits = false, compact = false }) {
   // useId keeps the clip paths apart when a card and a sheet are both on screen. React's format
   // has changed between majors, so strip anything that is not safe inside url(#…).
   const raw = useId()
@@ -58,8 +58,8 @@ export default function WaterBody({ ml, goal, mode = 'maintain', size = 'sm', sh
   const top = 170 - 170 * pct
   const left = Math.max(0, Math.round(g - m))
 
-  // Geometry is fixed; the wording follows the goal.
-  const BEN = BEN_GEO.map((g, i) => ({ ...g, ...waterBenefits(mode)[i] }))
+  // Geometry is fixed; the wording follows the goal and the diet.
+  const BEN = BEN_GEO.map((g, i) => ({ ...g, ...waterBenefits(mode, diet)[i] }))
 
   const shapes = <>
     <circle cx={HEAD.cx} cy={HEAD.cy} r={HEAD.r} />

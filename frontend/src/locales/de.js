@@ -2094,6 +2094,20 @@ export default {
   'Two meals in six hours. Good for cutting harder while still eating properly at both of them.': 'Zwei Mahlzeiten in sechs Stunden. Gut für einen härteren Cut, wenn du bei beiden trotzdem richtig isst.',
   'Four hours, usually around training. Hard to hit your protein in a window that short, so it suits people already tracking it.': 'Vier Stunden, meist rund um das Training. Protein in einem so kurzen Fenster zu erreichen ist schwer, also passt das für alle, die ihren Fortschritt schon messen.',
   'One meal a day. The hardest to keep and the easiest to undereat. For experienced fasters, not a starting point.': 'Eine Mahlzeit am Tag. Am schwersten zu halten und am leichtesten zu wenig zu essen. Für Erfahrene, nicht als Einstieg.',
+  'A glass before a meal cuts how much you eat. Plant food is bulkier and fills for fewer calories, so it works in your favour here.': 'Ein Glas vor dem Essen senkt, wie viel du isst. Pflanzenkost hat mehr Volumen und sättigt bei weniger Kalorien, also wirkt es hier zu deinen Gunsten.',
+  'A glass before a meal sometimes saves you half of it. Plant food is bulkier for fewer calories, so holding steady sits comfortably.': 'Ein Glas vor dem Essen spart dir manchmal die Hälfte. Pflanzenkost hat mehr Volumen bei weniger Kalorien, das Halten fällt dir also leichter.',
+  'A glass before a big meal helps. Plant food is bulkier for fewer calories, so a surplus comes easier by adding oil and nuts than by more volume.': 'Ein Glas vor einer großen Mahlzeit hilft. Pflanzenkost hat mehr Volumen bei weniger Kalorien, das Surplus kommt also leichter durch Öl und Nüsse als durch mehr Masse.',
+  'Plant food carries the plan. The session is what turns it into muscle.': 'Pflanzenkost trägt den Plan. Das Training macht daraus Muskel.',
+  'The same plate most days is the whole trick. Nothing exotic about it.': 'Das gleiche Gericht an den meisten Tagen ist der ganze Trick. Nichts Exotisches daran.',
+  'What you eat': 'Was du isst',
+  'Eating anything': 'Ich esse, was ich will',
+  'Plant-based': 'Pflanzenbasiert',
+  'Vegan': 'Vegan',
+  'No change. Your numbers come out of whatever you already eat.': 'Keine Änderung. Deine Zahlen ergeben sich aus dem, was du ohnehin isst.',
+  'Dairy and eggs are fine. Plant protein digests less completely, so your protein floor goes up a little to pay for it.': 'Milchprodukte und Eier sind in Ordnung. Pflanzliches Protein wird weniger vollständig verdaut, deshalb steigt dein Proteinminimum etwas, um das auszugleichen.',
+  'Nothing from an animal at all. The protein arithmetic is the same as plant-based; the nutrients need more planning.': 'Nichts vom Tier. Die Proteinrechnung ist dieselbe wie bei pflanzenbasiert; die Nährstoffe brauchen mehr Planung.',
+  'Plant protein digests less completely and carries less leucine, so your protein floor is about {0}% higher than it would be otherwise. Soy and peas are the densest; tofu, tempeh, lentils and seitan do the rest.': 'Pflanzliches Protein wird weniger vollständig verdaut und liefert weniger Leucin, deshalb liegt dein Proteinminimum etwa {0}% höher, als es sonst wäre. Soja und Erbse sind die dichtesten; Tofu, Tempeh, Linsen und Seitan übernehmen den Rest.',
+  'B12 does not occur naturally in plant foods, so it comes from fortified foods or a supplement. Iron and omega-3 take more planning than they would otherwise.': 'B12 kommt in pflanzlichen Lebensmitteln nicht von Natur aus vor, also kommt es aus angereicherten Lebensmitteln oder einem Präparat. Eisen und Omega-3 brauchen mehr Planung als sonst.',
 }
 
 

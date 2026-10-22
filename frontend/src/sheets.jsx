@@ -60,7 +60,7 @@ import {
   addFood, recentFoods, removeFood, startFast, stopFast, updateFood, waterGoalFor, waterGoalOf,
   waterSet, waterTotal,
 } from './lib/wellness.js'
-import { clampGoal, sessionsPerWeek } from './lib/macros.js'
+import { clampGoal, DIETS, dietOf, PLANT_PROTEIN_FACTOR, sessionsPerWeek } from './lib/macros.js'
 import { workoutText } from './lib/workout-text.js'
 import { copyText } from './lib/clipboard.js'
 import { queueRemaining, pinState } from './lib/queue.js'
@@ -311,7 +311,7 @@ function WaterSheet({ close }) {
     <Slider value={Math.min(ml, 6000)} min={0} max={6000} step={50} onChange={setMl} />
 
     <div style={{ marginTop: 18 }}>
-      <WaterBody ml={ml} goal={goal} mode={profilePlan(st).mode} size="lg" showBenefits />
+      <WaterBody ml={ml} goal={goal} mode={profilePlan(st).mode} diet={profilePlan(st).diet} size="lg" showBenefits />
     </div>
 
     {suggestion && Math.abs(suggestion.ml - goal) >= 100 && <div className="row between" style={{ gap: 10, marginTop: 14 }}>
@@ -533,11 +533,19 @@ const macroModeHint = id => (id === 'cut' ? t('A fifth below what you burn')
   : id === 'bulk' ? t('A tenth above what you burn')
   : t('Exactly what you burn'))
 
+const dietLabel = id => (id === 'vegan' ? t('Vegan')
+  : id === 'plant' ? t('Plant-based')
+  : t('Eating anything'))
+const dietHint = id => (id === 'vegan' ? t('Nothing from an animal at all. The protein arithmetic is the same as plant-based; the nutrients need more planning.')
+  : id === 'plant' ? t('Dairy and eggs are fine. Plant protein digests less completely, so your protein floor goes up a little to pay for it.')
+  : t('No change. Your numbers come out of whatever you already eat.'))
+
 function MacroSheet({ close }) {
   const st = useStore(s => s.S)
   const plan = profilePlan(st)
   const unit = st.unit || 'kg'
   const mode = st.macroMode || 'maintain'
+  const diet = dietOf(st.diet).id
   const spw = sessionsPerWeek(st.workouts, 8)
 
   const [height, setHeight] = useState(st.heightCm || '')
@@ -553,6 +561,21 @@ function MacroSheet({ close }) {
   const pick = id => {
     update(s => { s.macroMode = id; s.macroGoal = {} })
     setDraft(null)
+  }
+  const pickDiet = id => {
+    update(s => {
+      s.diet = id
+      // A typed number that the moved floor would now refuse has to be re-read through it.
+      // Otherwise raising the floor leaves the override sitting below the stated minimum.
+      const next = profilePlan(s)
+      const over = { ...(s.macroGoal || {}) }
+      for (const k of ['kcal', 'p', 'c', 'f']) {
+        const r = clampGoal(over[k], next, k)
+        if (r) over[k] = r.value
+        else delete over[k]
+      }
+      s.macroGoal = over
+    })
   }
   const saveBody = () => {
     update(s => {
@@ -602,6 +625,17 @@ function MacroSheet({ close }) {
     </div>
     <div className="dim small" style={{ marginBottom: 16 }}>{macroModeHint(mode)}</div>
 
+    <div className="dim small" style={{ marginBottom: 6 }}>{t('What you eat')}</div>
+    <div className="chips">
+      {DIETS.map(d => (
+        <button key={d.id} className={'chip' + (d.id === diet ? ' on' : '')} aria-pressed={d.id === diet}
+          onClick={() => pickDiet(d.id)}>
+          {dietLabel(d.id)}
+        </button>
+      ))}
+    </div>
+    <div className="dim small" style={{ marginTop: 6, marginBottom: 16 }}>{dietHint(diet)}</div>
+
     {plan.ok ? <>
       <div className="wl-line">
         <span className="dim small">{t('Resting burn')}</span>
@@ -631,6 +665,16 @@ function MacroSheet({ close }) {
           : t('Holding steady — your weight should not move')}
         {plan.etaWeeks ? ' · ' + t('{0} weeks to {1}', plan.etaWeeks, fmtNum(st.targetW) + ' ' + unit) : ''}
       </div>
+
+      {diet !== 'any' && <>
+        <div className="dim small" style={{ marginTop: 8 }}>
+          {t('Plant protein digests less completely and carries less leucine, so your protein floor is about {0}% higher than it would be otherwise. Soy and peas are the densest; tofu, tempeh, lentils and seitan do the rest.',
+            fmtNum(Math.round((PLANT_PROTEIN_FACTOR - 1) * 100)))}
+        </div>
+        {diet === 'vegan' && <div className="dim small" style={{ marginTop: 6 }}>
+          {t('B12 does not occur naturally in plant foods, so it comes from fortified foods or a supplement. Iron and omega-3 take more planning than they would otherwise.')}
+        </div>}
+      </>}
 
       <h4 className="sec" style={{ marginTop: 20 }}>{t('The minimum you require')}</h4>
       <div className="dim small">{t('Your targets never go below these, and a number you type under one is raised to it.')}</div>

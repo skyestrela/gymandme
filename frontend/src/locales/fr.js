@@ -2074,6 +2074,20 @@ export default {
   'Two meals in six hours. Good for cutting harder while still eating properly at both of them.': 'Deux repas en six heures. Bien pour couper plus fort tout en mangeant correctement aux deux.',
   'Four hours, usually around training. Hard to hit your protein in a window that short, so it suits people already tracking it.': 'Quatre heures, en général autour de l’entraînement. Difficile d’atteindre tes protéines dans une fenêtre aussi courte, donc c’est fait pour ceux qui les suivent déjà.',
   'One meal a day. The hardest to keep and the easiest to undereat. For experienced fasters, not a starting point.': 'Un repas par jour. Le plus dur à tenir et le plus facile de manger trop peu. Pour les habitués du jeûne, pas pour un début.',
+  'A glass before a meal cuts how much you eat. Plant food is bulkier and fills for fewer calories, so it works in your favour here.': 'Un verre avant le repas réduit ce que tu manges. La nourriture végétale est plus volumineuse et rassasie pour moins de calories, donc ici elle joue en ta faveur.',
+  'A glass before a meal sometimes saves you half of it. Plant food is bulkier for fewer calories, so holding steady sits comfortably.': 'Un verre avant le repas t’épargne parfois la moitié. La nourriture végétale est plus volumineuse pour moins de calories, donc tenir son poids est confortable.',
+  'A glass before a big meal helps. Plant food is bulkier for fewer calories, so a surplus comes easier by adding oil and nuts than by more volume.': 'Un verre avant un gros repas aide. La nourriture végétale est plus volumineuse pour moins de calories, le surplus vient donc plus facilement en ajoutant de l’huile et des noix que du volume.',
+  'Plant food carries the plan. The session is what turns it into muscle.': 'La nourriture végétale porte le plan. C’est la séance qui en fait du muscle.',
+  'The same plate most days is the whole trick. Nothing exotic about it.': 'La même assiette presque tous les jours, c’est tout le truc. Rien d’exotique là-dedans.',
+  'What you eat': 'Ce que tu manges',
+  'Eating anything': 'Je mange ce que je veux',
+  'Plant-based': 'À base de plantes',
+  'Vegan': 'Végane',
+  'No change. Your numbers come out of whatever you already eat.': 'Aucun changement. Tes chiffres découlent de ce que tu manges déjà.',
+  'Dairy and eggs are fine. Plant protein digests less completely, so your protein floor goes up a little to pay for it.': 'Produits laitiers et œufs, très bien. Les protéines végétales se digèrent moins complètement, donc ton minimum de protéines monte un peu pour compenser.',
+  'Nothing from an animal at all. The protein arithmetic is the same as plant-based; the nutrients need more planning.': 'Rien d’origine animale. Le calcul des protéines est le même que sur une base végétale ; ce sont les nutriments qui demandent plus de planification.',
+  'Plant protein digests less completely and carries less leucine, so your protein floor is about {0}% higher than it would be otherwise. Soy and peas are the densest; tofu, tempeh, lentils and seitan do the rest.': 'Les protéines végétales se digèrent moins complètement et apportent moins de leucine, donc ton minimum de protéines est environ {0} % plus élevé qu’il ne le serait. Le soja et le pois sont les plus denses ; le tofu, le tempeh, les lentilles et le seitan font le reste.',
+  'B12 does not occur naturally in plant foods, so it comes from fortified foods or a supplement. Iron and omega-3 take more planning than they would otherwise.': 'La B12 n’existe pas naturellement dans les aliments végétaux : elle vient des aliments enrichis ou d’un complément. Le fer et les oméga-3 demandent plus de planification que d’habitude.',
 }
 
 

@@ -519,3 +519,34 @@ describe("the day's line follows the goal too", () => {
     }
   })
 })
+
+describe('diet in the water row', () => {
+  it('gives a plant diet its own third row in every goal, because volume per calorie differs', () => {
+    const anyRows = waterBenefits('bulk', 'any')
+    const plantRows = waterBenefits('bulk', 'plant')
+    expect(plantRows[2].note).not.toBe(anyRows[2].note)
+    // The other three are hydration or training and do not care what you eat.
+    expect(plantRows[0]).toEqual(anyRows[0])
+    expect(plantRows[1]).toEqual(anyRows[1])
+    expect(plantRows[3]).toEqual(anyRows[3])
+    for (const mode of ['cut', 'maintain']) {
+      expect(waterBenefits(mode, 'vegan')[2].note).not.toBe(waterBenefits(mode, 'any')[2].note)
+    }
+  })
+
+  it('keeps the same titles on both diets, so the row does not jump as you switch', () => {
+    for (const mode of ['cut', 'maintain', 'bulk']) {
+      expect(waterBenefits(mode, 'plant')[2].title).toBe(waterBenefits(mode, 'any')[2].title)
+    }
+  })
+
+  it('gives a plant diet its own line every day, in every goal', () => {
+    const D = '2026-10-21'
+    const anyLine = waterLineFor(D, 'bulk', 'any')
+    expect(waterLineFor(D, 'bulk', 'plant')).not.toBe(anyLine)
+    expect(waterLineFor(D, 'cut', 'plant')).toBe(waterLineFor(D, 'bulk', 'plant'))
+    expect(waterLineFor(D, 'maintain', 'vegan')).toBe(waterLineFor(D, 'cut', 'plant'))
+    // No diet is the old behaviour, untouched.
+    expect(waterLineFor(D, 'bulk')).toBe(anyLine)
+  })
+})

@@ -2085,6 +2085,20 @@ export default {
   'Two meals in six hours. Good for cutting harder while still eating properly at both of them.': 'สองมื้อในหกชั่วโมง เหมาะกับการลดน้ำหนักแบบหนักกว่า โดยยังกินให้ถูกต้องทั้งสองมื้อ',
   'Four hours, usually around training. Hard to hit your protein in a window that short, so it suits people already tracking it.': 'สี่ชั่วโมง โดยปกติคือช่วงรอบเทรน ในหน้าต่างที่สั้นแค่นี้เก็บโปรตีนให้ได้ยาก จึงเหมาะกับคนที่ติดตามอยู่แล้ว',
   'One meal a day. The hardest to keep and the easiest to undereat. For experienced fasters, not a starting point.': 'วันละหนึ่งมื้อ ที่ทำยากที่สุดและกินน้อยเกินไปได้ง่ายที่สุด เหมาะกับคนที่ฝึกการถูกทางภายในมาแล้ว ไม่ใช่จุดเริ่มต้น',
+  'A glass before a meal cuts how much you eat. Plant food is bulkier and fills for fewer calories, so it works in your favour here.': 'แก้วหนึ่งใบก่อนมื้ออาหารทำให้คุณกินน้อยลง อาหารจากพืชมีปริมาณมากกว่าและอิ่มได้ด้วยแคลอรีน้อยกว่า จึงช่วยคุณในที่นี้',
+  'A glass before a meal sometimes saves you half of it. Plant food is bulkier for fewer calories, so holding steady sits comfortably.': 'แก้วหนึ่งใบก่อนมื้ออาหารบางครั้งก็ช่วยให้คุณได้ครึ่งหนึ่ง อาหารจากพืชมีปริมาณมากกว่าที่แคลอรีน้อยกว่า การคุมน้ำหนักจึงทำได้สบาย',
+  'A glass before a big meal helps. Plant food is bulkier for fewer calories, so a surplus comes easier by adding oil and nuts than by more volume.': 'แก้วหนึ่งใบก่อนมื้อใหญ่ช่วยได้ อาหารจากพืชมีปริมาณมากกว่าที่แคลอรีน้อยกว่า การทำให้ได้พลังงานเกินจึงง่ายกว่าถ้าเติมน้ำมันและถั่ว มากกว่าการกินปริมาณมากขึ้น',
+  'Plant food carries the plan. The session is what turns it into muscle.': 'อาหารจากพืชแบกรับแผนนี้ไว้ สิ่งที่เปลี่ยนมันให้เป็นกล้ามเนื้อคือการฝึก',
+  'The same plate most days is the whole trick. Nothing exotic about it.': 'จานเดิมในเกือบทุกวันคือเคล็ดลับทั้งหมด ไม่มีอะไรแปลกประหลาด',
+  'What you eat': 'สิ่งที่คุณกิน',
+  'Eating anything': 'กินอะไรก็ได้ที่อยากกิน',
+  'Plant-based': 'พืชเป็นหลัก',
+  'Vegan': 'วีแกน',
+  'No change. Your numbers come out of whatever you already eat.': 'ไม่มีการเปลี่ยนแปลง ตัวเลขของคุณมาจากสิ่งที่คุณกินอยู่แล้ว',
+  'Dairy and eggs are fine. Plant protein digests less completely, so your protein floor goes up a little to pay for it.': 'นมและไข่ก็ได้ โปรตีนจากพืชย่อยได้ไม่สมบูรณ์เท่า ค่าขั้นต่ำของโปรตีนจึงสูงขึ้นเล็กน้อยเพื่อชดเชย',
+  'Nothing from an animal at all. The protein arithmetic is the same as plant-based; the nutrients need more planning.': 'ไม่มีอะไรจากสัตว์เลย การคำนวณโปรตีนเหมือนกับการกินอาหารจากพืช ส่วนสารอาหารต้องวางแผนมากกว่า',
+  'Plant protein digests less completely and carries less leucine, so your protein floor is about {0}% higher than it would be otherwise. Soy and peas are the densest; tofu, tempeh, lentils and seitan do the rest.': 'โปรตีนจากพืชย่อยได้ไม่สมบูรณ์และมีลิวซีนน้อยกว่า ค่าขั้นต่ำของโปรตีนจึงสูงกว่าปกติประมาณ {0}% ถั่วเหลืองและลันเป็นตัวที่หนาแน่นที่สุด ส่วนเต้าหู้ เทมเป ถั่วแดง และเซตันทำหน้าที่ที่เหลือ',
+  'B12 does not occur naturally in plant foods, so it comes from fortified foods or a supplement. Iron and omega-3 take more planning than they would otherwise.': 'B12 ไม่พบตามธรรมชาติในอาหารจากพืช จึงต้องมาจากอาหารเสริมหรืออาหารเสริมเฉพาะทาง ธาตุเหล็กและโอเมก้า-3 ต้องวางแผนมากกว่าปกติ',
 }
 
 

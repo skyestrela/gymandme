@@ -14,7 +14,7 @@
 
 import { isoOf, todayISO, uid } from './format.js'
 import { effectiveRoutineIds, lastBW } from './history.js'
-import { macroPlan, sessionsPerWeek, toKg } from './macros.js'
+import { isPlantDiet, macroPlan, sessionsPerWeek, toKg } from './macros.js'
 
 // `n` days from the local day `iso`. A Date built from the parts (not from the string, which
 // parses as UTC and lands on the previous day west of Greenwich) is what keeps a streak honest
@@ -137,11 +137,19 @@ const SURPLUS_APPETITE = { need: 0.75, title: 'Easier to eat your surplus', note
 const CUT_OUTPUT = { need: 1.00, title: 'Stronger in the session', note: 'Past about 2% of your weight you start losing output.' }
 const BULK_OUTPUT = { need: 1.00, title: 'Stronger in the session', note: 'More food means more fuel for the session, and the session is where the gain comes from. Water does not build muscle, but it keeps the training that does.' }
 
-/** The four rows, ordered by when the day earns them, for the goal you are actually on. */
-export const waterBenefits = mode => {
-  if (mode === 'bulk') return [HEADACHE, HEAD, SURPLUS_APPETITE, BULK_OUTPUT]
-  if (mode === 'cut') return [HEADACHE, HEAD, CUT_APPETITE, CUT_OUTPUT]
-  return [HEADACHE, HEAD, HOLD_APPETITE, CUT_OUTPUT]
+/* Plant food is bulkier for fewer calories, which is the only reason these three exist. On a cut
+   that works for you. On a surplus it does not, and pretending otherwise would be advice that
+   quietly fails: the answer to a plant surplus is more fat and energy per plate, not more volume. */
+const PLANT_CUT_APPETITE = { need: 0.75, title: 'Less hungry', note: 'A glass before a meal cuts how much you eat. Plant food is bulkier and fills for fewer calories, so it works in your favour here.' }
+const PLANT_HOLD_APPETITE = { need: 0.75, title: 'Less hungry', note: 'A glass before a meal sometimes saves you half of it. Plant food is bulkier for fewer calories, so holding steady sits comfortably.' }
+const PLANT_SURPLUS_APPETITE = { need: 0.75, title: 'Easier to eat your surplus', note: 'A glass before a big meal helps. Plant food is bulkier for fewer calories, so a surplus comes easier by adding oil and nuts than by more volume.' }
+
+/** The four rows, ordered by when the day earns them, for the goal and diet you are on. */
+export const waterBenefits = (mode, diet) => {
+  const plant = isPlantDiet(diet)
+  if (mode === 'bulk') return [HEADACHE, HEAD, plant ? PLANT_SURPLUS_APPETITE : SURPLUS_APPETITE, BULK_OUTPUT]
+  if (mode === 'cut') return [HEADACHE, HEAD, plant ? PLANT_CUT_APPETITE : CUT_APPETITE, CUT_OUTPUT]
+  return [HEADACHE, HEAD, plant ? PLANT_HOLD_APPETITE : HOLD_APPETITE, CUT_OUTPUT]
 }
 
 /**
@@ -197,9 +205,17 @@ const WATER_LINES_CUT = [
   'Losing the weight is arithmetic. Keeping the muscle is the work.',
 ]
 
-/** Today's line, for the goal you are on. */
-export const waterLineFor = (d = todayISO(), mode = 'maintain') => {
-  const pool = mode === 'bulk' ? WATER_LINES_BULK
+/* About the diet rather than the goal, so this replaces the goal pool outright instead of
+   multiplying the rotation - a plant eater should get the plant line every day, not half of it. */
+const WATER_LINES_PLANT = [
+  'Plant food carries the plan. The session is what turns it into muscle.',
+  'The same plate most days is the whole trick. Nothing exotic about it.',
+]
+
+/** Today's line, for the goal and diet you are on. */
+export const waterLineFor = (d = todayISO(), mode = 'maintain', diet) => {
+  const pool = isPlantDiet(diet) ? WATER_LINES_PLANT
+    : mode === 'bulk' ? WATER_LINES_BULK
     : mode === 'cut' ? WATER_LINES_CUT
     : WATER_LINES
   const n = pool.length
@@ -498,6 +514,7 @@ export function profilePlan(S) {
     body: S?.body,
     sessionsPerWeek: sessionsPerWeek(S?.workouts, 8),
     mode: S?.macroMode,
+    diet: S?.diet,
     targetW: S?.targetW,
     unit: S?.unit || 'kg',
   })

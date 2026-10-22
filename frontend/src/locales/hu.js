@@ -2077,6 +2077,20 @@ export default {
   'Two meals in six hours. Good for cutting harder while still eating properly at both of them.': 'Két étkezés hat óra alatt. Jó az erősebb fogyáshoz, úgy, hogy mindkettőnél rendesen eszel.',
   'Four hours, usually around training. Hard to hit your protein in a window that short, so it suits people already tracking it.': 'Négy óra, általában az edzés körül. Ilyen rövid ablakban nehéz elérni a fehérjét, ezért azoknak való, akik már követik.',
   'One meal a day. The hardest to keep and the easiest to undereat. For experienced fasters, not a starting point.': 'Egy étkezés naponta. A legnehezebb betartani és a legkönnyebb aláenni. Tapasztalt böjtölőknek, nem kezdéshez.',
+  'A glass before a meal cuts how much you eat. Plant food is bulkier and fills for fewer calories, so it works in your favour here.': 'Egy pohár az étkezés előtt csökkenti, mennyit eszel. A növényi étel nagyobb térfogatú, és kevesebb kalóriával is jóllak, tehát itt ez neked kedvez.',
+  'A glass before a meal sometimes saves you half of it. Plant food is bulkier for fewer calories, so holding steady sits comfortably.': 'Egy pohár az étkezés előtt néha megspórol neked a felét. A növényi étel nagyobb térfogatú kevesebb kalória mellett, így a súlytartás kényelmesen megy.',
+  'A glass before a big meal helps. Plant food is bulkier for fewer calories, so a surplus comes easier by adding oil and nuts than by more volume.': 'Egy pohár egy nagy étkezés előtt segít. A növényi étel nagyobb térfogatú kevesebb kalória mellett, így a többletet könnyebb olajjal és dióval elérni, mint több térfogattal.',
+  'Plant food carries the plan. The session is what turns it into muscle.': 'A növényi étel tartja a tervet. Az edzés teszi belőle az izmot.',
+  'The same plate most days is the whole trick. Nothing exotic about it.': 'Ugyanaz a tábla a napok nagy részében ez az egész trükk. Semmi egzotikus nincs benne.',
+  'What you eat': 'Amit eszel',
+  'Eating anything': 'Bármit megeszek',
+  'Plant-based': 'Növényi alapú',
+  'Vegan': 'Vegán',
+  'No change. Your numbers come out of whatever you already eat.': 'Nincs változás. A számok abból adódnak, amit amúgy is eszel.',
+  'Dairy and eggs are fine. Plant protein digests less completely, so your protein floor goes up a little to pay for it.': 'Tejtermék és tojás rendben. A növényi fehérje emésztése kevésbé teljes, így a fehérjemeg Minimumod kicsit emelkedik, hogy ezt kiegyenlítse.',
+  'Nothing from an animal at all. The protein arithmetic is the same as plant-based; the nutrients need more planning.': 'Semmi állati eredetű. A fehérjeszámítás ugyanaz, mint a növényi alapnál; a tápanyagok igényelnek több tervezést.',
+  'Plant protein digests less completely and carries less leucine, so your protein floor is about {0}% higher than it would be otherwise. Soy and peas are the densest; tofu, tempeh, lentils and seitan do the rest.': 'A növényi fehérje kevésbé teljesen emésztődik és kevesebb leucint tartalmaz, így a fehérjemeg Minimumod körülbelül {0}%-kal magasabb a szokásosnál. A szója és a borsó a legtömörebb; a tofu, a tempeh, a lencse és a seitan teszi a többit.',
+  'B12 does not occur naturally in plant foods, so it comes from fortified foods or a supplement. Iron and omega-3 take more planning than they would otherwise.': 'A B12 természetesen nem fordul elő növényi táplálékokban, így dúsított élelmiszerből vagy kiegészítőből származik. A vas és az omega-3 több tervezést igényel a szokásosnál.',
 }
 
 

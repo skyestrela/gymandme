@@ -4,6 +4,7 @@ const INSIGHTS_KEYS = new Set(['version', 'days', 'sessions'])
 const META_KEYS = new Set(['version', 'disclosureAccepted', 'lastReadAt', 'importedSessionIds', 'dayFingerprints', 'permissions'])
 const DAY_KEYS = new Set(['date', 'steps', 'distanceM', 'heartRate', 'sources'])
 const HEART_RATE_KEYS = new Set(['samples', 'minBpm', 'maxBpm', 'avgBpm'])
+const SAMPLE_KEYS = new Set(['beatsPerMinute'])
 
 export function emptyHealthInsights() {
   return { version: HEALTH_INSIGHTS_VERSION, days: {}, sessions: {} }
@@ -77,12 +78,13 @@ function normalizeHeartRate(heartRate) {
 }
 
 export function summarizeHeartRate(samples) {
-  if (!Array.isArray(samples) || samples.length === 0) return null
+  if (!Array.isArray(samples) || samples.length === 0 || !hasCanonicalArrayKeys(samples)) return null
   let minBpm = Infinity
   let maxBpm = -Infinity
   let totalBpm = 0
   for (const sample of samples) {
-    const bpm = isPlainObject(sample) ? sample.beatsPerMinute : null
+    if (!isPlainObject(sample) || !hasOnlyKeys(sample, SAMPLE_KEYS)) return null
+    const bpm = sample.beatsPerMinute
     if (typeof bpm !== 'number' || !Number.isFinite(bpm) || bpm <= 0) return null
     if (bpm < minBpm) minBpm = bpm
     if (bpm > maxBpm) maxBpm = bpm
@@ -127,6 +129,13 @@ export function normalizeHealthDay(raw) {
 
 function canonicalStoredDay(day, normalized) {
   if (day.date !== normalized.date) return false
+
+  // The meta fingerprint is a JSON string, so a stored day has to serialise in the same
+  // key order as the normalized one or its fingerprint silently disagrees with it.
+  const storedKeys = Object.keys(day)
+  const normalizedKeys = Object.keys(normalized)
+  if (storedKeys.length !== normalizedKeys.length) return false
+  if (!storedKeys.every((key, index) => key === normalizedKeys[index])) return false
 
   for (const field of ['steps', 'distanceM']) {
     if (Object.hasOwn(day, field) !== Object.hasOwn(normalized, field)) return false
@@ -202,7 +211,7 @@ function toIsoDate(now) {
 export function reconcileHealthDays(insights, meta, days, now) {
   if (!validInsights(insights)) throw new TypeError('insights must be a valid Health Insights container')
   if (!validMeta(meta, insights.days)) throw new TypeError('meta must be a valid Health Insights metadata container')
-  if (!Array.isArray(days)) throw new TypeError('days must be an array')
+  if (!Array.isArray(days) || !hasCanonicalArrayKeys(days)) throw new TypeError('days must be an array')
 
   const updatedAt = toIsoDate(now)
   const nextDays = { ...insights.days }

@@ -2074,6 +2074,20 @@ export default {
   'Two meals in six hours. Good for cutting harder while still eating properly at both of them.': 'छह घंटों में दो भोजन। कठिन कट के लिए अच्छा, जबकि दोनों में ठीक से खाना बना रहता है।',
   'Four hours, usually around training. Hard to hit your protein in a window that short, so it suits people already tracking it.': 'चार घंटे, आमतौर पर ट्रेनिंग के आसपास। इतनी छोटी विंडो में प्रोटीन पूरा करना मुश्किल है, इसलिए यह उन लोगों के लिए है जो पहले से ट्रैक कर रहे हैं।',
   'One meal a day. The hardest to keep and the easiest to undereat. For experienced fasters, not a starting point.': 'दिन में एक भोजन। सबसे मुश्किल और कम खाने का सबसे आसान तरीका। अनुभवी फास्टर के लिए, शुरुआत के लिए नहीं।',
+  'A glass before a meal cuts how much you eat. Plant food is bulkier and fills for fewer calories, so it works in your favour here.': 'भोजन से पहले एक गिलास कितना खाएगे, उसे कम कर देता है। पौधों का भोजन ज्यादा भरा होता है और कम कैलोरी में पेट भर देता है, तो यहां आपके पक्ष में है।',
+  'A glass before a meal sometimes saves you half of it. Plant food is bulkier for fewer calories, so holding steady sits comfortably.': 'भोजन से पहले एक गिलास कभी-कभी आधा बचा लेता है। पौधों का भोजन कम कैलोरी में ज्यादा भरा होता है, इसलिए वजन बनाए रखना आराम से होता है।',
+  'A glass before a big meal helps. Plant food is bulkier for fewer calories, so a surplus comes easier by adding oil and nuts than by more volume.': 'बड़े भोजन से पहले एक गिलास मदद करता है। पौधों का भोजन कम कैलोरी में ज्यादा भरा होता है, इसलिए सरप्लस तेल और मेवे जोड़कर पाना आसान है, ज़्यादा मात्रा से नहीं।',
+  'Plant food carries the plan. The session is what turns it into muscle.': 'पौधों का भोजन योजना को सँभालता है। इसे मांस बनाता है आपकी ट्रेनिंग।',
+  'The same plate most days is the whole trick. Nothing exotic about it.': 'ज़्यादातर दिन वही एक थाली ही असली ट्रिक है। इसमें कुछ भी अजीब नहीं।',
+  'What you eat': 'आप क्या खाते हैं',
+  'Eating anything': 'जो चाहें खाता हूँ',
+  'Plant-based': 'पौधों पर आधारित',
+  'Vegan': 'शुद्ध सात्विक',
+  'No change. Your numbers come out of whatever you already eat.': 'कोई बदलाव नहीं। आपके आंकड़े आपके मौजूदा खाने से निकलते हैं।',
+  'Dairy and eggs are fine. Plant protein digests less completely, so your protein floor goes up a little to pay for it.': 'डेयरी और अंडे चलेंगे। पौधों का प्रोटीन कम पूरा पचता है, इसलिए उसकी भरपाई के लिए आपका प्रोटीन न्यूनतम थोड़ा बढ़ जाता है।',
+  'Nothing from an animal at all. The protein arithmetic is the same as plant-based; the nutrients need more planning.': 'पशु से कुछ नहीं। प्रोटीन का हिसाब वही रहता है; पोषक तत्वों की योजना ज़्यादा माँगती है।',
+  'Plant protein digests less completely and carries less leucine, so your protein floor is about {0}% higher than it would be otherwise. Soy and peas are the densest; tofu, tempeh, lentils and seitan do the rest.': 'पौधों का प्रोटीन कम पूरा पचता है और उसमें ल्यूसिन कम होता है, इसलिए आपका प्रोटीन न्यूनतम सामान्य से लगभग {0}% ऊँचा है। सोया और मटर सबसे घने हैं; टोफू, टेम्पेह, दाल और सीटान बाकी का काम करते हैं।',
+  'B12 does not occur naturally in plant foods, so it comes from fortified foods or a supplement. Iron and omega-3 take more planning than they would otherwise.': 'B12 प्राकृतिक रूप से पौधों के भोजन में नहीं मिलता, इसलिए यह फोर्टिफाइड भोजन या सप्लीमेंट से आता है। आयरन और ओमेगा-3 को सामान्य से ज़्यादा योजना चाहिए।',
 }
 
 

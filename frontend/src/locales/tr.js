@@ -2074,6 +2074,20 @@ export default {
   'Two meals in six hours. Good for cutting harder while still eating properly at both of them.': 'Altı saatte iki öğün. İkisinde de düzgün yemek yiyerek daha sert kısmak için iyi.',
   'Four hours, usually around training. Hard to hit your protein in a window that short, so it suits people already tracking it.': 'Dört saat, genellikle antrenmanın çevresinde. Bu kadar kısa bir pencerede protein hedefinize ulaşmak zor, bu yüzden zaten takip edenlere uygun.',
   'One meal a day. The hardest to keep and the easiest to undereat. For experienced fasters, not a starting point.': 'Günde bir öğün. Sürdürmesi en zor olan ve az yemek yemenizi en kolaylaştıran. Deneyimli oruçcular için, başlangıç için değil.',
+  'A glass before a meal cuts how much you eat. Plant food is bulkier and fills for fewer calories, so it works in your favour here.': 'Bir yemekten önce bir bardak, ne kadar yediğini azaltır. Bitkisel besinler daha hacimli ve daha az kaloride doyurur, yani burada lehine çalışır.',
+  'A glass before a meal sometimes saves you half of it. Plant food is bulkier for fewer calories, so holding steady sits comfortably.': 'Bir yemekten önce bir bardak bazen yarısını kazandırır. Bitkisel besinler daha az kaloride daha hacimlidir, yani kilo korumak rahat bir iş.',
+  'A glass before a big meal helps. Plant food is bulkier for fewer calories, so a surplus comes easier by adding oil and nuts than by more volume.': 'Büyük bir yemekten önce bir bardak yardımcı olur. Bitkisel besinler daha az kaloride daha hacimli olduğundan, fazlayı fazla hacimden çok yağ ve fındık ekleyerek yakalamak daha kolay.',
+  'Plant food carries the plan. The session is what turns it into muscle.': 'Bitkisel besinler planı taşır. Onu kas yapana antrenmandır.',
+  'The same plate most days is the whole trick. Nothing exotic about it.': 'Çoğu gün aynı tabak yemek bütün sırrı o. Egzotik bir yanı yok.',
+  'What you eat': 'Ne yiyorsun',
+  'Eating anything': 'İstediğimi yerim',
+  'Plant-based': 'Bitkisel beslenme',
+  'Vegan': 'Vegan',
+  'No change. Your numbers come out of whatever you already eat.': 'Değişiklik yok. Sayılar, zaten yediğinden çıkıyor.',
+  'Dairy and eggs are fine. Plant protein digests less completely, so your protein floor goes up a little to pay for it.': 'Süt ürünleri ve yumurtada sorun yok. Bitkisel protein daha az tam sindirildiğinden, bunu karşılamak için protein tabanın biraz yükselir.',
+  'Nothing from an animal at all. The protein arithmetic is the same as plant-based; the nutrients need more planning.': 'Hiçbir şey hayvansal değil. Protein hesabı bitkisel beslenmeyle aynı; besinlerin planlanması daha fazla emek istiyor.',
+  'Plant protein digests less completely and carries less leucine, so your protein floor is about {0}% higher than it would be otherwise. Soy and peas are the densest; tofu, tempeh, lentils and seitan do the rest.': 'Bitkisel protein daha az tam sindirilir ve daha az lösin içerir, bu yüzden protein tabanın normalde olacağından yaklaşık {0}% daha yüksek. Soya ve bezelye en yoğun olanlarıdır; tofu, tempeh, mercimek ve seitan gerisini halleder.',
+  'B12 does not occur naturally in plant foods, so it comes from fortified foods or a supplement. Iron and omega-3 take more planning than they would otherwise.': 'B12 doğal olarak bitkisel gıdalarda bulunmaz, bu yüzden zenginleştirilmiş gıdalardan veya bir takviyeden gelir. Demir ve omega-3 normalden daha fazla planlama gerektirir.',
 }
 
 

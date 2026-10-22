@@ -2074,6 +2074,20 @@ export default {
   'Two meals in six hours. Good for cutting harder while still eating properly at both of them.': '여섯 시간에 두 끼. 두 끼 모두 제대로 챙겨 먹으면서도 더 강하게 감량하기 좋습니다.',
   'Four hours, usually around training. Hard to hit your protein in a window that short, so it suits people already tracking it.': '네 시간, 보통 훈련 전후입니다. 이렇게 짧은 창에서 단백질 채우기는 어렵기 때문에 이미 기록하고 있는 사람에게 맞습니다.',
   'One meal a day. The hardest to keep and the easiest to undereat. For experienced fasters, not a starting point.': '하루 한 끼. 가장 지키기 어렵고 가장 많이 못 먹게 되기 쉬운 방법입니다. 경험 있는 절식자에게 맞지, 시작하기에는 아닙니다.',
+  'A glass before a meal cuts how much you eat. Plant food is bulkier and fills for fewer calories, so it works in your favour here.': '식사 전에 물 한 잔은 드시는 양을 줄여줍니다. 식물성 음식은 부피가 크고 적은 칼로리로 배가 차오르기 때문에, 여기서는 오히려 도움이 됩니다.',
+  'A glass before a meal sometimes saves you half of it. Plant food is bulkier for fewer calories, so holding steady sits comfortably.': '식사 전에 물 한 잔은 가끔 반쯤을 아껴줍니다. 식물성 음식은 적은 칼로리로 부피가 크기 때문에, 체중 유지가 편안합니다.',
+  'A glass before a big meal helps. Plant food is bulkier for fewer calories, so a surplus comes easier by adding oil and nuts than by more volume.': '큰 식사 전에 물 한 잔은 도움이 됩니다. 식물성 음식은 적은 칼로리로 부피가 크기 때문에, 더 많은 부피가 아니라 기름과 견과류를 더해 초과분을 맞추는 편이 쉽습니다.',
+  'Plant food carries the plan. The session is what turns it into muscle.': '식물성 음식이 계획을 지탱합니다. 그것을 근육으로 바꾸는 것은 훈련입니다.',
+  'The same plate most days is the whole trick. Nothing exotic about it.': '거의 매일 같은 접시 먹는 것이 핵심입니다. 특별한 건 하나도 없습니다.',
+  'What you eat': '드시는 것',
+  'Eating anything': '먹고 싶은 것을 먹습니다',
+  'Plant-based': '식물성 기반',
+  'Vegan': '비건',
+  'No change. Your numbers come out of whatever you already eat.': '변화 없음. 수치는 지금 드시는 음식에서 나옵니다.',
+  'Dairy and eggs are fine. Plant protein digests less completely, so your protein floor goes up a little to pay for it.': '유제품과 달걀도 괜찮습니다. 식물성 단백질은 덜 완전히 소화되므로, 그만큼 단백질 기준이 조금 올라갑니다.',
+  'Nothing from an animal at all. The protein arithmetic is the same as plant-based; the nutrients need more planning.': '동물 성분은 전혀 없습니다. 단백질 계산은 식물성 기준과 같고, 영양소는 더 계획이 필요합니다.',
+  'Plant protein digests less completely and carries less leucine, so your protein floor is about {0}% higher than it would be otherwise. Soy and peas are the densest; tofu, tempeh, lentils and seitan do the rest.': '식물성 단백질은 덜 완전히 소화되고 류신도 적어, 단백질 기준이 평소보다 약 {0}% 높습니다.콩과 완두콩이 가장 밀도가 높고, 두부·템페·렌틸콩·세이탄이 나머지를 채웁니다.',
+  'B12 does not occur naturally in plant foods, so it comes from fortified foods or a supplement. Iron and omega-3 take more planning than they would otherwise.': 'B12는 식물성 음식에 자연적으로 없으므로 강화식품이나 보충제로得来야 합니다. 철분과 오메가-3도 평소보다 더 계획이 필요합니다.',
 }
 
 

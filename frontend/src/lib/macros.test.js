@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
-  FAT_FLOOR_PER_KG, KCAL_PER_KG, PROTEIN_FLOOR, RATE_BAND, activityFactor, bmrOf, clampGoal, fromKg,
-  macroPlan, maintenanceOf, modeOf, sessionsPerWeek, toKg,
+  DIETS, FAT_FLOOR_PER_KG, KCAL_PER_KG, PLANT_PROTEIN_FACTOR, PROTEIN_FLOOR, RATE_BAND, activityFactor,
+  bmrOf, clampGoal, dietOf, fromKg, isPlantDiet, macroPlan, maintenanceOf, modeOf, sessionsPerWeek, toKg,
 } from './macros.js'
 
 // One real profile to reason about: 80 kg, 180 cm, 30, training four times a week.
@@ -190,5 +190,50 @@ describe('units', () => {
   it('reads a goal weight in the profile\'s own unit when estimating the weeks', () => {
     const inLb = macroPlan({ ...LEO, mode: 'cut', targetW: 165.4, unit: 'lb' })
     expect(inLb.etaWeeks).toBe(macroPlan({ ...LEO, mode: 'cut', targetW: 75, unit: 'kg' }).etaWeeks)
+  })
+})
+
+describe('diet', () => {
+  it('raises the protein floor for a plant diet and leaves it alone otherwise', () => {
+    const any = macroPlan({ ...LEO, mode: 'bulk' })
+    const plant = macroPlan({ ...LEO, mode: 'bulk', diet: 'plant' })
+    const vegan = macroPlan({ ...LEO, mode: 'bulk', diet: 'vegan' })
+
+    expect(plant.p).toBe(Math.round(PROTEIN_FLOOR.bulk * PLANT_PROTEIN_FACTOR * LEO.weightKg / 5) * 5)
+    // Plant-based and vegan take their protein from plants, so they are the same arithmetic.
+    expect(vegan.p).toBe(plant.p)
+    // And an absent or unrecognised diet is not a plant diet by accident.
+    expect(any.p).toBe(macroPlan({ ...LEO, mode: 'bulk', diet: 'nonsense' }).p)
+    expect(macroPlan({ ...LEO, mode: 'bulk', diet: 'nonsense' }).diet).toBe('any')
+  })
+
+  it('moves protein, not calories: the surplus is the same and the carbs pay for it', () => {
+    const any = macroPlan({ ...LEO, mode: 'bulk' })
+    const plant = macroPlan({ ...LEO, mode: 'bulk', diet: 'plant' })
+
+    expect(plant.kcal).toBe(any.kcal)
+    expect(plant.floor.p).toBeGreaterThan(any.floor.p)
+    expect(plant.c).toBeLessThan(any.c)
+    // Fat is a floor too, and nothing about the diet moved it.
+    expect(plant.f).toBe(any.f)
+  })
+
+  it('treats the factor as one pass over the floor, not a second one', () => {
+    for (const mode of ['cut', 'maintain', 'bulk']) {
+      const base = macroPlan({ ...LEO, mode })
+      const plant = macroPlan({ ...LEO, mode, diet: 'plant' })
+      expect(plant.proteinPerKg).toBeCloseTo(PROTEIN_FLOOR[mode] * PLANT_PROTEIN_FACTOR, 10)
+      expect(base.proteinPerKg).toBe(PROTEIN_FLOOR[mode])
+    }
+  })
+
+  it('classifies the three diets, with an unknown one falling back rather than throwing', () => {
+    expect(DIETS.map(d => d.id)).toEqual(['any', 'plant', 'vegan'])
+    expect(dietOf('vegan').id).toBe('vegan')
+    expect(dietOf(undefined).id).toBe('any')
+    expect(isPlantDiet('plant')).toBe(true)
+    expect(isPlantDiet('vegan')).toBe(true)
+    expect(isPlantDiet('any')).toBe(false)
+    expect(isPlantDiet('nonsense')).toBe(false)
   })
 })

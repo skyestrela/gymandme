@@ -2071,6 +2071,20 @@ export default {
   'Two meals in six hours. Good for cutting harder while still eating properly at both of them.': 'Два приймання їжі за шість годин. Підходить для жорсткішого дефіциту, коли обидва приймання все одно повноцінні.',
   'Four hours, usually around training. Hard to hit your protein in a window that short, so it suits people already tracking it.': 'Чотири години, зазвичай навколо тренування. У такому короткому вікні важко добрати білок, тож це для тих, хто вже стежить за ним.',
   'One meal a day. The hardest to keep and the easiest to undereat. For experienced fasters, not a starting point.': 'Одне приймання їжі на день. Найважче тримати і найлегше недоїсти. Для досвідчених, це не точка відліку.',
+  'A glass before a meal cuts how much you eat. Plant food is bulkier and fills for fewer calories, so it works in your favour here.': 'Склянка перед їжею зменшує те, скільки ви з’їсте. Рослинна їжа об’ємніша і насичує меншою кількістю калорій, тож тут це працює на вашу користь.',
+  'A glass before a meal sometimes saves you half of it. Plant food is bulkier for fewer calories, so holding steady sits comfortably.': 'Склянка перед їжею іноді заощаджує вам половину. Рослинна їжа об’ємніша при меншій калорійності, тож тримати вагу комфортно.',
+  'A glass before a big meal helps. Plant food is bulkier for fewer calories, so a surplus comes easier by adding oil and nuts than by more volume.': 'Склянка перед великою їжею допомагає. Рослинна їжа об’ємніша при меншій калорійності, тож профіцит легше набрати, додаючи олію та горіхи, а не об’єм.',
+  'Plant food carries the plan. The session is what turns it into muscle.': 'Рослинна їжа тримає план. У м’язи її перетворює тренування.',
+  'The same plate most days is the whole trick. Nothing exotic about it.': 'Та сама страва в більшість днів — це і весь секрет. Нічого екзотичного.',
+  'What you eat': 'Що ви їсте',
+  'Eating anything': 'Їм що хочу',
+  'Plant-based': 'Рослинна основа',
+  'Vegan': 'Веганський',
+  'No change. Your numbers come out of whatever you already eat.': 'Без змін. Ваші цифри випливають із того, що ви вже їсте.',
+  'Dairy and eggs are fine. Plant protein digests less completely, so your protein floor goes up a little to pay for it.': 'Молочні продукти та яйця — будь ласка. Рослинний білок перетравлюється гірше, тому ваш мінімум білка трохи піднімається, щоб це компенсувати.',
+  'Nothing from an animal at all. The protein arithmetic is the same as plant-based; the nutrients need more planning.': 'Нічого тваринного походження. Розрахунок білка такий самий, як на рослинній основі; більше планування потребують поживні речовини.',
+  'Plant protein digests less completely and carries less leucine, so your protein floor is about {0}% higher than it would be otherwise. Soy and peas are the densest; tofu, tempeh, lentils and seitan do the rest.': 'Рослинний білок перетравлюється гірше і має менше лейцину, тому ваш мінімум білка приблизно на {0}% вищий за звичайний. Найщільніші — соя та горох; тофу, темпе, сочевиця та сетан роблять решту.',
+  'B12 does not occur naturally in plant foods, so it comes from fortified foods or a supplement. Iron and omega-3 take more planning than they would otherwise.': 'B12 у рослинних продуктах у природі не трапляється, тож він надходить із збагачених продуктів або добавки. Залізо та омега-3 потребують більше планування, ніж зазвичай.',
 }
 
 

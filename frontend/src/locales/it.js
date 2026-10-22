@@ -2074,6 +2074,20 @@ export default {
   'Two meals in six hours. Good for cutting harder while still eating properly at both of them.': 'Due pasti in sei ore. Buono per tagliare più duri mangiando comunque bene a entrambi.',
   'Four hours, usually around training. Hard to hit your protein in a window that short, so it suits people already tracking it.': 'Quatro ore, di solito intorno all’allenamento. Difficile raggiungere le proteine in una finestra così corta, quindi fa per chi le sta già seguendo.',
   'One meal a day. The hardest to keep and the easiest to undereat. For experienced fasters, not a starting point.': 'Un pasto al giorno. Il più difficile da mantenere e il più facile da mangiare troppo poco. Per chi digiuna da tempo, non per iniziare.',
+  'A glass before a meal cuts how much you eat. Plant food is bulkier and fills for fewer calories, so it works in your favour here.': 'Un bicchiere prima del pasto riduce quanto mangi. Il cibo vegetale è più voluminoso e sazia con meno calorie, quindi qui lavora a tuo favore.',
+  'A glass before a meal sometimes saves you half of it. Plant food is bulkier for fewer calories, so holding steady sits comfortably.': 'Un bicchiere prima del pasto a volte ti fa risparmiare metà. Il cibo vegetale è più voluminoso a parità di calorie, quindi mantenere il peso è più facile.',
+  'A glass before a big meal helps. Plant food is bulkier for fewer calories, so a surplus comes easier by adding oil and nuts than by more volume.': 'Un bicchiere prima di un pasto abbondante aiuta. Il cibo vegetale è più voluminoso a parità di calorie, quindi il surplus arriva più facilmente aggiungendo olio e frutta secca che con più volume.',
+  'Plant food carries the plan. The session is what turns it into muscle.': 'Il cibo vegetale sostiene il piano. È l’allenamento a trasformarlo in muscolo.',
+  'The same plate most days is the whole trick. Nothing exotic about it.': 'Lo stesso piatto quasi ogni giorno è tutto il trucco. Non c’è niente di esotico.',
+  'What you eat': 'Cosa mangi',
+  'Eating anything': 'Mangio quello che voglio',
+  'Plant-based': 'A base di piante',
+  'Vegan': 'Vegano',
+  'No change. Your numbers come out of whatever you already eat.': 'Nessun cambiamento. I tuoi numeri derivano da quello che mangi già.',
+  'Dairy and eggs are fine. Plant protein digests less completely, so your protein floor goes up a little to pay for it.': 'Latticini e uova vanno benissimo. La proteina vegetale si digerisce peggio, quindi il tuo minimo di proteine sale un po’ per compensare.',
+  'Nothing from an animal at all. The protein arithmetic is the same as plant-based; the nutrients need more planning.': 'Niente di origine animale. Il calcolo della proteina è lo stesso di una dieta a base vegetale; sono i nutrienti che richiedono più pianificazione.',
+  'Plant protein digests less completely and carries less leucine, so your protein floor is about {0}% higher than it would be otherwise. Soy and peas are the densest; tofu, tempeh, lentils and seitan do the rest.': 'La proteina vegetale si digerisce peggio e apporta meno leucina, quindi il tuo minimo di proteine è circa {0}% più alto del normale. Soia e piselli sono le più dense; tofu, tempeh, lenticchie e seitan fanno il resto.',
+  'B12 does not occur naturally in plant foods, so it comes from fortified foods or a supplement. Iron and omega-3 take more planning than they would otherwise.': 'La B12 non si trova naturalmente negli alimenti vegetali, quindi arriva dagli alimenti fortificati o da un integratore. Ferro e omega-3 richiedono più pianificazione del solito.',
 }
 
 

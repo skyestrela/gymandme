@@ -33,6 +33,20 @@ export const fromKg = (kg, unit) => (unit === 'lb' ? kg * LB_PER_KG : kg)
 //                      going to fat instead (Morton et al. 2018), so this is where it peaks.
 export const PROTEIN_FLOOR = Object.freeze({ cut: 2.0, maintain: 1.4, bulk: 1.6 })
 
+// What the floor above becomes when the protein comes from plants. See the note in the file
+// header: this pays for digestibility and leucine, it is not a correction for any belief that
+// plants are second-rate protein. They are not - they are just a different accounting.
+export const PLANT_PROTEIN_FACTOR = 1.2
+
+/** The three diets. `plant` covers plant-based; `vegan` is the same arithmetic, more advice. */
+export const DIETS = Object.freeze([
+  { id: 'any', plant: false },
+  { id: 'plant', plant: true },
+  { id: 'vegan', plant: true },
+])
+export const dietOf = id => DIETS.find(d => d.id === id) || DIETS[0]
+export const isPlantDiet = id => dietOf(id).plant
+
 // Fat never goes below ~0.6 g/kg: below that the hormonal picture and fat-soluble vitamins start
 // to suffer, whatever the calorie target says.
 export const FAT_FLOOR_PER_KG = 0.6
@@ -119,7 +133,7 @@ const round5 = n => Math.round(n / 5) * 5
  *
  * `weight` is in kilograms. Returns `{ ok: false, needs }` when there is not enough to go on.
  */
-export function macroPlan({ weightKg, heightCm, age, body, sessionsPerWeek: spw, mode: modeId, targetW, unit = 'kg' }) {
+export function macroPlan({ weightKg, heightCm, age, body, sessionsPerWeek: spw, mode: modeId, diet: dietId, targetW, unit = 'kg' }) {
   const need = []
   if (!(Number(weightKg) > 0)) need.push('weight')
   if (!(Number(heightCm) > 0)) need.push('height')
@@ -128,6 +142,8 @@ export function macroPlan({ weightKg, heightCm, age, body, sessionsPerWeek: spw,
 
   const { bmr, factor, maintenance } = maintenanceOf({ weightKg, heightCm, age, body, sessionsPerWeek: spw })
   const mode = modeOf(modeId).id
+  const diet = dietOf(dietId).id
+  const proteinPerKg = PROTEIN_FLOOR[mode] * (isPlantDiet(diet) ? PLANT_PROTEIN_FACTOR : 1)
 
   // Never below the resting burn (going under it has no special meaning), and never below a 25%
   // deficit, which is past the point protein can defend the muscle.
@@ -141,7 +157,7 @@ export function macroPlan({ weightKg, heightCm, age, body, sessionsPerWeek: spw,
   const perWeek = Math.abs(drift) < 0.05 ? 0 : Math.round(drift * 100) / 100
   const perWeekPct = Math.round(Math.abs(drift) / weightKg * 10000) / 100
 
-  const p = round5(PROTEIN_FLOOR[mode] * weightKg)
+  const p = round5(proteinPerKg * weightKg)
   const fFloor = round5(FAT_FLOOR_PER_KG * weightKg)
   const cRaw = (kcal - p * 4 - fFloor * 9) / 4
   // Carbohydrate is what flexes; if the floored protein and fat leave nothing, hand back zero
@@ -156,7 +172,7 @@ export function macroPlan({ weightKg, heightCm, age, body, sessionsPerWeek: spw,
   }
 
   return {
-    ok: true, mode, bmr, factor, maintenance,
+    ok: true, mode, diet, proteinPerKg, bmr, factor, maintenance,
     kcal, p, c, f: fFloor,
     floor: { kcal: floorKcal, p, f: fFloor },
     perWeek, perWeekPct,

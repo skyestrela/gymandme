@@ -320,3 +320,57 @@ describe('the goal sheet', () => {
     expect(state().S.macroGoal).toEqual({})
   })
 })
+
+describe('the diet picker', () => {
+  it('offers the three diets and starts on eating anything', () => {
+    Object.assign(mocks.store.S, PROFILE)
+    open(macroSheet)
+    for (const label of ['Eating anything', 'Plant-based', 'Vegan']) {
+      expect(byText('button', label), label).toBeTruthy()
+    }
+    expect(byText('button', 'Eating anything').getAttribute('aria-pressed')).toBe('true')
+    expect(host.textContent).toContain('No change.')
+    expect(host.textContent).toContain('160 g')            // 2.0 g/kg of 80 kg, unscaled
+  })
+
+  it('raises the protein floor on a plant diet and leaves the calories where they were', async () => {
+    Object.assign(mocks.store.S, PROFILE)
+    open(macroSheet)
+    expect(host.textContent).toContain('2,420')
+    await click(byText('button', 'Plant-based'))
+    expect(state().S.diet).toBe('plant')
+    open(macroSheet)                                      // reopened, so the plan is rebuilt
+    const txt = host.textContent
+    expect(txt).toContain('190 g')                        // 2.0 g/kg scaled by the plant factor
+    expect(txt).toContain('2,420')                        // the calorie target has NOT moved
+    expect(txt).toContain('Plant protein digests less completely')
+  })
+
+  it('gives fully vegan the nutrient note, and plant-based not', async () => {
+    Object.assign(mocks.store.S, PROFILE)
+    open(macroSheet)
+    await click(byText('button', 'Plant-based'))
+    open(macroSheet)
+    expect(host.textContent).not.toContain('B12')
+    await click(byText('button', 'Vegan'))
+    expect(state().S.diet).toBe('vegan')
+    open(macroSheet)
+    expect(host.textContent).toContain('B12')
+  })
+
+  it('lifts a hand-typed protein number that the raised floor would otherwise refuse', async () => {
+    Object.assign(mocks.store.S, PROFILE, { macroGoal: { p: 170, kcal: 2420, c: 335, f: 50 } })
+    open(macroSheet)
+    await click(byText('button', 'Vegan'))
+    // 170 cleared the old 160 floor and does not clear the raised 192, so it has to come back
+    // up. Leaving it would put the stored override below the minimum printed two lines below it.
+    expect(state().S.macroGoal.p).toBe(190)
+  })
+
+  it('leaves a hand-typed number alone when it already clears the raised floor', async () => {
+    Object.assign(mocks.store.S, PROFILE, { macroGoal: { p: 210, kcal: 2420, c: 300, f: 50 } })
+    open(macroSheet)
+    await click(byText('button', 'Vegan'))
+    expect(state().S.macroGoal.p).toBe(210)
+  })
+})
