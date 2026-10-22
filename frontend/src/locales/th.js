@@ -2079,6 +2079,12 @@ export default {
   'The weight goes on. What it turns into is decided in the session.': 'น้ำหนักขึ้น แต่มันจะกลายเป็นอะไร ตัดสินกันที่เซสชัน',
   'A deficit is easy. Holding your strength in it is not.': 'การขาดแคลอรีทำได้ง่าย การรักษาความแข็งแรงไว้ข้างในนั้นไม่ง่าย',
   'Losing the weight is arithmetic. Keeping the muscle is the work.': 'การลดน้ำหนักเป็นเรื่องคณิตศาสตร์ การรักษากล้ามคืองานจริง',
+  'The gentlest one. It is just the gap between dinner and breakfast, so nothing changes about when you eat. Good for starting out, or if you train late.': 'แบบที่อ่อนโยนที่สุด คือแค่ช่วงเวลาระหว่างมื้อเย็นกับมื้อเช้า กินเวลาเดิมไม่ต้องเปลี่ยนอะไร เหมาะกับคนเพิ่งเริ่ม หรือคนที่เทรนดึก',
+  'Skips breakfast and keeps two meals. A ten-hour window is far easier to hit a calorie surplus in than sixteen hours, because you are not trying to force a third meal.': 'ข้ามมื้อเช้าไป เหลือแค่สองมื้อ หน้าต่างสิบชั่วโมงทำให้ได้แคลอรีเกินได้ง่ายกว่าสิบหกชั่วโมงมาก เพราะไม่ต้องฝืนตัวเองกินมื้อที่สาม',
+  'The most studied schedule and the one most people stick to. Two meals, or three if you train early.': 'ตารางที่ศึกษามากที่สุดและคนส่วนใหญ่ยึดถือ เป็นสองมื้อ หรือสามมื้อถ้าเทรนตอนเช้า',
+  'Two meals in six hours. Good for cutting harder while still eating properly at both of them.': 'สองมื้อในหกชั่วโมง เหมาะกับการลดน้ำหนักแบบหนักกว่า โดยยังกินให้ถูกต้องทั้งสองมื้อ',
+  'Four hours, usually around training. Hard to hit your protein in a window that short, so it suits people already tracking it.': 'สี่ชั่วโมง โดยปกติคือช่วงรอบเทรน ในหน้าต่างที่สั้นแค่นี้เก็บโปรตีนให้ได้ยาก จึงเหมาะกับคนที่ติดตามอยู่แล้ว',
+  'One meal a day. The hardest to keep and the easiest to undereat. For experienced fasters, not a starting point.': 'วันละหนึ่งมื้อ ที่ทำยากที่สุดและกินน้อยเกินไปได้ง่ายที่สุด เหมาะกับคนที่ฝึกการถูกทางภายในมาแล้ว ไม่ใช่จุดเริ่มต้น',
 }
 
 

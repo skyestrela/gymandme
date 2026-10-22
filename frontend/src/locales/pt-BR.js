@@ -1315,6 +1315,12 @@ export const PT_BR_OVERRIDES = {
   'The weight goes on. What it turns into is decided in the session.': 'O peso vem. Aquilo em que vira é decidido no treino.',
   'A deficit is easy. Holding your strength in it is not.': 'Um déficit é fácil. Manter a força dentro dele não é.',
   'Losing the weight is arithmetic. Keeping the muscle is the work.': 'Perder o peso é aritmética. Manter o músculo é o trabalho.',
+  'The gentlest one. It is just the gap between dinner and breakfast, so nothing changes about when you eat. Good for starting out, or if you train late.': 'O mais leve. É só o intervalo entre o jantar e o café da manhã, então nada muda em relação a quando você come. Bom para começar, ou se você treina tarde.',
+  'Skips breakfast and keeps two meals. A ten-hour window is far easier to hit a calorie surplus in than sixteen hours, because you are not trying to force a third meal.': 'Pula o café da manhã e ficam duas refeições. Uma janela de dez horas é muito mais fácil de atingir um excedente de calorias do que dezesseis horas, porque você não precisa forçar uma terceira refeição.',
+  'The most studied schedule and the one most people stick to. Two meals, or three if you train early.': 'A rotina mais estudada e aquela que a maioria das pessoas mantém. Duas refeições, ou três se você treina cedo.',
+  'Two meals in six hours. Good for cutting harder while still eating properly at both of them.': 'Duas refeições em seis horas. Bom para cortar mais forte ainda comendo bem nas duas.',
+  'Four hours, usually around training. Hard to hit your protein in a window that short, so it suits people already tracking it.': 'Quatro horas, normalmente em volta do treino. Difícil bater a meta de proteína numa janela tão curta, então serve para quem já acompanha.',
+  'One meal a day. The hardest to keep and the easiest to undereat. For experienced fasters, not a starting point.': 'Uma refeição por dia. O mais difícil de manter e o mais fácil de comer de menos. Para quem já faz jejum há tempo, não para começar.',
 }
 
 export default { ...pt, ...PT_BR_OVERRIDES }

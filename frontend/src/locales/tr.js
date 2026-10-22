@@ -2068,6 +2068,12 @@ export default {
   'The weight goes on. What it turns into is decided in the session.': 'Kilo gelir. Neye dönüştüğü antrenmanda belli olur.',
   'A deficit is easy. Holding your strength in it is not.': 'Açık kolaydır. Gücünü açıkta tutmak kolay değil.',
   'Losing the weight is arithmetic. Keeping the muscle is the work.': 'Kilo vermek aritmetiktir. Kası korumak iştir.',
+  'The gentlest one. It is just the gap between dinner and breakfast, so nothing changes about when you eat. Good for starting out, or if you train late.': 'En hafifi. Sadece akşam yemeği ile kahvaltı arasındaki boşluk, yani ne zaman yediğiniz hiç değişmez. Yeni başlayanlar için, ya da geç antrenman yapıyorsanız iyi.',
+  'Skips breakfast and keeps two meals. A ten-hour window is far easier to hit a calorie surplus in than sixteen hours, because you are not trying to force a third meal.': 'Kahvaltıyı atlar ve iki öğün kalır. On altı saate kıyasla on saatlik bir pencerede kalori fazlasına ulaşmak çok daha kolay, çünkü üçüncü bir öğünü zorlamıyorsunuz.',
+  'The most studied schedule and the one most people stick to. Two meals, or three if you train early.': 'En çok araştırılan ve çoğu kişinin uyduğu program. İki öğün, ya da erken antrenman yapıyorsanız üç.',
+  'Two meals in six hours. Good for cutting harder while still eating properly at both of them.': 'Altı saatte iki öğün. İkisinde de düzgün yemek yiyerek daha sert kısmak için iyi.',
+  'Four hours, usually around training. Hard to hit your protein in a window that short, so it suits people already tracking it.': 'Dört saat, genellikle antrenmanın çevresinde. Bu kadar kısa bir pencerede protein hedefinize ulaşmak zor, bu yüzden zaten takip edenlere uygun.',
+  'One meal a day. The hardest to keep and the easiest to undereat. For experienced fasters, not a starting point.': 'Günde bir öğün. Sürdürmesi en zor olan ve az yemek yemenizi en kolaylaştıran. Deneyimli oruçcular için, başlangıç için değil.',
 }
 
 

@@ -386,10 +386,15 @@ function FastingSheet({ close }) {
           </button>
         ))}
       </div>
-      <div className="dim small" style={{ marginBottom: 14 }}>
+      <div className="dim small" style={{ marginBottom: 8 }}>
         {t('{0} fast, {1} eating window', fmtNum(fastPreset(win).fastH), fmtNum(fastPreset(win).eatH))}
       </div>
-      <Button variant="primary" icon="play" onClick={start}>{t('Start fast')}</Button>
+      {/* What the selected window is actually for. Shown for one at a time: six notes at once
+          is a wall of text, and you only need the one you are considering. */}
+      <p className="fast-note">{t(fastPreset(win).note)}</p>
+      <div style={{ marginTop: 14 }}>
+        <Button variant="primary" icon="play" onClick={start}>{t('Start fast')}</Button>
+      </div>
     </>}
 
     {streak > 0 && <div className="row small" style={{ marginTop: 16, gap: 6, color: 'var(--orange)' }}>

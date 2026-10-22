@@ -2061,6 +2061,12 @@ export default {
   'The weight goes on. What it turns into is decided in the session.': '體重會上去。它會變成什麼，由訓練決定。',
   'A deficit is easy. Holding your strength in it is not.': '缺口很容易，在缺口裡保住力量不容易。',
   'Losing the weight is arithmetic. Keeping the muscle is the work.': '掉體重是算術，保住肌肉才是工作。',
+  'The gentlest one. It is just the gap between dinner and breakfast, so nothing changes about when you eat. Good for starting out, or if you train late.': '最溫和的一種。它只是晚餐與早餐之間的間隔，所以你的進食時間完全不用改變。適合剛開始，或訓練較晚的人。',
+  'Skips breakfast and keeps two meals. A ten-hour window is far easier to hit a calorie surplus in than sixteen hours, because you are not trying to force a third meal.': '跳過早餐，只保留兩餐。十小時的進食窗口比十六小時更容易吃出熱量盈餘，因為你不必勉強自己塞進第三餐。',
+  'The most studied schedule and the one most people stick to. Two meals, or three if you train early.': '研究最多的方案，也是大多數人能堅持下來的方案。兩餐，或早練的人吃三餐。',
+  'Two meals in six hours. Good for cutting harder while still eating properly at both of them.': '六小時內吃兩餐。適合在兩餐都吃好的前提下更狠地減脂。',
+  'Four hours, usually around training. Hard to hit your protein in a window that short, so it suits people already tracking it.': '四小時，通常圍繞訓練安排。窗口這麼短很難吃夠蛋白質，所以更適合已經在記錄的人。',
+  'One meal a day. The hardest to keep and the easiest to undereat. For experienced fasters, not a starting point.': '一天一餐。最難堅持，也最容易吃不夠。適合有經驗的斷食者，不適合作為起點。',
 }
 
 

@@ -2068,6 +2068,12 @@ export default {
   'The weight goes on. What it turns into is decided in the session.': '체중은 붙습니다. 그것이 무엇이 되는지는 트레이닝에서 정해져요.',
   'A deficit is easy. Holding your strength in it is not.': '적자기는 쉬워요. 그 안에서 힘을 지키는 건 쉬우지 않아요.',
   'Losing the weight is arithmetic. Keeping the muscle is the work.': '체중을 줄이는 건 산술이에요. 근질을 지키는 게 일이에요.',
+  'The gentlest one. It is just the gap between dinner and breakfast, so nothing changes about when you eat. Good for starting out, or if you train late.': '가장 부담 없는 방법입니다. 그저 저녁 식사와 아침 식사 사이의 간격일 뿐이라 식사 시간은 전혀 달라지지 않습니다. 처음 시작할 때, 혹은 늦게 훈련할 때 잘 맞습니다.',
+  'Skips breakfast and keeps two meals. A ten-hour window is far easier to hit a calorie surplus in than sixteen hours, because you are not trying to force a third meal.': '아침 식사를 건너뛰고 두 끼만 먹습니다. 열 시간 창은 열여섯 시간보다 칼로리 잉여를 훨씬 쉽게 만들 수 있습니다. 세 번째 끼를 억지로 먹을 필요가 없기 때문입니다.',
+  'The most studied schedule and the one most people stick to. Two meals, or three if you train early.': '가장 많이 연구된 일정이자 대부분의 사람이 지키는 일정입니다. 두 끼, 혹은 아침에 훈련한다면 세 끼.',
+  'Two meals in six hours. Good for cutting harder while still eating properly at both of them.': '여섯 시간에 두 끼. 두 끼 모두 제대로 챙겨 먹으면서도 더 강하게 감량하기 좋습니다.',
+  'Four hours, usually around training. Hard to hit your protein in a window that short, so it suits people already tracking it.': '네 시간, 보통 훈련 전후입니다. 이렇게 짧은 창에서 단백질 채우기는 어렵기 때문에 이미 기록하고 있는 사람에게 맞습니다.',
+  'One meal a day. The hardest to keep and the easiest to undereat. For experienced fasters, not a starting point.': '하루 한 끼. 가장 지키기 어렵고 가장 많이 못 먹게 되기 쉬운 방법입니다. 경험 있는 절식자에게 맞지, 시작하기에는 아닙니다.',
 }
 
 

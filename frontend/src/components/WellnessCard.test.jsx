@@ -263,9 +263,16 @@ describe("the day's line", () => {
     mount()
     const quip = host.querySelector('.wl-quip')
     const figure = host.querySelector('.wl-body')
-    const block = quip.parentElement
+    // The line and the pace behind it are one statement about the day, so they share a
+    // .wl-status. That block sits inside the water block rather than being it.
+    const status = quip.closest('.wl-status')
+    expect(status).toBeTruthy()
+    expect(status.querySelector('.wl-quip')).toBe(quip)
+    // The pace belongs to the same block as the line, never stranded beside it.
+    const pace = host.querySelector('.wl-pace')
+    if (pace) expect(pace.closest('.wl-status')).toBe(status)
     // Same block as the body it belongs to, not floating somewhere else on the card.
-    expect(block.contains(figure)).toBe(true)
+    expect(status.parentElement.contains(figure)).toBe(true)
     // Document order: the figure is rendered before the line.
     expect(figure.compareDocumentPosition(quip) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
     // And the line is not inside the figure's own bench, so it cannot be clipped by it.

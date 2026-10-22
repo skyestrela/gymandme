@@ -2068,6 +2068,12 @@ export default {
   'The weight goes on. What it turns into is decided in the session.': 'Le poids arrive. Ce qu\'il devient se décide à la séance.',
   'A deficit is easy. Holding your strength in it is not.': 'Un déficit, c\'est facile. Garder sa force dedans, non.',
   'Losing the weight is arithmetic. Keeping the muscle is the work.': 'Perdre du poids, c\'est de l\'arithmétique. Garder le muscle, c\'est le travail.',
+  'The gentlest one. It is just the gap between dinner and breakfast, so nothing changes about when you eat. Good for starting out, or if you train late.': 'Le plus doux. C’est simplement l’espace entre le dîner et le petit-déjeuner, donc rien ne change sur l’heure à laquelle tu manges. Bien pour commencer, ou si tu t’entraînes tard.',
+  'Skips breakfast and keeps two meals. A ten-hour window is far easier to hit a calorie surplus in than sixteen hours, because you are not trying to force a third meal.': 'Saute le petit-déjeuner et garde deux repas. Une fenêtre de dix heures permet d’atteindre un surplus de calories bien plus facilement que seize heures, parce que tu n’essaies pas de forcer un troisième repas.',
+  'The most studied schedule and the one most people stick to. Two meals, or three if you train early.': 'Le planning le plus étudié et celui que la plupart des gens tiennent. Deux repas, ou trois si tu t’entraînes tôt.',
+  'Two meals in six hours. Good for cutting harder while still eating properly at both of them.': 'Deux repas en six heures. Bien pour couper plus fort tout en mangeant correctement aux deux.',
+  'Four hours, usually around training. Hard to hit your protein in a window that short, so it suits people already tracking it.': 'Quatre heures, en général autour de l’entraînement. Difficile d’atteindre tes protéines dans une fenêtre aussi courte, donc c’est fait pour ceux qui les suivent déjà.',
+  'One meal a day. The hardest to keep and the easiest to undereat. For experienced fasters, not a starting point.': 'Un repas par jour. Le plus dur à tenir et le plus facile de manger trop peu. Pour les habitués du jeûne, pas pour un début.',
 }
 
 

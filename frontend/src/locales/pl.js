@@ -2068,6 +2068,12 @@ export default {
   'The weight goes on. What it turns into is decided in the session.': 'Waga przychodzi. W co się zmieni, rozstrzyga się na treningu.',
   'A deficit is easy. Holding your strength in it is not.': 'Deficyt jest łatwy. Utrzymanie w nim siły już nie.',
   'Losing the weight is arithmetic. Keeping the muscle is the work.': 'Zrzucenie wagi to arytmetyka. Zachowanie mięśni to praca.',
+  'The gentlest one. It is just the gap between dinner and breakfast, so nothing changes about when you eat. Good for starting out, or if you train late.': 'Najłagodniejszy. To po prostu przerwa między kolacją a śniadaniem, więc nic nie zmienia się w tym, kiedy jesz. Dobry na start albo gdy trenujesz późno.',
+  'Skips breakfast and keeps two meals. A ten-hour window is far easier to hit a calorie surplus in than sixteen hours, because you are not trying to force a third meal.': 'Pomija śniadanie i zostają dwa posiłki. W dziesięciogodzinnym oknie o wiele łatwiej wygenerować nadwyżkę kalorii niż w szesnastogodzinnym, bo nie musisz wciskać trzeciego posiłku.',
+  'The most studied schedule and the one most people stick to. Two meals, or three if you train early.': 'Najlepiej przebadany harmonogram i ten, którego ludzie najczęściej się trzymają. Dwa posiłki albo trzy, jeśli trenujesz wcześnie.',
+  'Two meals in six hours. Good for cutting harder while still eating properly at both of them.': 'Dwa posiłki w sześciu godzinach. Dobre do ostrzejszego redukowania, wciąż jedząc porządnie na obu.',
+  'Four hours, usually around training. Hard to hit your protein in a window that short, so it suits people already tracking it.': 'Cztery godziny, zwykle wokół treningu. Trudno w tak krótkim oknie dostarczyć białka, więc pasuje do osób, które już to liczą.',
+  'One meal a day. The hardest to keep and the easiest to undereat. For experienced fasters, not a starting point.': 'Jeden posiłek dziennie. Najtrudniejsze do utrzymania i najłatwiejsze do zjedzenia za mało. Dla osób, które już kroczą, nie na start.',
 }
 
 

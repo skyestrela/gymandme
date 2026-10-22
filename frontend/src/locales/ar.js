@@ -2121,6 +2121,12 @@ export default {
   'The weight goes on. What it turns into is decided in the session.': 'الوزن يزداد. وما يتحول إليه يُحسم في التمرين.',
   'A deficit is easy. Holding your strength in it is not.': 'العجز سهل. والحفاظ على قوته داخله ليس سهلًا.',
   'Losing the weight is arithmetic. Keeping the muscle is the work.': 'نزول الوزن مسألة حساب. والعضلات هي العمل الحقيقي.',
+  'The gentlest one. It is just the gap between dinner and breakfast, so nothing changes about when you eat. Good for starting out, or if you train late.': 'الأنعم على الإطلاق. إنه مجرد الفاصل بين العشاء والإفطار، فلا يتغير شيء متى تأكل. مناسب للبداية، أو إذا كنت تتدرب متأخراً.',
+  'Skips breakfast and keeps two meals. A ten-hour window is far easier to hit a calorie surplus in than sixteen hours, because you are not trying to force a third meal.': 'يتخطى الإفطار ويبقى وجبتان. نافذة عشر ساعات أسهل بكثير للوصول إلى فائض في السعرات من ست عشرة ساعة، لأنك لا تحاول إجبار نفسك على وجبة ثالثة.',
+  'The most studied schedule and the one most people stick to. Two meals, or three if you train early.': 'الجدول الأكثر دراسةً والذي يلتزم به معظم الناس. وجبتان، أو ثلاث إذا كنت تتدرب مبكراً.',
+  'Two meals in six hours. Good for cutting harder while still eating properly at both of them.': 'وجبتان في ست ساعات. مناسب للخفض بشكل أكبر مع الأكل الجيد في كلتيهما.',
+  'Four hours, usually around training. Hard to hit your protein in a window that short, so it suits people already tracking it.': 'أربع ساعات، غالباً حول التمرين. يصعب بلوغ البروتين في نافذة قصيرة بهذا الشكل، لذا يناسب من يتابعه أصلاً.',
+  'One meal a day. The hardest to keep and the easiest to undereat. For experienced fasters, not a starting point.': 'وجبة واحدة في اليوم. الأصعب في الاستمرار والأسهل في نقص الأكل. لمن اعتاد الصيام، لا كبداية.',
 }
 
 

@@ -2147,7 +2147,14 @@ body.no-tabbar.resting #toast{bottom:calc(100px + var(--sab))}
 /* One line a day under the water row. The only thing on the card that is not a number, so
    it is deliberately the quietest thing here: no weight, no accent, centred under the row.
    Named .wl-quip, not .wl-line — that one is the MacroSheet's left/right working-out row. */
-.wl-quip{margin:13px 0 0;text-align:center;font-size:12.5px;line-height:1.4;color:var(--label-3)}
+/* The day's headline and the pace note. One centred block, capped so it stays a tidy column
+   in a wide card instead of stretching edge to edge. The line carries the weight because it is
+   the sentence; the pace note is in the accent because it is the part that asks for something. */
+.wl-status{margin:18px auto 0;max-width:36ch;text-align:center}
+.wl-quip{margin:0;font-size:14px;font-weight:600;line-height:1.35;letter-spacing:-.012em;color:var(--label)}
+.wl-pace{margin-top:7px;font-size:12px;font-weight:500;color:var(--blue)}
+/* What a fasting window is actually for, under the chips. */
+.fast-note{margin:0;font-size:12.5px;line-height:1.45;color:var(--label-3)}
 
 /* "900 ml behind for the time of day" — only ever rendered when it is worth saying. */
 .wl-pace{color:var(--label-3)}

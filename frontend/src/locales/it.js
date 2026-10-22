@@ -2068,6 +2068,12 @@ export default {
   'The weight goes on. What it turns into is decided in the session.': 'Il peso arriva. In cosa diventa si decide in palestra.',
   'A deficit is easy. Holding your strength in it is not.': 'Un deficit è facile. Mantenerci la forza no.',
   'Losing the weight is arithmetic. Keeping the muscle is the work.': 'Perdere il peso è aritmetica. Tenere il muscolo è il lavoro.',
+  'The gentlest one. It is just the gap between dinner and breakfast, so nothing changes about when you eat. Good for starting out, or if you train late.': 'Il più gentile. È semplicemente lo spazio tra cena e colazione, quindi non cambia nulla su quando mangi. Buono per iniziare, o se ti alleni tardi.',
+  'Skips breakfast and keeps two meals. A ten-hour window is far easier to hit a calorie surplus in than sixteen hours, because you are not trying to force a third meal.': 'Salta la colazione e restano due pasti. In una finestra di dieci ore è molto più facile raggiungere un surplus di calorie che in sedici ore, perché non devi forzare un terzo pasto.',
+  'The most studied schedule and the one most people stick to. Two meals, or three if you train early.': 'Lo schema più studiato e quello a cui la maggior parte delle persone tiene. Due pasti, o tre se ti alleni presto.',
+  'Two meals in six hours. Good for cutting harder while still eating properly at both of them.': 'Due pasti in sei ore. Buono per tagliare più duri mangiando comunque bene a entrambi.',
+  'Four hours, usually around training. Hard to hit your protein in a window that short, so it suits people already tracking it.': 'Quatro ore, di solito intorno all’allenamento. Difficile raggiungere le proteine in una finestra così corta, quindi fa per chi le sta già seguendo.',
+  'One meal a day. The hardest to keep and the easiest to undereat. For experienced fasters, not a starting point.': 'Un pasto al giorno. Il più difficile da mantenere e il più facile da mangiare troppo poco. Per chi digiuna da tempo, non per iniziare.',
 }
 
 

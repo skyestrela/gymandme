@@ -149,10 +149,20 @@ describe('fasting', () => {
   const NOW = new Date(2026, 9, 21, 12, 0, 0).getTime()   // 2026-10-21 12:00 local
   const hoursAgo = h => NOW - h * 3600e3
 
-  it('falls back to a known preset for an unknown or missing id', () => {
+  it('falls back to the default preset for an unknown or missing id', () => {
     expect(fastPreset('20:4').fastH).toBe(20)
     expect(fastPreset('nonsense').id).toBe(DEFAULT_FAST)
-    expect(fastPreset(undefined).fastH).toBe(FAST_PRESETS[0].fastH)
+    expect(fastPreset(undefined).id).toBe(DEFAULT_FAST)
+    // Whatever the fallback lands on, it must still be a real entry, or a hand-edited
+    // stored preset would render an undefined length in the sheet.
+    expect(FAST_PRESETS.some(p => p.id === fastPreset('nonsense').id)).toBe(true)
+  })
+
+  it('gives every window a note to show, because the sheet renders it', () => {
+    for (const p of FAST_PRESETS) {
+      expect(typeof p.note).toBe('string')
+      expect(p.note.trim().length).toBeGreaterThan(0)
+    }
   })
 
   it('measures a running fast against its preset', () => {

@@ -2072,6 +2072,12 @@ export default {
   'The weight goes on. What it turns into is decided in the session.': 'Вес набирается. Во что он превратится, решается на тренировке.',
   'A deficit is easy. Holding your strength in it is not.': 'Дефицит — это легко. Удержать в нём силу — нет.',
   'Losing the weight is arithmetic. Keeping the muscle is the work.': 'Похудеть — арифметика. Сохранить мышцы — работа.',
+  'The gentlest one. It is just the gap between dinner and breakfast, so nothing changes about when you eat. Good for starting out, or if you train late.': 'Самый мягкий. Это просто промежуток между ужином и завтраком, так что время приёмов пищи вообще не меняется. Подходит для начала, или если вы тренируетесь поздно.',
+  'Skips breakfast and keeps two meals. A ten-hour window is far easier to hit a calorie surplus in than sixteen hours, because you are not trying to force a third meal.': 'Пропускает завтрак и остаются два приёма пищи. В десятичасовом окне набрать профицит калорий намного проще, чем в шестнадцатичасовом, потому что не нужно заставлять себя есть третий раз.',
+  'The most studied schedule and the one most people stick to. Two meals, or three if you train early.': 'Самая изученная схема и та, на которой держится большинство. Два приёма пищи, или три, если вы тренируетесь рано.',
+  'Two meals in six hours. Good for cutting harder while still eating properly at both of them.': 'Два приёма пищи за шесть часов. Подходит для более жёсткого дефицита, когда оба приёма всё равно полноценные.',
+  'Four hours, usually around training. Hard to hit your protein in a window that short, so it suits people already tracking it.': 'Четыре часа, обычно вокруг тренировки. В таком коротком окне трудно добрать белок, поэтому это для тех, кто уже следит за ним.',
+  'One meal a day. The hardest to keep and the easiest to undereat. For experienced fasters, not a starting point.': 'Один приём пищи в день. Самое трудное из соблюдать и самое лёгкое из недобрать. Для опытных, это не точка отсчёта.',
 }
 
 

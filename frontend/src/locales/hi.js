@@ -2068,6 +2068,12 @@ export default {
   'The weight goes on. What it turns into is decided in the session.': 'वज़न बढ़ता है। वह किसमें बदलता है, यह सेशन में तय होता है।',
   'A deficit is easy. Holding your strength in it is not.': 'कमी आसान है। उसमें अपनी ताकत रखना आसान नहीं।',
   'Losing the weight is arithmetic. Keeping the muscle is the work.': 'वज़न घटाना हिसाब है। मांसपेशियाँ बचाना असली काम है।',
+  'The gentlest one. It is just the gap between dinner and breakfast, so nothing changes about when you eat. Good for starting out, or if you train late.': 'सबसे कोमल वाला। यह बस रात के खाने और नाश्ते के बीच का अंतर है, इसलिए खाने का समय बिल्कुल नहीं बदलता। शुरुआत के लिए अच्छा, या अगर आप देर से ट्रेन करते हैं।',
+  'Skips breakfast and keeps two meals. A ten-hour window is far easier to hit a calorie surplus in than sixteen hours, because you are not trying to force a third meal.': 'नाश्ता छोड़ देता है और दो भोजन रहते हैं। दस घंटे की विंडो में सोलह घंटे की तुलना में कैलोरी सरप्लस तक पहुंचना कहीं आसान है, क्योंकि आपको तीसरा भोजन ज़बरदस्ती नहीं करना पड़ता।',
+  'The most studied schedule and the one most people stick to. Two meals, or three if you train early.': 'सबसे ज्यादा अध्ययन की गई और वही जिसे ज़्यादातर लोग अपनाते हैं। दो भोजन, या तीन अगर आप सुबह ट्रेन करते हैं।',
+  'Two meals in six hours. Good for cutting harder while still eating properly at both of them.': 'छह घंटों में दो भोजन। कठिन कट के लिए अच्छा, जबकि दोनों में ठीक से खाना बना रहता है।',
+  'Four hours, usually around training. Hard to hit your protein in a window that short, so it suits people already tracking it.': 'चार घंटे, आमतौर पर ट्रेनिंग के आसपास। इतनी छोटी विंडो में प्रोटीन पूरा करना मुश्किल है, इसलिए यह उन लोगों के लिए है जो पहले से ट्रैक कर रहे हैं।',
+  'One meal a day. The hardest to keep and the easiest to undereat. For experienced fasters, not a starting point.': 'दिन में एक भोजन। सबसे मुश्किल और कम खाने का सबसे आसान तरीका। अनुभवी फास्टर के लिए, शुरुआत के लिए नहीं।',
 }
 
 

@@ -2071,6 +2071,12 @@ export default {
   'The weight goes on. What it turns into is decided in the session.': 'A súly feljön. Azzá válása az edzésen dől el.',
   'A deficit is easy. Holding your strength in it is not.': 'A hiány könnyű. Az erőt tartani benne nem az.',
   'Losing the weight is arithmetic. Keeping the muscle is the work.': 'A súly leadása aritmetika. Az izom megőrzése a munka.',
+  'The gentlest one. It is just the gap between dinner and breakfast, so nothing changes about when you eat. Good for starting out, or if you train late.': 'A legkíméletesebb. Ez egyszerűen a vacsora és a reggeli közötti rés, tehát semmi nem változik abban, mikor eszel. Jó kezdéshez, vagy ha későn edzesz.',
+  'Skips breakfast and keeps two meals. A ten-hour window is far easier to hit a calorie surplus in than sixteen hours, because you are not trying to force a third meal.': 'Kihagyja a reggelit és két étkezés marad. A tízórás ablakban sokkal könnyebb elérni a kalóriatöbbletet, mint a tizenhatórásban, mert nem kell rávenni magad egy harmadik étkezést.',
+  'The most studied schedule and the one most people stick to. Two meals, or three if you train early.': 'A legjobban kutatott menetrend, és az, amelyet a legtöbben megtartanak. Két étkezés, vagy három, ha korán edzesz.',
+  'Two meals in six hours. Good for cutting harder while still eating properly at both of them.': 'Két étkezés hat óra alatt. Jó az erősebb fogyáshoz, úgy, hogy mindkettőnél rendesen eszel.',
+  'Four hours, usually around training. Hard to hit your protein in a window that short, so it suits people already tracking it.': 'Négy óra, általában az edzés körül. Ilyen rövid ablakban nehéz elérni a fehérjét, ezért azoknak való, akik már követik.',
+  'One meal a day. The hardest to keep and the easiest to undereat. For experienced fasters, not a starting point.': 'Egy étkezés naponta. A legnehezebb betartani és a legkönnyebb aláenni. Tapasztalt böjtölőknek, nem kezdéshez.',
 }
 
 

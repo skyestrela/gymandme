@@ -2065,6 +2065,12 @@ export default {
   'The weight goes on. What it turns into is decided in the session.': 'Вага набирається. У що вона перетвориться, вирішується на тренуванні.',
   'A deficit is easy. Holding your strength in it is not.': 'Дефіцит — це легко. Утримати в ньому силу — ні.',
   'Losing the weight is arithmetic. Keeping the muscle is the work.': 'Схуднути — це арифметика. Зберегти м\'язи — це робота.',
+  'The gentlest one. It is just the gap between dinner and breakfast, so nothing changes about when you eat. Good for starting out, or if you train late.': 'Найм’який. Це просто проміжок між вечерею та сніданком, тож час приймання їжі взагалі не змінюється. Підходить для початку або якщо ви тренуєтеся пізно.',
+  'Skips breakfast and keeps two meals. A ten-hour window is far easier to hit a calorie surplus in than sixteen hours, because you are not trying to force a third meal.': 'Пропускає сніданок і залишаються два приймання їжі. У десятигодинному вікні набрати профіцит калорій значно простіше, ніж у шістнадцятигодинному, бо не треба змушувати себе до третього приймання.',
+  'The most studied schedule and the one most people stick to. Two meals, or three if you train early.': 'Найкраще вивчений графік і той, якого тримається більшість. Два приймання їжі, або три, якщо ви тренуєтеся рано.',
+  'Two meals in six hours. Good for cutting harder while still eating properly at both of them.': 'Два приймання їжі за шість годин. Підходить для жорсткішого дефіциту, коли обидва приймання все одно повноцінні.',
+  'Four hours, usually around training. Hard to hit your protein in a window that short, so it suits people already tracking it.': 'Чотири години, зазвичай навколо тренування. У такому короткому вікні важко добрати білок, тож це для тих, хто вже стежить за ним.',
+  'One meal a day. The hardest to keep and the easiest to undereat. For experienced fasters, not a starting point.': 'Одне приймання їжі на день. Найважче тримати і найлегше недоїсти. Для досвідчених, це не точка відліку.',
 }
 
 

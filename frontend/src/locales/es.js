@@ -2068,6 +2068,12 @@ export default {
   'The weight goes on. What it turns into is decided in the session.': 'El peso se añade. En lo que se convierte se decide en la sesión.',
   'A deficit is easy. Holding your strength in it is not.': 'Un déficit es fácil. Mantener la fuerza dentro no lo es.',
   'Losing the weight is arithmetic. Keeping the muscle is the work.': 'Perder el peso es aritmética. Conservar el músculo es el trabajo.',
+  'The gentlest one. It is just the gap between dinner and breakfast, so nothing changes about when you eat. Good for starting out, or if you train late.': 'El más suave. Es solo el hueco entre la cena y el desayuno, así que no cambia nada sobre cuándo comes. Bueno para empezar, o si entrenas tarde.',
+  'Skips breakfast and keeps two meals. A ten-hour window is far easier to hit a calorie surplus in than sixteen hours, because you are not trying to force a third meal.': 'Se salta el desayuno y quedan dos comidas. Una ventana de diez horas es mucho más fácil para alcanzar un excedente de calorías que dieciséis horas, porque no tienes que forzar una tercera comida.',
+  'The most studied schedule and the one most people stick to. Two meals, or three if you train early.': 'El horario más estudiado y con el que más gente sigue. Dos comidas, o tres si entrenas pronto.',
+  'Two meals in six hours. Good for cutting harder while still eating properly at both of them.': 'Dos comidas en seis horas. Bueno para cortar más fuerte sin dejar de comer bien en las dos.',
+  'Four hours, usually around training. Hard to hit your protein in a window that short, so it suits people already tracking it.': 'Cuatro horas, normalmente alrededor del entrenamiento. Difícil alcanzar tu proteína en una ventana tan corta, así que va bien para quien ya la controla.',
+  'One meal a day. The hardest to keep and the easiest to undereat. For experienced fasters, not a starting point.': 'Una comida al día. El más difícil de mantener y el más fácil de comer de menos. Para gente que ya lleva tiempo ayunando, no para empezar.',
 }
 
 

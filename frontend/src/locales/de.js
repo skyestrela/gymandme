@@ -2088,6 +2088,12 @@ export default {
   'The weight goes on. What it turns into is decided in the session.': 'Das Gewicht kommt. Was daraus wird, entscheidet sich in der Einheit.',
   'A deficit is easy. Holding your strength in it is not.': 'Ein Defizit ist leicht. Die Kraft darin zu halten ist es nicht.',
   'Losing the weight is arithmetic. Keeping the muscle is the work.': 'Das Gewicht zu verlieren ist Rechenaufgabe. Die Muskeln zu behalten ist die Arbeit.',
+  'The gentlest one. It is just the gap between dinner and breakfast, so nothing changes about when you eat. Good for starting out, or if you train late.': 'Das sanfteste. Es ist einfach die Lücke zwischen Abendessen und Frühstück, also ändert sich nichts daran, wann du isst. Gut zum Einstieg, oder wenn du spät trainierst.',
+  'Skips breakfast and keeps two meals. A ten-hour window is far easier to hit a calorie surplus in than sixteen hours, because you are not trying to force a third meal.': 'Überspringt das Frühstück und lässt zwei Mahlzeiten. In einem Zehn-Stunden-Fenster ist ein Kalorienüberschuss viel leichter zu erreichen als in sechzehn Stunden, weil du keine dritte Mahlzeit erzwingen musst.',
+  'The most studied schedule and the one most people stick to. Two meals, or three if you train early.': 'Der am besten erforschte Plan und der, bei dem die meisten bleiben. Zwei Mahlzeiten, oder drei, wenn du früh trainierst.',
+  'Two meals in six hours. Good for cutting harder while still eating properly at both of them.': 'Zwei Mahlzeiten in sechs Stunden. Gut für einen härteren Cut, wenn du bei beiden trotzdem richtig isst.',
+  'Four hours, usually around training. Hard to hit your protein in a window that short, so it suits people already tracking it.': 'Vier Stunden, meist rund um das Training. Protein in einem so kurzen Fenster zu erreichen ist schwer, also passt das für alle, die ihren Fortschritt schon messen.',
+  'One meal a day. The hardest to keep and the easiest to undereat. For experienced fasters, not a starting point.': 'Eine Mahlzeit am Tag. Am schwersten zu halten und am leichtesten zu wenig zu essen. Für Erfahrene, nicht als Einstieg.',
 }
 
 

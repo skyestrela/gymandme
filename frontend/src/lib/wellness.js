@@ -229,17 +229,43 @@ export function waterStreak(water, goal, d = todayISO()) {
 
 /* ============================================================ fasting */
 
+/* Every window carries what it is actually used for. Ordered easiest to hardest, so the list
+   reads as a difficulty ramp rather than a menu. These are tendencies, not prescriptions: the
+   short windows genuinely are harder to hit protein in, and saying so is more use than
+   pretending six hours and twenty-three are interchangeable. */
 export const FAST_PRESETS = [
-  { id: '16:8', fastH: 16, eatH: 8 },
-  { id: '18:6', fastH: 18, eatH: 6 },
-  { id: '20:4', fastH: 20, eatH: 4 },
-  { id: 'omad', fastH: 23, eatH: 1 },
+  {
+    id: '12:12', fastH: 12, eatH: 12,
+    note: 'The gentlest one. It is just the gap between dinner and breakfast, so nothing changes about when you eat. Good for starting out, or if you train late.',
+  },
+  {
+    id: '14:10', fastH: 14, eatH: 10,
+    note: 'Skips breakfast and keeps two meals. A ten-hour window is far easier to hit a calorie surplus in than sixteen hours, because you are not trying to force a third meal.',
+  },
+  {
+    id: '16:8', fastH: 16, eatH: 8,
+    note: 'The most studied schedule and the one most people stick to. Two meals, or three if you train early.',
+  },
+  {
+    id: '18:6', fastH: 18, eatH: 6,
+    note: 'Two meals in six hours. Good for cutting harder while still eating properly at both of them.',
+  },
+  {
+    id: '20:4', fastH: 20, eatH: 4,
+    note: 'Four hours, usually around training. Hard to hit your protein in a window that short, so it suits people already tracking it.',
+  },
+  {
+    id: 'omad', fastH: 23, eatH: 1,
+    note: 'One meal a day. The hardest to keep and the easiest to undereat. For experienced fasters, not a starting point.',
+  },
 ]
 export const DEFAULT_FAST = '16:8'
 
 /** The preset with `id`, falling back to the default so an old or hand-edited value still works. */
 export function fastPreset(id) {
-  return FAST_PRESETS.find(p => p.id === id) || FAST_PRESETS[0]
+  return FAST_PRESETS.find(p => p.id === id)
+    || FAST_PRESETS.find(p => p.id === DEFAULT_FAST)
+    || FAST_PRESETS[0]
 }
 
 /** The running fast to store: null when nothing is running. */

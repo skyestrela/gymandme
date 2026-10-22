@@ -2068,6 +2068,12 @@ export default {
   'The weight goes on. What it turns into is decided in the session.': 'O peso vem. Aquilo em que se transforma decide-se no treino.',
   'A deficit is easy. Holding your strength in it is not.': 'Um défice é fácil. Manter a força dentro dele não é.',
   'Losing the weight is arithmetic. Keeping the muscle is the work.': 'Perder o peso é aritmética. Manter o músculo é o trabalho.',
+  'The gentlest one. It is just the gap between dinner and breakfast, so nothing changes about when you eat. Good for starting out, or if you train late.': 'O mais gentle. É apenas o intervalo entre o jantar e o pequeno-almoço, por isso nada muda quanto a quando come. Bom para começar, ou se treina tarde.',
+  'Skips breakfast and keeps two meals. A ten-hour window is far easier to hit a calorie surplus in than sixteen hours, because you are not trying to force a third meal.': 'Salta o pequeno-almoço e ficam duas refeições. Uma janela de dez horas é muito mais fácil para atingir um excedente de calorias do que dezasseis horas, porque não tem de forçar uma terceira refeição.',
+  'The most studied schedule and the one most people stick to. Two meals, or three if you train early.': 'O horário mais estudado e aquele a que a maioria das pessoas se mantém. Duas refeições, ou três se treinar cedo.',
+  'Two meals in six hours. Good for cutting harder while still eating properly at both of them.': 'Duas refeições em seis horas. Bom para cortar mais a fundo enquanto come bem em ambas.',
+  'Four hours, usually around training. Hard to hit your protein in a window that short, so it suits people already tracking it.': 'Quatro horas, normalmente à volta do treino. Difícil atingir a proteína numa janela tão curta, por isso convém a quem já a acompanha.',
+  'One meal a day. The hardest to keep and the easiest to undereat. For experienced fasters, not a starting point.': 'Uma refeição por dia. O mais difícil de manter e o mais fácil de comer a menos. Para quem já faz jejuns há tempo, não para começar.',
 }
 
 

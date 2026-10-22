@@ -111,10 +111,14 @@ export default function WellnessCard() {
       />
       <div style={{ marginTop: 10 }}><WaterBody ml={ml} goal={wGoal} mode={goal.plan.mode} size="sm" showBenefits compact /></div>
 
-      <p className="wl-quip">{t(waterLineFor(undefined, goal.plan.mode))}</p>
-      {wPace.behind > 0 && <div className="dim small wl-pace" style={{ marginTop: 4 }}>
-        {t('{0} ml behind for the time of day', fmtNum(wPace.behind))}
-      </div>}
+      {/* The day's headline and the one number that wants action. They were siblings doing two
+          unrelated jobs; they are one statement about the day, so they are one block now. */}
+      <div className="wl-status">
+        <p className="wl-quip">{t(waterLineFor(undefined, goal.plan.mode))}</p>
+        {wPace.behind > 0 && <div className="wl-pace">
+          {t('{0} ml behind for the time of day', fmtNum(wPace.behind))}
+        </div>}
+      </div>
       <div className="row between" style={{ marginTop: 8, gap: 8 }}>
         <div className="chips" style={{ margin: 0 }}>
           {WATER_QUICK.map(q => (
