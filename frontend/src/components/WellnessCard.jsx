@@ -110,6 +110,8 @@ export default function WellnessCard() {
         right={<span className="small dim">{fmtNum(ml)} / {fmtNum(wGoal)} ml</span>}
       />
       <div style={{ marginTop: 10 }}><WaterBody ml={ml} goal={wGoal} size="sm" showBenefits compact /></div>
+
+      <p className="wl-quip">{t(waterLineFor())}</p>
       {wPace.behind > 0 && <div className="dim small wl-pace" style={{ marginTop: 4 }}>
         {t('{0} ml behind for the time of day', fmtNum(wPace.behind))}
       </div>}
@@ -123,7 +125,6 @@ export default function WellnessCard() {
         {wStreak > 1 && <span className="dim small" style={{ whiteSpace: 'nowrap' }}>{t('{0} day streak', wStreak)}</span>}
       </div>
 
-      <p className="wl-quip">{t(waterLineFor())}</p>
     </div>
 
     {/* ---- fasting ---- */}

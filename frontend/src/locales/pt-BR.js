@@ -1300,13 +1300,13 @@ export const PT_BR_OVERRIDES = {
   '“{0}” leaves {1} and goes to the end of the routine you pick.': '“{0}” sai de {1} e vai para o final da rotina que você escolher.',
   '“{0}” stays in {1}, and a copy of it goes to the end of the routine you pick.': '“{0}” fica em {1}, e uma cópia vai para o final da rotina que você escolher.',
   'You are not behind. You are drinking.': 'Você não está atrasado. Está bebendo.',
-  'A glass now beats a headache later.': 'Um copo agora evita a dor de cabeça depois.',
-  'Small sips, often, beat one big glass.': 'Pequenos goles frequentes valem mais do que um copo grande.',
-  'Your body is mostly water. Keep the top up.': 'Seu corpo é quase toda água. Mantenha o reservatório cheio.',
-  'Still water bored you? Sparkling counts just the same.': 'A água sem gás está te entediando? A com gás conta do mesmo jeito.',
-  'The goal is a reference, not a rule.': 'A meta é uma referência, não uma regra.',
-  'Every glass is a vote for the session you want.': 'Cada copo é um voto pelo treino que você quer.',
-  'Hydration is the cheapest performance gain there is.': 'A hidratação é a melhora de desempenho mais barata que existe.',
+  'Small choices, repeated, become who you are.': 'Pequenas escolhas, repetidas, viram quem você é.',
+  'You do not need a perfect day. You need the next glass.': 'Você não precisa de um dia perfeito. Precisa do próximo copo.',
+  'Discipline is deciding before you are tired.': 'Disciplina é decidir antes de estar cansado.',
+  'You are building a habit, not chasing a number.': 'Você está construindo um hábito, não perseguindo um número.',
+  'Progress is quiet. Keep going anyway.': 'O progresso é silencioso. Continue assim mesmo.',
+  'You showed up today. That is the whole trick.': 'Você apareceu hoje. É esse o truque.',
+  'The person you are becoming starts with this glass.': 'A pessoa que você está se tornando começa por este copo.',
 }
 
 export default { ...pt, ...PT_BR_OVERRIDES }

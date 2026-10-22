@@ -2053,13 +2053,13 @@ export default {
   'Use this': 'Bunu kullan',
   'About a fifth of what you drink comes from food.': 'İçtiğinizin yaklaşık beşte biri yiyecekten geliyor.',
   'You are not behind. You are drinking.': 'Geride değilsin. İçiyorsun.',
-  'A glass now beats a headache later.': 'Şimdi bir bardak, sonrasındaki baş ağrısından iyidir.',
-  'Small sips, often, beat one big glass.': 'Az az, sık sık içmek tek büyük bardaktan iyidir.',
-  'Your body is mostly water. Keep the top up.': 'Vücudun büyük kısmı su. Deposunu dolu tut.',
-  'Still water bored you? Sparkling counts just the same.': 'Düz su sıkıldı mı? Gazlı su da aynı şekilde sayılır.',
-  'The goal is a reference, not a rule.': 'Hedef bir referans, bir kural değil.',
-  'Every glass is a vote for the session you want.': 'Her bardak, istediğin antrenman için bir oy.',
-  'Hydration is the cheapest performance gain there is.': 'Bolca su içmek, performans artışının en ucuz yoludur.',
+  'Small choices, repeated, become who you are.': 'Küçük seçimler tekrarlanınca kim olduğuna karar verir.',
+  'You do not need a perfect day. You need the next glass.': 'Mükemmel bir güne ihtiyacın yok. Sıradaki kadehe ihtiyacın var.',
+  'Discipline is deciding before you are tired.': 'Disiplin, yorulmadan önce karar vermektir.',
+  'You are building a habit, not chasing a number.': 'Bir sayıyı kovalamıyorsun; bir alışkanlık kuruyorsun.',
+  'Progress is quiet. Keep going anyway.': 'İlerleme sessizdir. Yine de devam et.',
+  'You showed up today. That is the whole trick.': 'Bugün buradaydın. Bütün mesele bu.',
+  'The person you are becoming starts with this glass.': 'Olmaya başladığın kişi bu kadekle başlıyor.',
 }
 
 

@@ -2053,13 +2053,13 @@ export default {
   'Use this': 'Usa questo',
   'About a fifth of what you drink comes from food.': 'Circa un quinto di quello che bevi arriva dal cibo.',
   'You are not behind. You are drinking.': 'Non sei in ritardo. Stai bevendo.',
-  'A glass now beats a headache later.': 'Un bicchiere adesso batte un mal di testa dopo.',
-  'Small sips, often, beat one big glass.': 'Piccoli sorsi frequenti battono un bicchiere grande.',
-  'Your body is mostly water. Keep the top up.': 'Il tuo corpo è quasi tutto acqua. Tieni il serbatoio pieno.',
-  'Still water bored you? Sparkling counts just the same.': 'Ti sei stancato dell\'acqua liscia? Quella con le bollicine conta uguale.',
-  'The goal is a reference, not a rule.': 'L\'obiettivo è un riferimento, non una regola.',
-  'Every glass is a vote for the session you want.': 'Ogni bicchiere è un voto per la sessione che vuoi.',
-  'Hydration is the cheapest performance gain there is.': 'L\'idratazione è il miglioramento di prestazione più economico che ci sia.',
+  'Small choices, repeated, become who you are.': 'Piccole scelte, ripetute, diventano chi sei.',
+  'You do not need a perfect day. You need the next glass.': 'Non ti serve una giornata perfetta. Ti serve il prossimo bicchiere.',
+  'Discipline is deciding before you are tired.': 'La disciplina è decidere prima di essere stanco.',
+  'You are building a habit, not chasing a number.': 'Stai costruendo un\'abitudine, non inseguendo un numero.',
+  'Progress is quiet. Keep going anyway.': 'I progressi sono silenziosi. Continua comunque.',
+  'You showed up today. That is the whole trick.': 'Sei comparso oggi. È tutto qui.',
+  'The person you are becoming starts with this glass.': 'La persona che stai diventando inizia da questo bicchiere.',
 }
 
 

@@ -134,18 +134,19 @@ export function dayOrdinal(d) {
  * One line a day, under the water row.
  *
  * The app's own words, not a quotation from anyone: there is nothing here to attribute,
- * because an invented attribution would be worse than no line at all. Chosen from the date
- * rather than at random, so it holds for the whole day and does not shuffle on re-render.
+ * because an invented attribution would be worse than no line at all. About the person and
+ * the habit, never a promised health outcome. Chosen from the date rather than at random,
+ * so it holds for the whole day and does not shuffle on re-render.
  */
 export const WATER_LINES = [
   'You are not behind. You are drinking.',
-  'A glass now beats a headache later.',
-  'Small sips, often, beat one big glass.',
-  'Your body is mostly water. Keep the top up.',
-  'Still water bored you? Sparkling counts just the same.',
-  'The goal is a reference, not a rule.',
-  'Every glass is a vote for the session you want.',
-  'Hydration is the cheapest performance gain there is.',
+  'Small choices, repeated, become who you are.',
+  'You do not need a perfect day. You need the next glass.',
+  'Discipline is deciding before you are tired.',
+  'You are building a habit, not chasing a number.',
+  'Progress is quiet. Keep going anyway.',
+  'You showed up today. That is the whole trick.',
+  'The person you are becoming starts with this glass.',
 ]
 
 /** Today's line. */

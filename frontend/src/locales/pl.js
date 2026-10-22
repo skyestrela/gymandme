@@ -2053,13 +2053,13 @@ export default {
   'Use this': 'Użyj tej',
   'About a fifth of what you drink comes from food.': 'Około jednej piątej tego, co pijesz, pochodzi z jedzenia.',
   'You are not behind. You are drinking.': 'Nie jesteś z tyłu. Pijesz.',
-  'A glass now beats a headache later.': 'Szklanka teraz jest lepsza niż ból głowy później.',
-  'Small sips, often, beat one big glass.': 'Małe łyki często biją jedną dużą szklankę.',
-  'Your body is mostly water. Keep the top up.': 'Twoje ciało to głównie woda. Uzupełniaj zapas.',
-  'Still water bored you? Sparkling counts just the same.': 'Znudziła Ci się woda niegazowana? Gazowana liczy się tak samo.',
-  'The goal is a reference, not a rule.': 'Cel to punkt odniesienia, a nie reguła.',
-  'Every glass is a vote for the session you want.': 'Każda szklanka to głos za treningiem, którego chcesz.',
-  'Hydration is the cheapest performance gain there is.': 'Nawodnienie to najtańsza możliwa poprawa wyników.',
+  'Small choices, repeated, become who you are.': 'Małe wybory, powtarzane, tworzą kim jesteś.',
+  'You do not need a perfect day. You need the next glass.': 'Nie potrzebujesz idealnego dnia. Potrzebujesz następnej szklanki.',
+  'Discipline is deciding before you are tired.': 'Dyscyplina to decydowanie, zanim jesteś zmęczony.',
+  'You are building a habit, not chasing a number.': 'Budujesz nawyk, a nie gonisz się za liczbą.',
+  'Progress is quiet. Keep going anyway.': 'Postęp jest cichy. Kontynuuj mimo to.',
+  'You showed up today. That is the whole trick.': 'Pojawiłeś się dzisiaj. Na tym polega cały trik.',
+  'The person you are becoming starts with this glass.': 'Osoba, którą się stajesz, zaczyna się od tej szklanki.',
 }
 
 

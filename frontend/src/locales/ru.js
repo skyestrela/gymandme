@@ -2057,13 +2057,13 @@ export default {
   'Use this': 'Использовать',
   'About a fifth of what you drink comes from food.': 'Около пятой части выпитого приходит с едой.',
   'You are not behind. You are drinking.': 'Вы не отстаёте. Вы пьёте.',
-  'A glass now beats a headache later.': 'Стакан сейчас — лучше, чем головная боль потом.',
-  'Small sips, often, beat one big glass.': 'Частые маленькие глотки лучше одного большого стакана.',
-  'Your body is mostly water. Keep the top up.': 'Ваше тело почти целиком состоит из воды. Поддерживайте запас.',
-  'Still water bored you? Sparkling counts just the same.': 'Надоела негазированная? Газированная считается точно так же.',
-  'The goal is a reference, not a rule.': 'Цель — это ориентир, а не правило.',
-  'Every glass is a vote for the session you want.': 'Каждый стакан — голос за ту тренировку, которую вы хотите.',
-  'Hydration is the cheapest performance gain there is.': 'Гидратация — самая дешёвая прибавка к результату.',
+  'Small choices, repeated, become who you are.': 'Маленькие решения, повторённые, формируют вас.',
+  'You do not need a perfect day. You need the next glass.': 'Вам не нужен идеальный день. Вам нужен следующий стакан.',
+  'Discipline is deciding before you are tired.': 'Дисциплина — это решить раньше, чем вы устали.',
+  'You are building a habit, not chasing a number.': 'Вы строите привычку, а не гонитесь за числом.',
+  'Progress is quiet. Keep going anyway.': 'Прогресс незаметен. Продолжайте всё равно.',
+  'You showed up today. That is the whole trick.': 'Вы появились сегодня. В этом весь секрет.',
+  'The person you are becoming starts with this glass.': 'Тот, кем вы становитесь, начинается с этого стакана.',
 }
 
 

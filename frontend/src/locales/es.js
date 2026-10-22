@@ -2053,13 +2053,13 @@ export default {
   'Use this': 'Usar este',
   'About a fifth of what you drink comes from food.': 'Cerca de un quinto de lo que bebes viene de la comida.',
   'You are not behind. You are drinking.': 'No vas atrasado. Estás bebiendo.',
-  'A glass now beats a headache later.': 'Un vaso ahora evita el dolor de cabeza después.',
-  'Small sips, often, beat one big glass.': 'Tragos pequeños y frecuentes ganan a un vaso grande.',
-  'Your body is mostly water. Keep the top up.': 'Tu cuerpo es casi todo agua. Mantén el depósito lleno.',
-  'Still water bored you? Sparkling counts just the same.': '¿Te aburre el agua sin gas? Con gas cuenta igual.',
-  'The goal is a reference, not a rule.': 'La meta es una referencia, no una regla.',
-  'Every glass is a vote for the session you want.': 'Cada vaso es un voto por la sesión que quieres.',
-  'Hydration is the cheapest performance gain there is.': 'La hidratación es la mejora de rendimiento más barata que existe.',
+  'Small choices, repeated, become who you are.': 'Las pequeñas decisiones, repetidas, se convierten en quien eres.',
+  'You do not need a perfect day. You need the next glass.': 'No necesitas un día perfecto. Necesitas el siguiente vaso.',
+  'Discipline is deciding before you are tired.': 'La disciplina es decidir antes de estar cansado.',
+  'You are building a habit, not chasing a number.': 'Estás construyendo un hábito, no persiguiendo una cifra.',
+  'Progress is quiet. Keep going anyway.': 'El progreso es silencioso. Sigue adelante igual.',
+  'You showed up today. That is the whole trick.': 'Has aparecido hoy. Ese es todo el truco.',
+  'The person you are becoming starts with this glass.': 'La persona en la que te estás convirtiendo empieza con este vaso.',
 }
 
 

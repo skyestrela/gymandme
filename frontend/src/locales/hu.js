@@ -2056,13 +2056,13 @@ export default {
   'Use this': 'Ezt használom',
   'About a fifth of what you drink comes from food.': 'Amiből iszál körülbelül ötöde ételből származik.',
   'You are not behind. You are drinking.': 'Nem vagy lemaradva. Iszál.',
-  'A glass now beats a headache later.': 'Egy pohár most jobb, mint a későbbi fejfájás.',
-  'Small sips, often, beat one big glass.': 'A gyakori kis kortyogás nyer egy nagy pohárral szemben.',
-  'Your body is mostly water. Keep the top up.': 'A tested főként víz. Tartsd tele a tartályt.',
-  'Still water bored you? Sparkling counts just the same.': 'Unalmas a csapvíz? A pezsgő ugyanúgy számít.',
-  'The goal is a reference, not a rule.': 'A cél irányelv, nem szabály.',
-  'Every glass is a vote for the session you want.': 'Minden pohár egy szavazat arra az edzésre, amit szeretnél.',
-  'Hydration is the cheapest performance gain there is.': 'A hidratálás a legolcsóbb teljesítménynövekedés.',
+  'Small choices, repeated, become who you are.': 'A kis döntések, ismételve, megalkotják, ki vagy.',
+  'You do not need a perfect day. You need the next glass.': 'Nincs szükséged tökéletes napra. A következő pohárra van.',
+  'Discipline is deciding before you are tired.': 'A fegyelem az, hogy döntesel, mielőtt elfáradtál.',
+  'You are building a habit, not chasing a number.': 'Nem egy számot hajszolsz, hanem szokást építesz.',
+  'Progress is quiet. Keep going anyway.': 'A haladás csendes. Menj tovább, ettől függetlenül.',
+  'You showed up today. That is the whole trick.': 'Ma itt voltál. Ennyi az egész.',
+  'The person you are becoming starts with this glass.': 'Aki éppen vagy, ezzel a pohárral kezdődik.',
 }
 
 

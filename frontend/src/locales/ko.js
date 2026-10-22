@@ -2053,13 +2053,13 @@ export default {
   'Use this': '이 값 사용',
   'About a fifth of what you drink comes from food.': '마시는 물의 약 5분의 1은 음식에서 와요.',
   'You are not behind. You are drinking.': '뒤처진 게 아니에요. 지금 마시고 있어요.',
-  'A glass now beats a headache later.': '지금 마시는 한 잔이 나중 두통보다 나아요.',
-  'Small sips, often, beat one big glass.': '자주 조금씩 마시는 게 한 번에 크게 마시는 것보다 좋아요.',
-  'Your body is mostly water. Keep the top up.': '몸의 대부분은 물이에요. 항상 채워 두세요.',
-  'Still water bored you? Sparkling counts just the same.': '미네랄물이 지루한가요? 탄산수도 똑같이 인정돼요.',
-  'The goal is a reference, not a rule.': '목표는 기준이지 규칙이 아니에요.',
-  'Every glass is a vote for the session you want.': '한 잔마다가 원하는 운동을 한 표예요.',
-  'Hydration is the cheapest performance gain there is.': '수분 보충은 성능을 끌어올리는 가장 값싼 방법이에요.',
+  'Small choices, repeated, become who you are.': '작은 선택을 반복하면 오늘의 내가 됩니다.',
+  'You do not need a perfect day. You need the next glass.': '완벽한 하루가 필요한 게 아니에요. 다음 한 잔이면 돼요.',
+  'Discipline is deciding before you are tired.': '규율은 지쳐서 결정하기 전에 결정하는 거예요.',
+  'You are building a habit, not chasing a number.': '숫자를 쫓는 게 아니라 습관을 만들고 있어요.',
+  'Progress is quiet. Keep going anyway.': '진행은 조용합니다. 그래도 계속하세요.',
+  'You showed up today. That is the whole trick.': '오늘 여기까지 왔네요. 그게 핵심이에요.',
+  'The person you are becoming starts with this glass.': '지금의 당신이 되는 건 이 한 잔부터예요.',
 }
 
 

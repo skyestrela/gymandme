@@ -2147,7 +2147,7 @@ body.no-tabbar.resting #toast{bottom:calc(100px + var(--sab))}
 /* One line a day under the water row. The only thing on the card that is not a number, so
    it is deliberately the quietest thing here: no weight, no accent, centred under the row.
    Named .wl-quip, not .wl-line — that one is the MacroSheet's left/right working-out row. */
-.wl-quip{margin:16px 0 0;text-align:center;font-size:12.5px;line-height:1.4;color:var(--label-3)}
+.wl-quip{margin:13px 0 0;text-align:center;font-size:12.5px;line-height:1.4;color:var(--label-3)}
 
 /* "900 ml behind for the time of day" — only ever rendered when it is worth saying. */
 .wl-pace{color:var(--label-3)}

@@ -2073,13 +2073,13 @@ export default {
   'Use this': 'Übernehmen',
   'About a fifth of what you drink comes from food.': 'Etwa ein Fünftel dessen, was du trinkst, kommt aus der Nahrung.',
   'You are not behind. You are drinking.': 'Du bist nicht im Rückstand. Du trinkst.',
-  'A glass now beats a headache later.': 'Ein Glas jetzt schlägt Kopfschmerzen später.',
-  'Small sips, often, beat one big glass.': 'Viele kleine Schlucke schlagen ein großes Glas.',
-  'Your body is mostly water. Keep the top up.': 'Dein Körper besteht hauptsächlich aus Wasser. Füll ihn auf.',
-  'Still water bored you? Sparkling counts just the same.': 'Stillwasser langweilig? Sprudel zählt genauso.',
-  'The goal is a reference, not a rule.': 'Das Ziel ist ein Richtwert, keine Vorschrift.',
-  'Every glass is a vote for the session you want.': 'Jedes Glas ist eine Stimme für die Einheit, die du willst.',
-  'Hydration is the cheapest performance gain there is.': 'Gute Hydration ist die billigste Leistungssteigerung, die es gibt.',
+  'Small choices, repeated, become who you are.': 'Kleine Entscheidungen, wiederholt, machen aus dir, wer du bist.',
+  'You do not need a perfect day. You need the next glass.': 'Du brauchst keinen perfekten Tag. Du brauchst das nächste Glas.',
+  'Discipline is deciding before you are tired.': 'Disziplin heißt, zu entscheiden, bevor du müde bist.',
+  'You are building a habit, not chasing a number.': 'Du baust eine Gewohnheit auf, nicht einer Zahl hinterher.',
+  'Progress is quiet. Keep going anyway.': 'Fortschritt ist leise. Mach trotzdem weiter.',
+  'You showed up today. That is the whole trick.': 'Du bist heute erschienen. Das ist die ganze Sache.',
+  'The person you are becoming starts with this glass.': 'Die Person, die du wirst, beginnt mit diesem Glas.',
 }
 
 
