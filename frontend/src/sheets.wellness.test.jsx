@@ -25,7 +25,12 @@ vi.mock('./store/useUI.js', () => {
 import { waterSheet, fastingSheet, foodSheet, macroSheet } from './sheets.jsx'
 
 globalThis.IS_REACT_ACT_ENVIRONMENT = true
-const TODAY = new Date().toISOString().slice(0, 10)
+// The clock every sheet in here sees. TODAY has to be built from THIS, not from the real one:
+// the component calls todayISO() while the timer is frozen, so a TODAY read at module load would
+// silently drift a day behind the day under test — which is exactly what happened.
+const FROZEN = new Date(2026, 9, 21, 12, 0, 0)
+// Local parts, to match todayISO(). toISOString() is UTC and disagrees either side of midnight.
+const TODAY = `${FROZEN.getFullYear()}-${String(FROZEN.getMonth() + 1).padStart(2, '0')}-${String(FROZEN.getDate()).padStart(2, '0')}`
 
 // Four sessions a week for the last eight weeks - 32 trained days, which is what the
 // activity factor in lib/macros.js reads as "four times a week".
@@ -44,7 +49,7 @@ beforeEach(() => {
   mocks.sheets.length = 0
   mocks.toast.mockClear()
   vi.useFakeTimers()
-  vi.setSystemTime(new Date(2026, 9, 21, 12, 0, 0))
+  vi.setSystemTime(FROZEN)
   host = document.createElement('div')
   document.body.appendChild(host)
   root = createRoot(host)
