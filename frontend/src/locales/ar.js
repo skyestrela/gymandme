@@ -2161,6 +2161,8 @@ export default {
   'kcal per 100 g': 'سعرة لكل 100 غرام',
   'Search foods': 'ابحث عن الطعام',
   'Add a photo': 'أضف صورة',
+  'Add your height and age': 'أضف طولك وعمرك',
+  'Log your weight': 'سجّل وزنك',
 }
 
 

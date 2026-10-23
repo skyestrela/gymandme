@@ -2108,6 +2108,8 @@ export default {
   'kcal per 100 g': 'प्रति 100 ग्राम कैलोरी',
   'Search foods': 'खोजें भोजन',
   'Add a photo': 'एक फ़ोटो जोड़ें',
+  'Add your height and age': 'अपनी ऊँचाई और उम्र जोड़ें',
+  'Log your weight': 'अपना वज़न दर्ज करें',
 }
 
 

@@ -233,6 +233,13 @@ describe('the calories row', () => {
     expect(macroSheet).toHaveBeenCalled()
   })
 
+  it('says what is missing when a goal is chosen but the plan cannot be worked out', () => {
+    // A goal is chosen; the resting burn has no height or age to work from.
+    mount({ ...BODY, heightCm: null, age: null, macroMode: 'bulk' })
+    expect(byText('button', 'Add your height and age')).toBeTruthy()
+    expect(byText('button', 'Set your goal')).toBeFalsy()
+  })
+
   it('opens the food sheet', () => {
     mount()
     act(() => byText('button', 'Log food').click())

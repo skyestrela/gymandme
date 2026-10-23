@@ -2108,6 +2108,8 @@ export default {
   'kcal per 100 g': 'kcal por 100 g',
   'Search foods': 'Buscar alimentos',
   'Add a photo': 'Añadir una foto',
+  'Add your height and age': 'Añade tu altura y tu edad',
+  'Log your weight': 'Registra tu peso',
 }
 
 

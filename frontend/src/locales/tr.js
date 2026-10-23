@@ -2108,6 +2108,8 @@ export default {
   'kcal per 100 g': '100 g başına kcal',
   'Search foods': 'Gıda ara',
   'Add a photo': 'Fotoğraf ekle',
+  'Add your height and age': 'Boyunu ve yaşını ekle',
+  'Log your weight': 'Kilonu kaydet',
 }
 
 

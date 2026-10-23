@@ -43,6 +43,16 @@ const Meter = ({ value, goal, color }) => (
 )
 
 const macroModeLabel = id => (id === 'cut' ? t('Lose weight') : id === 'bulk' ? t('Gain muscle') : t('Maintain'))
+// What the Calories row says it needs. A goal can be chosen and still have no plan: the resting
+// burn wants a weigh-in, a height and an age, and without them every number on this card is a
+// blank. Saying "set your goal" again then is wrong - the goal is already set, and it sends the
+// reader after the wrong thing while the sheet says nothing about what is missing. Say what is
+// actually missing instead, so the next thing to do is the obvious one.
+const planCta = (S, plan) => {
+  if (plan.ok) return macroModeLabel(plan.mode)
+  if (!S.macroMode) return t('Set your goal')
+  return plan.needs?.includes('weight') ? t('Log your weight') : t('Add your height and age')
+}
 
 const Head = ({ icon, tint, label, right }) => (
   <div className="row between" style={{ gap: 8 }}>
@@ -161,7 +171,7 @@ export default function WellnessCard() {
     <div>
       <Head icon="meal" tint="var(--acc)" label={t('Calories')}
         right={<button className={'chip nocap' + (goal.plan.ok ? ' on' : '')} onClick={macroSheet}>
-          {goal.plan.ok ? macroModeLabel(goal.plan.mode) : t('Set your goal')}
+          {planCta(S, goal.plan)}
         </button>} />
       <div className="row" style={{ gap: 6, alignItems: 'baseline', marginTop: 2 }}>
         <span className="wl-num">{fmtNum(kcal.kcal)}</span>{' '}
@@ -186,7 +196,7 @@ export default function WellnessCard() {
       )}
       <div className="row" style={{ gap: 8, marginTop: 8 }}>
         <Button size="sm" icon="plus" onClick={foodSheet}>{t('Log food')}</Button>
-        {!goal.plan.ok && <Button size="sm" variant="ghost" icon="target" onClick={macroSheet}>{t('Set your goal')}</Button>}
+        {!goal.plan.ok && <Button size="sm" variant="ghost" icon="target" onClick={macroSheet}>{planCta(S, goal.plan)}</Button>}
       </div>
     </div>
   </div>

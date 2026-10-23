@@ -2119,6 +2119,8 @@ export default {
   'kcal per 100 g': 'กิโลแคลอรีต่อ 100 กรัม',
   'Search foods': 'ค้นหาอาหาร',
   'Add a photo': 'เพิ่มรูปภาพ',
+  'Add your height and age': 'เพิ่มส่วนสูงและอายุของคุณ',
+  'Log your weight': 'บันทึกน้ำหนักของคุณ',
 }
 
 

@@ -2101,6 +2101,8 @@ export default {
   'kcal per 100 g': '每 100 克千卡',
   'Search foods': '搜尋食物',
   'Add a photo': '加入照片',
+  'Add your height and age': '填入你的身高和年齡',
+  'Log your weight': '記錄你的體重',
 }
 
 

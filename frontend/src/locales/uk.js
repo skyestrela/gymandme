@@ -2105,6 +2105,8 @@ export default {
   'kcal per 100 g': 'ккал на 100 г',
   'Search foods': 'Пошук продуктів',
   'Add a photo': 'Додати фото',
+  'Add your height and age': 'Додай свій зріст і вік',
+  'Log your weight': 'Запиши свою вагу',
 }
 
 

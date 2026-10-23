@@ -1355,6 +1355,8 @@ export const PT_BR_OVERRIDES = {
   'kcal per 100 g': 'kcal por 100 g',
   'Search foods': 'Buscar alimentos',
   'Add a photo': 'Adicionar uma foto',
+  'Add your height and age': 'Adicione sua altura e idade',
+  'Log your weight': 'Registre seu peso',
 }
 
 export default { ...pt, ...PT_BR_OVERRIDES }

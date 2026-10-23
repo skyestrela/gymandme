@@ -2111,6 +2111,8 @@ export default {
   'kcal per 100 g': 'kcal / 100 g',
   'Search foods': 'Ételek keresése',
   'Add a photo': 'Fotó hozzáadása',
+  'Add your height and age': 'Add meg a magasságod és a korod',
+  'Log your weight': 'Rögzítsd a súlyod',
 }
 
 

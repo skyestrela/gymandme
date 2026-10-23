@@ -2108,6 +2108,8 @@ export default {
   'kcal per 100 g': '100 g당 kcal',
   'Search foods': '음식 검색',
   'Add a photo': '사진 추가',
+  'Add your height and age': '키와 나이를 입력하세요',
+  'Log your weight': '체중을 기록하세요',
 }
 
 
