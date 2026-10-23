@@ -35,6 +35,18 @@ const MEDIA_GUESS_BYTES = 64 * 1024
 const MEDIA_TRIM_EVERY = 20
 const isMediaPath = p => p.includes('/img/') || p.includes('/gif/')
 
+// A dev server's module graph is never cached and never answered from the cache. The cache name
+// carries a build hash that only a real build stamps, so in dev there is exactly one cache and it
+// is however old it was when the session began; the network wait below is 3 s, which a dev
+// server under load can miss, and a miss is answered from that cache. That is what made a rebuilt
+// app keep serving the previous build, and why main.jsx cannot simply wait to unregister: while an
+// old worker is still in charge it serves the old shell, so the code that would unregister it is
+// never the code that loads. A built app serves none of these paths (public/ holds only icons,
+// the manifest and this file), so the rule is inert in production.
+const DEV_MODULE_PATH = /^(?:\/@[\w-]+|\/src\/|\/node_modules\/\.vite)/
+const isDevModule = url =>
+  DEV_MODULE_PATH.test(url.pathname) || url.searchParams.has('t') || url.searchParams.has('import')
+
 // The code the app loads only when it needs it (the photo and video ingest, the QR reader...),
 // listed by the build (vite.config.js, scripts/sw-stamp.mjs). Without it the first photo added
 // offline after an update had no ingest to run. Unstamped (a dev server, a test) it is empty.
@@ -228,6 +240,7 @@ self.addEventListener('fetch', e => {
   const url = new URL(e.request.url)
   if (e.request.method !== 'GET' || url.origin !== location.origin) return
   if (url.pathname.startsWith('/api/') || url.pathname.startsWith(API)) return    // never cache auth/data
+  if (isDevModule(url)) return                                                      // dev server: always the network
 
   if (isMediaPath(url.pathname)) {
     e.respondWith(media(e))
