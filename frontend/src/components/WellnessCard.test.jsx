@@ -22,7 +22,14 @@ const iso = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')
 
 // Four sessions a week for the last eight weeks - 32 trained days, which is what the
 // activity factor in lib/macros.js reads as "four times a week".
-const dayAgo = n => { const d = new Date(); d.setDate(d.getDate() - n); return iso(d) }
+const FROZEN = new Date(2026, 9, 21, 12, 0, 0)
+// Anchored to FROZEN, not to the real calendar. TRAINED is built at import, before the fake
+// timers are installed, so `new Date()` here slid the training log a day further into the
+// future every time the suite ran while the window in sessionsPerWeek stayed pinned to
+// FROZEN. One day at a time a session fell out of the eight-week window and every derived
+// number moved with it: 32 days a week reads as 4x, 31 reads as 3.875. The suite passed for
+// as long as the real date was at or before FROZEN, and then failed on its own.
+const dayAgo = n => { const d = new Date(FROZEN); d.setDate(d.getDate() - n); return iso(d) }
 const TRAINED = Array.from({ length: 32 }, (_, i) => ({ d: dayAgo(Math.floor((31 - i) * 50 / 31) + 1) }))
 
 // Enough of a profile for lib/macros.js to work a real plan out of: 80 kg, 180 cm, 30.
@@ -33,7 +40,7 @@ beforeEach(() => {
   globalThis.IS_REACT_ACT_ENVIRONMENT = true
   // Noon on 2026-10-21, so a fast started at 02:00 reads as 10h whatever the machine's zone is.
   vi.useFakeTimers()
-  vi.setSystemTime(new Date(2026, 9, 21, 12, 0, 0))
+  vi.setSystemTime(FROZEN)
   waterSheet.mockClear(); fastingSheet.mockClear(); foodSheet.mockClear(); macroSheet.mockClear()
   host = document.createElement('div')
   document.body.appendChild(host)

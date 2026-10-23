@@ -35,7 +35,13 @@ const TODAY = `${FROZEN.getFullYear()}-${String(FROZEN.getMonth() + 1).padStart(
 // Four sessions a week for the last eight weeks - 32 trained days, which is what the
 // activity factor in lib/macros.js reads as "four times a week".
 const iso = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
-const dayAgo = n => { const d = new Date(); d.setDate(d.getDate() - n); return iso(d) }
+// Anchored to FROZEN, not to the real calendar. TRAINED is built at import, before the fake
+// timers are installed, so `new Date()` here slid the training log a day further into the
+// future every time the suite ran while the window in sessionsPerWeek stayed pinned to
+// FROZEN. One day at a time a session fell out of the eight-week window and every derived
+// number moved with it: 32 days a week reads as 4x, 31 reads as 3.875. The suite passed for
+// as long as the real date was at or before FROZEN, and then failed on its own.
+const dayAgo = n => { const d = new Date(FROZEN); d.setDate(d.getDate() - n); return iso(d) }
 const TRAINED = Array.from({ length: 32 }, (_, i) => ({ d: dayAgo(Math.floor((31 - i) * 50 / 31) + 1) }))
 // 80 kg, 180 cm, 30, cutting to 75 kg.
 const PROFILE = {
