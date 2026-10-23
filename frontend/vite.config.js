@@ -2,6 +2,7 @@ import { readFileSync, writeFileSync, existsSync } from 'node:fs'
 import { createHash } from 'node:crypto'
 import { join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { execSync } from 'node:child_process'
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { lazyAssets, stampSw } from './scripts/sw-stamp.mjs'
@@ -80,9 +81,36 @@ const flavor = {
 const pkgVersion = JSON.parse(readFileSync(new URL('./package.json', import.meta.url), 'utf8')).version
 const appVersion = process.env.APP_BUILD ? `${pkgVersion}+${process.env.APP_BUILD}` : pkgVersion
 
-export default defineConfig({
-  define: { __APP_VERSION__: JSON.stringify(appVersion) },
-  plugins: [react(), umami, flavor, swStamp],
+// A dev server has no build hash to report, so the one question a stale tab turns on - "which build
+// am I actually looking at?" - had no answer from inside the app: every session said v1.3.10, and
+// identical numbers cannot tell a fresh build from a three-day-old cache. A dev build now names the
+// commit it was started from, marks a dirty working tree, and carries the time the server came up, so
+// a stale tab is readable in one glance. A real build is untouched: same string as before.
+const gitStamp = () => {
+  try {
+    const cwd = fileURLToPath(new URL('..', import.meta.url))
+    const run = cmd => execSync(cmd, { cwd, stdio: ['ignore', 'pipe', 'ignore'], encoding: 'utf8' }).trim()
+    const sha = run('git rev-parse --short HEAD')
+    return sha + (run('git status --porcelain') ? '*' : '')
+  } catch { return 'nogit' }
+}
+const devVersion = () => `${pkgVersion} dev ${gitStamp()} ${new Date().toISOString().slice(11, 16)}Z`
+
+// A dev build is served with __APP_VERSION__ left as a bare identifier rather than replaced, so
+// anything reading it depends on a global that has to exist. Define it before the app boots: the
+// settings page prints the version in two places and update.js reads it, and a dev session that
+// cannot say which commit it is the same problem this stamp exists to solve.
+const devVersionGlobal = {
+  name: 'gymandme-dev-version-global',
+  apply: 'serve',
+  transformIndexHtml: html => html.replace(
+    '<head>',
+    `<head>\n<script>window.__APP_VERSION__=${JSON.stringify(devVersion())}</script>`),
+}
+
+export default defineConfig(({ command }) => ({
+  define: { __APP_VERSION__: JSON.stringify(command === 'serve' ? devVersion() : appVersion) },
+  plugins: [react(), umami, flavor, swStamp, devVersionGlobal],
   base: './',
   server: {
     // Allow the WSL node's exact Tailscale HTTPS hostname, not a broad tailnet suffix.
@@ -98,4 +126,4 @@ export default defineConfig({
     }
   },
   build: { chunkSizeWarningLimit: 1500 }
-})
+}))
