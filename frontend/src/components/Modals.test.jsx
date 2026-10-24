@@ -84,6 +84,14 @@ function mouse(target, type, clientY, clientX = 0) {
   target.dispatchEvent(event)
 }
 
+// linkedom has no layout engine: its elements have no scrollHeight and no clientHeight at all,
+// so a browser's own numbers have to be stubbed before the scroll rules can be exercised.
+// clientHeight is the visible box, scrollHeight the content inside it.
+function sheetLayout(sheetEl, { scrollHeight, clientHeight }) {
+  Object.defineProperty(sheetEl, 'scrollHeight', { value: scrollHeight, configurable: true })
+  Object.defineProperty(sheetEl, 'clientHeight', { value: clientHeight, configurable: true })
+}
+
 beforeEach(async () => {
   mocks.state.sheets = []
   installDom()
@@ -254,6 +262,58 @@ describe('Modals drag axis lock and dismiss', () => {
     await act(async () => { window.dispatchEvent(new dom.Event('mouseup')) })
     expect(sheetEl.style.transform).toBe('')
     expect(mocks.state.sheets).toHaveLength(1)
+  })
+
+  it('a drag on the content of a sheet that scrolls is a scroll, never a dismissal', async () => {
+    let now = 0
+    vi.spyOn(performance, 'now').mockImplementation(() => now)
+    await setSheets([sheet('scroll')])
+    const sheetEl = container.querySelector('.sheet')
+    sheetEl.scrollTop = 0
+    // A sheet whose content is taller than the sheet: the content can scroll.
+    sheetLayout(sheetEl, { scrollHeight: 2000, clientHeight: 400 })
+
+    await act(async () => {
+      mouse(sheetEl, 'mousedown', 10)
+      now = 300; mouse(sheetEl, 'mousemove', 120)
+    })
+    expect(sheetEl.style.transform).toBe('')
+
+    await act(async () => { window.dispatchEvent(new dom.Event('mouseup')) })
+    expect(mocks.state.sheets).toHaveLength(1)
+  })
+
+  it('the handle still dismisses a sheet whose content scrolls', async () => {
+    let now = 0
+    vi.spyOn(performance, 'now').mockImplementation(() => now)
+    await setSheets([sheet('handle')])
+    const sheetEl = container.querySelector('.sheet')
+    sheetEl.scrollTop = 0
+    sheetLayout(sheetEl, { scrollHeight: 2000, clientHeight: 400 })
+    const handle = sheetEl.querySelector('.grab-hit')
+    expect(handle).toBeTruthy()
+
+    await act(async () => {
+      mouse(handle, 'mousedown', 10)
+      now = 300; mouse(handle, 'mousemove', 120)
+    })
+    expect(sheetEl.style.transform).toBe('translateY(110px)')
+  })
+
+  it('a sheet with nothing to scroll is still draggable from its content', async () => {
+    let now = 0
+    vi.spyOn(performance, 'now').mockImplementation(() => now)
+    await setSheets([sheet('short')])
+    const sheetEl = container.querySelector('.sheet')
+    sheetEl.scrollTop = 0
+    // Content as tall as the sheet: nothing to scroll, so nothing to protect.
+    sheetLayout(sheetEl, { scrollHeight: 400, clientHeight: 400 })
+
+    await act(async () => {
+      mouse(sheetEl, 'mousedown', 10)
+      now = 300; mouse(sheetEl, 'mousemove', 120)
+    })
+    expect(sheetEl.style.transform).toBe('translateY(110px)')
   })
 
   it('dismisses on a short but fast flick', async () => {

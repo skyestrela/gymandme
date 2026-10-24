@@ -62,6 +62,13 @@ function Sheet({ sheet }) {
     const el = ref.current
     if (target.closest && target.closest(NODRAG)) { drag.current = idle(); return }
     if (el.scrollTop > 0) { drag.current = idle(); return }
+    // A sheet with content to scroll is dismissed by its handle alone. A dismiss armed anywhere
+    // else steals the first touch of a scroll: the finger goes down on the content, the content
+    // has not moved yet, so the gesture reads as a pull, the sheet moves instead and the content
+    // never scrolls at all. A sheet with nothing to scroll has nothing to steal, so all of it
+    // stays draggable.
+    const onHandle = !!(target.closest && target.closest('.grab-hit'))
+    if (el.scrollHeight > el.clientHeight + 1 && !onHandle) { drag.current = idle(); return }
     drag.current = { ...idle(), startX: x, startY: y, lastY: y, lastT: performance.now() }
   }
   const move = (e, x, y) => {
@@ -139,7 +146,7 @@ function Sheet({ sheet }) {
       <div className="mback" onClick={() => { if (!sheet.locked) close() }} />
       <div className="sheet" ref={ref} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}
         onMouseDown={onMouseDown} onMouseMove={onMouseMove} onMouseUp={onMouseUp} onMouseLeave={onMouseUp}>
-        <div className="grab" />
+        <div className="grab-hit"><div className="grab" /></div>
         {sheet.render(close)}
       </div>
     </div>

@@ -1495,7 +1495,11 @@ body.no-tabbar #timer.working{box-shadow:inset 0 var(--hair) 0 var(--acc),0 -10p
 }
 :root[data-theme="light"] .sheet{background:var(--bg)}
 @keyframes sheetup{from{transform:translateY(100%)}to{transform:none}}
-.sheet .grab{width:36px;height:5px;border-radius:99px;background:var(--label-4);margin:6px auto 14px}
+.sheet .grab{width:36px;height:5px;border-radius:99px;background:var(--label-4);margin:6px auto 14px;position:relative}
+/* The handle's own bar is 5 px tall, which is a poor thing to aim a finger at. This invisible
+   strip around it is the real target: 29 px of touch, and because it is painted over the layout
+   instead of inside it, not one pixel of the sheet moves. */
+.sheet .grab::after{content:"";position:absolute;left:-18px;right:-18px;top:-12px;bottom:-12px}
 .sheet h3{font-size:20px;font-weight:600;letter-spacing:-.021em;margin-bottom:14px}
 .picker-search{
   position:sticky;top:0;z-index:2;margin-bottom:0;padding-bottom:10px;
