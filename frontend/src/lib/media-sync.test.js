@@ -27,6 +27,17 @@ let clock, media, toast, api, apiUpload, apiBlob, allowed, storage
 const make = (store, over = {}) => createMediaSync({ store, media, api, apiUpload, apiBlob, toast, allowed: () => allowed, now: () => clock, locks: null, storage, ...over })
 const put = (hash, size = 10, mime = 'image/webp') => media.put(hash, new Blob([new Uint8Array(size)]), { mime, pending: true })
 
+// A file this big is only ever counted, never read: the clean-up works off the size the record
+// carries, and the in-memory backend keeps the blob by reference without opening it. So the blob
+// can be one byte with the size written on it. Allocating 200 MB of real bytes to prove a cap
+// cost this suite seconds and most of a gigabyte of heap, which is what made it flake under the
+// load of a CI run with other workers beside it.
+const bigBlob = (bytes, mime = 'image/webp') => {
+  const b = new Blob([new Uint8Array(1)], { type: mime })
+  Object.defineProperty(b, 'size', { value: bytes })
+  return b
+}
+
 beforeEach(() => {
   _resetMediaOwed()
   clock = 10_000_000
@@ -328,10 +339,10 @@ describe('localMediaGc', () => {
       { id: 'x', media: refOf(hex('a'), hex('b'), { size: 200 * MB }) },
       { id: 'y', media: refOf(hex('c'), hex('d'), { size: 150 * MB }) }
     ] }
-    await media.put(hex('a'), new Blob([new Uint8Array(200 * MB)]), { mime: 'image/webp', pending: false })
-    await media.put(hex('b'), new Blob([new Uint8Array(1 * MB)]), { mime: 'image/webp', pending: false })
-    await media.put(hex('c'), new Blob([new Uint8Array(150 * MB)]), { mime: 'image/webp', pending: true })
-    await media.put(hex('d'), new Blob([new Uint8Array(1 * MB)]), { mime: 'image/webp', pending: false })
+    await media.put(hex('a'), bigBlob(200 * MB), { mime: 'image/webp', pending: false })
+    await media.put(hex('b'), bigBlob(1 * MB), { mime: 'image/webp', pending: false })
+    await media.put(hex('c'), bigBlob(150 * MB), { mime: 'image/webp', pending: true })
+    await media.put(hex('d'), bigBlob(1 * MB), { mime: 'image/webp', pending: false })
     clock += 2 * 3600000
     await make(appStore({ S })).localMediaGc()
     expect((await media.list()).map(r => r.hash).sort()).toEqual([hex('b'), hex('c'), hex('d')])
@@ -392,7 +403,7 @@ describe('localMediaGc', () => {
 
   it('a guest never loses a referenced file to the cap', async () => {
     const S = { customEx: [{ id: 'x', media: refOf(hex('a'), null, { size: 400 * MB }) }] }
-    await media.put(hex('a'), new Blob([new Uint8Array(400 * MB)]), { mime: 'image/webp', pending: false })
+    await media.put(hex('a'), bigBlob(400 * MB), { mime: 'image/webp', pending: false })
     clock += 2 * 3600000
     await make(appStore({ S, user: null })).localMediaGc()
     expect(await media.has(hex('a'))).toBe(true)
